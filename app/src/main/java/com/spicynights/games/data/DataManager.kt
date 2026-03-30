@@ -1,6 +1,9 @@
 package com.spicynights.games.data
 
 import android.content.Context
+import com.spicynights.games.data.party.NeverPromptsFile
+import com.spicynights.games.data.party.WyrPairDto
+import com.spicynights.games.data.party.WyrPairsFile
 import kotlinx.serialization.json.Json
 
 class DataManager(
@@ -17,6 +20,20 @@ class DataManager(
         }
     }
 
+    fun loadNeverPrompts(level: Level): Result<List<String>> = runCatching {
+        val name = "never_${level.partyAssetSuffix()}.json"
+        context.assets.open("data/$name").use { stream ->
+            json.decodeFromString<NeverPromptsFile>(stream.bufferedReader().readText()).prompts
+        }
+    }
+
+    fun loadWyrPairs(level: Level): Result<List<WyrPairDto>> = runCatching {
+        val name = "wyr_${level.partyAssetSuffix()}.json"
+        context.assets.open("data/$name").use { stream ->
+            json.decodeFromString<WyrPairsFile>(stream.bufferedReader().readText()).pairs
+        }
+    }
+
     fun buildSessionPack(
         base: PromptPack,
         customTruthLines: List<String>,
@@ -29,4 +46,10 @@ class DataManager(
             dares = base.dares + extraDares,
         )
     }
+}
+
+private fun Level.partyAssetSuffix(): String = when (this) {
+    Level.TRIALS -> "trials"
+    Level.WANDERINGS -> "wanderings"
+    Level.CLIMAX -> "climax"
 }

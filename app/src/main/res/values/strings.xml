@@ -99,7 +99,7 @@
     <string name="game_never">I Have Never</string>
     <string name="game_truth_dare">Truth or Dare</string>
     <string name="game_dirty_dice">Dirty Dice</string>
-    <string name="game_wyr">Would You Rather</string>
+    <string name="game_wyr">Would You Rather?</string>
 
     <string name="session_setup_title">Session Setup</string>
     <string name="session_whos_playing">Who\'s Playing?</string>
@@ -116,10 +116,11 @@
     <string name="session_content_settings">Content Settings</string>
     <string name="session_drinking_rules">Drinking Rules</string>
     <string name="session_drinking_subtitle">Include prompts that require taking a sip</string>
-    <string name="session_truth_prompts">Truth prompts</string>
-    <string name="session_truth_subtitle">Include truth questions in the deck</string>
-    <string name="session_dare_prompts">Dare prompts</string>
-    <string name="session_dare_subtitle">Include dare challenges in the deck</string>
+    <string name="session_prompt_mix">Prompt mix</string>
+    <string name="session_prompt_mix_subtitle">What to include in the deck for every player this session</string>
+    <string name="session_prompt_mix_truth_only">Truth only</string>
+    <string name="session_prompt_mix_dare_only">Dare only</string>
+    <string name="session_prompt_mix_both">Both</string>
     <string name="session_turn_timer_row">Turn Timer</string>
     <string name="session_turn_timer_subtitle">Limit time for answers/actions (%1$ds)</string>
     <string name="session_start_disclaimer">By starting, you confirm all players are 18+</string>
@@ -166,11 +167,83 @@
     <string name="mode_placeholder_title">Coming soon</string>
     <string name="mode_placeholder_body">This game mode is under construction.</string>
     <string name="never_sample_prompt">…sent a risky text to the wrong person and tried to play it off.</string>
+    <string name="never_game_title">Never Have I Ever</string>
+    <string name="never_have_prefix">Never have I ever…</string>
+    <string name="never_i_have">I have</string>
+    <string name="never_never">Never</string>
+    <string name="never_reads_prompt">%1$s reads</string>
+    <string name="never_next_prompt">Next prompt</string>
+    <string name="never_deck_empty">No prompts left in this deck.</string>
     <string name="never_sip_hint">If you have, take 1 sip!</string>
-    <string name="dice_tap_to_roll">TAP DICE TO ROLL</string>
+    <string name="dice_couples_subtitle">Couples\' edition · two d6 dice</string>
+    <string name="dice_your_turn">Your turn</string>
+    <string name="dice_named_turn">%1$s\'s turn</string>
+    <string name="dice_body_die">Body</string>
+    <string name="dice_action_die">Action</string>
+    <string name="dice_roll_both">Roll both dice</string>
+    <string name="dice_tap_to_roll">Tap to roll</string>
+    <string name="dice_instruction_fmt">%1$s — %2$s</string>
+    <string name="dice_instruction_natural">%1$s on the %2$s</string>
+    <string name="dice_double_roll_title">Double roll</string>
+    <string name="dice_double_roll_body">Both dice show the same number. Pick any body part and any action you both agree on.</string>
+    <string name="dice_free_choice_confirm">We\'re choosing freely</string>
+    <string name="dice_free_choice_hint">Your choice — any combo until you tap Next player.</string>
+    <string name="dice_consent_line">Consent: tap a hand to pause · smile or nod to continue.</string>
+    <string name="dice_modifier_label">Spicy extra</string>
+    <string name="dice_rules_title">How to play</string>
+    <string name="dice_turns_fmt">Turns: %1$d / %2$d</string>
+    <string name="dice_session_complete">Session complete</string>
+    <string name="dice_session_complete_body">You finished %1$d turns each. Play again or head back.</string>
+    <string name="dice_play_again">Play again</string>
+    <string name="dice_back">Back</string>
+    <string name="dice_timer_fmt">Action: %1$ds</string>
+    <string name="dice_reroll_fmt">Re-roll (%1$d)</string>
+
+    <string-array name="dice_body_parts">
+        <item>Lips</item>
+        <item>Neck</item>
+        <item>Chest</item>
+        <item>Thighs</item>
+        <item>Ears</item>
+        <item>Nipple</item>
+    </string-array>
+    <string-array name="dice_actions">
+        <item>Kiss</item>
+        <item>Lick</item>
+        <item>Caress</item>
+        <item>Bite</item>
+        <item>Whisper</item>
+        <item>Tease</item>
+    </string-array>
+    <string-array name="dice_spicy_modifiers">
+        <item>Try it blindfolded</item>
+        <item>Add an ice cube</item>
+        <item>Go slow for 10 extra seconds</item>
+        <item>No talking — eye contact only</item>
+        <item>Switch who leads halfway</item>
+        <item>Whisper what you\'ll do first</item>
+        <item>Feather-light touch only</item>
+        <item>Count down from 6 before you start</item>
+    </string-array>
+    <string-array name="dice_rules">
+        <item>Each player rolls two six-sided (d6) dice — one for body, one for action.</item>
+        <item>Die 1 is body zones (6 faces). Die 2 is actions (6 faces). Match the on-screen words to your comfort.</item>
+        <item>Die 2 (action, d6): Kiss, Lick, Caress, Bite, Whisper, Tease.</item>
+        <item>On your turn, roll both dice and perform the action on the body part rolled.</item>
+        <item>Take turns rolling. Use the timer if you turned it on in session setup.</item>
+        <item>Double roll: if both dice show the same number, you choose any body part and any action (by agreement).</item>
+        <item>Keep a consent signal — tap a hand to stop, smile or nod to continue.</item>
+        <item>Optional spicy extras appear sometimes — use them if you want.</item>
+        <item>The round ends after five turns each (or when you stop).</item>
+        <item>Always prioritize fun, consent, and teasing. Stop or skip anything that doesn\'t feel right.</item>
+    </string-array>
     <string name="wyr_option_a">Share your browser history with the group</string>
     <string name="wyr_option_b">Let someone in the group text anyone in your contacts</string>
     <string name="wyr_spicy_deck">SPICY DECK</string>
+    <string name="wyr_or">OR</string>
+    <string name="wyr_next_card">Next card</string>
+    <string name="wyr_deck_empty">No more cards in this deck.</string>
+    <string name="wyr_timer_fmt">Debate: %1$ds</string>
     <string name="debate_timer">Debate Timer</string>
 
     <!-- Truth & Dare gameplay (Screen 5) -->

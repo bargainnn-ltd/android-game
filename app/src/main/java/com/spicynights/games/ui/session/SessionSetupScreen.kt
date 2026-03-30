@@ -87,6 +87,18 @@ private enum class PlayModeChoice {
     HOST_ONLINE,
 }
 
+private enum class PromptMix {
+    TRUTH_ONLY,
+    DARE_ONLY,
+    BOTH,
+}
+
+private fun PromptMix.toIncludeFlags(): Pair<Boolean, Boolean> = when (this) {
+    PromptMix.TRUTH_ONLY -> true to false
+    PromptMix.DARE_ONLY -> false to true
+    PromptMix.BOTH -> true to true
+}
+
 @Composable
 fun SessionSetupScreen(
     gameMode: SessionGameMode,
@@ -111,8 +123,7 @@ fun SessionSetupScreen(
     var playMode by remember { mutableStateOf(PlayModeChoice.PASS_AND_PLAY) }
     var intensity by remember { mutableStateOf(SessionIntensityChoice.EXTRA_SPICY) }
     var drinkingOn by remember { mutableStateOf(true) }
-    var truthOn by remember { mutableStateOf(true) }
-    var dareOn by remember { mutableStateOf(true) }
+    var promptMix by remember { mutableStateOf(PromptMix.BOTH) }
     var timerOn by remember { mutableStateOf(false) }
 
     fun levelForIntensity(): Level = when (intensity) {
@@ -144,12 +155,15 @@ fun SessionSetupScreen(
             prefs.setCategoryPartyDrinking(drinkingOn)
         }
 
+        val (includeTruths, includeDares) = promptMix.toIncludeFlags()
         val snapshot = SessionSnapshot(
             intensityLabel = intensityLabel,
             drinkingRulesOn = drinkingOn,
-            includeTruths = truthOn,
-            includeDares = dareOn,
+            includeTruths = includeTruths,
+            includeDares = includeDares,
             turnTimerOn = timerOn,
+            level = level,
+            turnTimerSeconds = timerSec,
             playerNames = names,
         )
 
@@ -160,8 +174,8 @@ fun SessionSetupScreen(
                         firstTurnIsPlayerOne = true,
                         level = level,
                         poolMode = PoolMode.ALL,
-                        includeTruths = truthOn,
-                        includeDares = dareOn,
+                        includeTruths = includeTruths,
+                        includeDares = includeDares,
                         playerNames = names,
                         firstPlayerIndex = 0,
                         drinkingRulesEnabled = drinkingOn,
@@ -384,18 +398,41 @@ fun SessionSetupScreen(
             checked = drinkingOn,
             onCheckedChange = { drinkingOn = it },
         )
-        ContentRow(
-            title = stringResource(R.string.session_truth_prompts),
-            subtitle = stringResource(R.string.session_truth_subtitle),
-            checked = truthOn,
-            onCheckedChange = { truthOn = it },
+        Text(
+            stringResource(R.string.session_prompt_mix),
+            color = Color.White,
+            fontWeight = FontWeight.Medium,
+            modifier = Modifier.padding(top = 4.dp),
         )
-        ContentRow(
-            title = stringResource(R.string.session_dare_prompts),
-            subtitle = stringResource(R.string.session_dare_subtitle),
-            checked = dareOn,
-            onCheckedChange = { dareOn = it },
+        Text(
+            stringResource(R.string.session_prompt_mix_subtitle),
+            color = Color.Gray,
+            style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
         )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            PromptMixSegment(
+                label = stringResource(R.string.session_prompt_mix_truth_only),
+                selected = promptMix == PromptMix.TRUTH_ONLY,
+                onClick = { promptMix = PromptMix.TRUTH_ONLY },
+                modifier = Modifier.weight(1f),
+            )
+            PromptMixSegment(
+                label = stringResource(R.string.session_prompt_mix_dare_only),
+                selected = promptMix == PromptMix.DARE_ONLY,
+                onClick = { promptMix = PromptMix.DARE_ONLY },
+                modifier = Modifier.weight(1f),
+            )
+            PromptMixSegment(
+                label = stringResource(R.string.session_prompt_mix_both),
+                selected = promptMix == PromptMix.BOTH,
+                onClick = { promptMix = PromptMix.BOTH },
+                modifier = Modifier.weight(1f),
+            )
+        }
         ContentRow(
             title = stringResource(R.string.session_turn_timer_row),
             subtitle = stringResource(R.string.session_turn_timer_subtitle, defaultTurnTimerSeconds),
@@ -404,7 +441,7 @@ fun SessionSetupScreen(
         )
 
         Spacer(Modifier.height(28.dp))
-        val canStart = players.count { it.selected } >= 2 && (truthOn || dareOn)
+        val canStart = players.count { it.selected } >= 2
         Button(
             onClick = { startGame() },
             enabled = canStart && playMode == PlayModeChoice.PASS_AND_PLAY,
@@ -487,6 +524,54 @@ private fun PlayModeSegment(
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
             textAlign = TextAlign.Center,
         )
+    }
+}
+
+@Composable
+private fun PromptMixSegment(
+    label: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val border = if (selected) BorderStroke(2.dp, AccentPink) else BorderStroke(1.dp, Color.Gray.copy(alpha = 0.3f))
+    Surface(
+        modifier = modifier
+            .clip(RoundedCornerShape(14.dp))
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(14.dp),
+        color = CardBg,
+        border = border,
+    ) {
+        Column(
+            modifier = Modifier.padding(horizontal = 6.dp, vertical = 10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Box(
+                modifier = Modifier
+                    .height(20.dp)
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center,
+            ) {
+                if (selected) {
+                    Icon(
+                        Icons.Filled.Check,
+                        contentDescription = null,
+                        tint = AccentPink,
+                        modifier = Modifier.size(18.dp),
+                    )
+                }
+            }
+            Text(
+                label,
+                color = Color.White,
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                textAlign = TextAlign.Center,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
     }
 }
 

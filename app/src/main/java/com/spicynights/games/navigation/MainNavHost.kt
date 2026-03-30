@@ -132,7 +132,12 @@ fun MainNavHost(
                 )
             }
             composable(Routes.NeverGameplay) { NeverGameplayScreen() }
-            composable(Routes.DirtyDiceGameplay) { DirtyDiceGameplayScreen() }
+            composable(Routes.DirtyDiceGameplay) {
+                DirtyDiceGameplayScreen(
+                    prefs = prefs,
+                    onBack = { navController.popBackStack() },
+                )
+            }
             composable(Routes.WyrGameplay) { WyrGameplayScreen() }
             composable(Routes.HowToPlay) {
                 HowToPlayScreen(

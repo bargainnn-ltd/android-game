@@ -1,5 +1,7 @@
 package com.spicynights.games.session
 
+import com.spicynights.games.data.Level
+
 /**
  * Session choices passed from Screen 3 to in-app gameplay routes (Never, Dice, WYR).
  * Set immediately before [androidx.navigation.NavController.navigate]; consumed on arrival.
@@ -10,6 +12,10 @@ data class SessionSnapshot(
     val includeTruths: Boolean,
     val includeDares: Boolean,
     val turnTimerOn: Boolean,
+    /** Resolved deck tier; matches Truth or Dare session intensity. */
+    val level: Level,
+    /** Seconds for debate/timer when [turnTimerOn] is true (same as Truth or Dare session). */
+    val turnTimerSeconds: Int,
     val playerNames: List<String>,
 )
 
