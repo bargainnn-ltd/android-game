@@ -49,7 +49,7 @@ class DataManager(
 }
 
 private fun Level.partyAssetSuffix(): String = when (this) {
-    Level.TRIALS -> "trials"
-    Level.WANDERINGS -> "wanderings"
-    Level.CLIMAX -> "climax"
+    Level.MILD -> "mild"
+    Level.SPICY -> "spicy"
+    Level.EXTREME -> "extreme"
 }

@@ -12,9 +12,9 @@
     <string name="cd_who_starts_switch">Who starts first: male or female</string>
     <string name="level_section_title">Level</string>
     <string name="pool_size_title">Pool size</string>
-    <string name="level_trials">Trials (Starter)</string>
-    <string name="level_wanderings">Wanderings (Intermediate)</string>
-    <string name="level_climax">Climax (Final)</string>
+    <string name="level_mild">Mild (Starter)</string>
+    <string name="level_spicy">Spicy (Intermediate)</string>
+    <string name="level_extreme">Extreme (Final)</string>
     <string name="include_truths">Include Truths</string>
     <string name="include_dares">Include Dares</string>
     <string name="pool_all">Full pool</string>
@@ -24,8 +24,8 @@
     <string name="player_names_section">Names</string>
     <string name="male_name_placeholder">Male name</string>
     <string name="female_name_placeholder">Female name</string>
-    <string name="climax_lock_title">Unlock Climax level</string>
-    <string name="climax_lock_body">Climax contains explicit content for consenting adults only. Confirm you are 18+ and both partners consent to this intensity.</string>
+    <string name="extreme_lock_title">Unlock Extreme level</string>
+    <string name="extreme_lock_body">Extreme contains explicit content for consenting adults only. Confirm you are 18+ and both partners consent to this intensity.</string>
     <string name="confirm_unlock">Unlock and continue</string>
     <string name="cancel">Cancel</string>
     <string name="truth_label">TRUTH</string>

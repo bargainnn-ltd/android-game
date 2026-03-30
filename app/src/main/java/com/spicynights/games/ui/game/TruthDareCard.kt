@@ -47,7 +47,7 @@ fun TruthDareCard(
     glowPulse: Float,
     shakeOffsetX: Float,
     isMaleTurn: Boolean,
-    climaxBorderPulse: Boolean = false,
+    extremeBorderPulse: Boolean = false,
     /** Screen 5: white elevated card, dark text, tag row. */
     lightPromptStyle: Boolean = false,
     intensityLabel: String = "",
@@ -76,10 +76,10 @@ fun TruthDareCard(
         }
         val borderColor = when {
             lightPromptStyle && !showBack -> Color(0xFFE0D8E8)
-            climaxBorderPulse -> {
+            extremeBorderPulse -> {
                 lerp(
                     ModColors.StrokeBlack,
-                    ModColors.ClimaxGlow,
+                    ModColors.ExtremeGlow,
                     ((glowPulse - 0.85f) / 0.15f).coerceIn(0f, 1f),
                 )
             }

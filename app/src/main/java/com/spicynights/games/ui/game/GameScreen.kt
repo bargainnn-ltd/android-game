@@ -111,8 +111,8 @@ fun GameScreen(
                     rotation.animateTo(0f, tween(200, easing = FastOutSlowInEasing))
                     return@LaunchedEffect
                 }
-                val climaxDare = snap.level == Level.CLIMAX && !snap.pendingRevealIsTruth
-                if (climaxDare) onHapticStrong() else onHapticLight()
+                val extremeDare = snap.level == Level.EXTREME && !snap.pendingRevealIsTruth
+                if (extremeDare) onHapticStrong() else onHapticLight()
                 rotation.animateTo(180f, halfFlipSpec)
                 viewModel.onFlipComplete()
                 shake.snapTo(0f)
@@ -154,9 +154,9 @@ fun GameScreen(
     }
     val isAlternateStyle = idx % 2 == 0
     val intensityLabel = when (ui.level) {
-        Level.TRIALS -> stringResource(R.string.intensity_mild)
-        Level.WANDERINGS -> stringResource(R.string.intensity_spicy)
-        Level.CLIMAX -> stringResource(R.string.intensity_extreme)
+        Level.MILD -> stringResource(R.string.intensity_mild)
+        Level.SPICY -> stringResource(R.string.intensity_spicy)
+        Level.EXTREME -> stringResource(R.string.intensity_extreme)
     }
 
     Column(
@@ -262,10 +262,10 @@ fun GameScreen(
                                 prompt = ui.currentPrompt,
                                 isTruth = displayIsTruth,
                                 rotationY = rotValue,
-                                glowPulse = if (ui.level == Level.CLIMAX) pulse else 1f,
+                                glowPulse = if (ui.level == Level.EXTREME) pulse else 1f,
                                 shakeOffsetX = shakeX,
                                 isMaleTurn = isMale,
-                                climaxBorderPulse = ui.level == Level.CLIMAX,
+                                extremeBorderPulse = ui.level == Level.EXTREME,
                                 lightPromptStyle = true,
                                 intensityLabel = intensityLabel,
                                 modifier = Modifier

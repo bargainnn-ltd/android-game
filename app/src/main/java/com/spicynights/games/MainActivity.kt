@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
             SpicyNightsTheme(appTheme = appTheme) {
                 val scope = rememberCoroutineScope()
                 val ageVerified by prefs.ageVerified.collectAsStateWithLifecycle(initialValue = false)
-                val climaxUnlocked by prefs.climaxUnlocked.collectAsStateWithLifecycle(initialValue = false)
+                val extremeUnlocked by prefs.extremeUnlocked.collectAsStateWithLifecycle(initialValue = false)
 
                 val gameLauncher = rememberLauncherForActivityResult(
                     contract = ActivityResultContracts.StartActivityForResult(),
@@ -51,9 +51,9 @@ class MainActivity : ComponentActivity() {
                     MainNavHost(
                         navController = navController,
                         prefs = prefs,
-                        climaxUnlocked = climaxUnlocked,
-                        onUnlockClimax = {
-                            scope.launch { prefs.setClimaxUnlocked(true) }
+                        extremeUnlocked = extremeUnlocked,
+                        onUnlockExtreme = {
+                            scope.launch { prefs.setExtremeUnlocked(true) }
                         },
                         onStartGame = { config: GameConfig ->
                             gameLauncher.launch(GameActivity.createIntent(this@MainActivity, config))

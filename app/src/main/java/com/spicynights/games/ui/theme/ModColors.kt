@@ -21,7 +21,7 @@ object ModColors {
     val SetupGradientTop = Color(0xFFFF1E82)
     val SetupGradientBottom = Color(0xFF6B0A20)
     val GlassOverlay = Color(0xFF000000).copy(alpha = 0.45f)
-    val ClimaxGlow = Color(0xFFFF1744)
+    val ExtremeGlow = Color(0xFFFF1744)
 
     fun cardFill(isMaleTurn: Boolean): Color {
         val base = CardRed
@@ -31,13 +31,13 @@ object ModColors {
 
     fun gameBackgroundBrush(level: Level): Brush {
         return when (level) {
-            Level.TRIALS -> Brush.verticalGradient(
+            Level.MILD -> Brush.verticalGradient(
                 colors = listOf(Color(0xFFFF3D7A), Color(0xFF7D1028)),
             )
-            Level.WANDERINGS -> Brush.verticalGradient(
+            Level.SPICY -> Brush.verticalGradient(
                 colors = listOf(Color(0xFFFF2E8A), Color(0xFF5C0A18)),
             )
-            Level.CLIMAX -> Brush.verticalGradient(
+            Level.EXTREME -> Brush.verticalGradient(
                 colors = listOf(Color(0xFFFF1E6E), Color(0xFF3D050F)),
             )
         }

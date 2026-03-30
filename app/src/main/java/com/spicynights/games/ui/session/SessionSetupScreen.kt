@@ -102,8 +102,8 @@ private fun PromptMix.toIncludeFlags(): Pair<Boolean, Boolean> = when (this) {
 @Composable
 fun SessionSetupScreen(
     gameMode: SessionGameMode,
-    climaxUnlocked: Boolean,
-    onUnlockClimax: () -> Unit,
+    extremeUnlocked: Boolean,
+    onUnlockExtreme: () -> Unit,
     prefs: AppPreferencesRepository,
     defaultTurnTimerSeconds: Int,
     onBack: () -> Unit,
@@ -111,7 +111,7 @@ fun SessionSetupScreen(
     onStartInAppMode: (SessionSnapshot) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
-    var showClimaxDialog by remember { mutableStateOf(false) }
+    var showExtremeDialog by remember { mutableStateOf(false) }
 
     val players = remember {
         mutableStateListOf(
@@ -127,14 +127,14 @@ fun SessionSetupScreen(
     var timerOn by remember { mutableStateOf(false) }
 
     fun levelForIntensity(): Level = when (intensity) {
-        SessionIntensityChoice.SPICY -> Level.WANDERINGS
+        SessionIntensityChoice.SPICY -> Level.SPICY
         SessionIntensityChoice.EXTRA_SPICY ->
-            if (climaxUnlocked) Level.CLIMAX else Level.WANDERINGS
+            if (extremeUnlocked) Level.EXTREME else Level.SPICY
     }
 
     fun trySetIntensity(choice: SessionIntensityChoice) {
-        if (choice == SessionIntensityChoice.EXTRA_SPICY && !climaxUnlocked) {
-            showClimaxDialog = true
+        if (choice == SessionIntensityChoice.EXTRA_SPICY && !extremeUnlocked) {
+            showExtremeDialog = true
             return
         }
         intensity = choice
@@ -474,24 +474,24 @@ fun SessionSetupScreen(
         )
     }
 
-    if (showClimaxDialog) {
+    if (showExtremeDialog) {
         AlertDialog(
-            onDismissRequest = { showClimaxDialog = false },
-            title = { Text(stringResource(R.string.climax_lock_title)) },
-            text = { Text(stringResource(R.string.climax_lock_body)) },
+            onDismissRequest = { showExtremeDialog = false },
+            title = { Text(stringResource(R.string.extreme_lock_title)) },
+            text = { Text(stringResource(R.string.extreme_lock_body)) },
             confirmButton = {
                 TextButton(
                     onClick = {
-                        onUnlockClimax()
+                        onUnlockExtreme()
                         intensity = SessionIntensityChoice.EXTRA_SPICY
-                        showClimaxDialog = false
+                        showExtremeDialog = false
                     },
                 ) {
                     Text(stringResource(R.string.confirm_unlock))
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showClimaxDialog = false }) {
+                TextButton(onClick = { showExtremeDialog = false }) {
                     Text(stringResource(R.string.cancel))
                 }
             },

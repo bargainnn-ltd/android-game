@@ -60,13 +60,13 @@ import kotlinx.coroutines.launch
 @Composable
 fun SettingsScreen(
     prefs: AppPreferencesRepository,
-    climaxUnlocked: Boolean,
-    onUnlockClimax: () -> Unit,
+    extremeUnlocked: Boolean,
+    onUnlockExtreme: () -> Unit,
     onResetSession: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val uriHandler = LocalUriHandler.current
-    var showClimaxDialog by remember { mutableStateOf(false) }
+    var showExtremeDialog by remember { mutableStateOf(false) }
 
     val defaultIntensity by prefs.defaultIntensity.collectAsStateWithLifecycle(initialValue = DefaultIntensity.SPICY.storageValue)
     val romance by prefs.categoryRomance.collectAsStateWithLifecycle(initialValue = true)
@@ -104,8 +104,8 @@ fun SettingsScreen(
         Spacer(Modifier.height(20.dp))
         SectionTitle(stringResource(R.string.settings_game_prefs))
         IntensityRow(defaultIntensity) { v ->
-            if (v == DefaultIntensity.EXTREME.storageValue && !climaxUnlocked) {
-                showClimaxDialog = true
+            if (v == DefaultIntensity.EXTREME.storageValue && !extremeUnlocked) {
+                showExtremeDialog = true
             } else {
                 scope.launch { prefs.setDefaultIntensity(v) }
             }
@@ -199,24 +199,24 @@ fun SettingsScreen(
         Text(stringResource(R.string.settings_made_with), color = Color.Gray, style = MaterialTheme.typography.labelSmall)
     }
 
-    if (showClimaxDialog) {
+    if (showExtremeDialog) {
         AlertDialog(
-            onDismissRequest = { showClimaxDialog = false },
-            title = { Text(stringResource(R.string.climax_lock_title)) },
-            text = { Text(stringResource(R.string.climax_lock_body)) },
+            onDismissRequest = { showExtremeDialog = false },
+            title = { Text(stringResource(R.string.extreme_lock_title)) },
+            text = { Text(stringResource(R.string.extreme_lock_body)) },
             confirmButton = {
                 TextButton(
                     onClick = {
-                        onUnlockClimax()
+                        onUnlockExtreme()
                         scope.launch { prefs.setDefaultIntensity(DefaultIntensity.EXTREME.storageValue) }
-                        showClimaxDialog = false
+                        showExtremeDialog = false
                     },
                 ) {
                     Text(stringResource(R.string.confirm_unlock))
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showClimaxDialog = false }) {
+                TextButton(onClick = { showExtremeDialog = false }) {
                     Text(stringResource(R.string.cancel))
                 }
             },

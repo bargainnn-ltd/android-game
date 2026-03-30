@@ -30,8 +30,8 @@ import com.spicynights.games.ui.settings.SettingsScreen
 fun MainNavHost(
     navController: NavHostController,
     prefs: AppPreferencesRepository,
-    climaxUnlocked: Boolean,
-    onUnlockClimax: () -> Unit,
+    extremeUnlocked: Boolean,
+    onUnlockExtreme: () -> Unit,
     onStartGame: (GameConfig) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -107,8 +107,8 @@ fun MainNavHost(
                 val mode = SessionGameMode.fromRouteArg(arg)
                 SessionSetupScreen(
                     gameMode = mode,
-                    climaxUnlocked = climaxUnlocked,
-                    onUnlockClimax = onUnlockClimax,
+                    extremeUnlocked = extremeUnlocked,
+                    onUnlockExtreme = onUnlockExtreme,
                     prefs = prefs,
                     defaultTurnTimerSeconds = turnTimerSeconds,
                     onBack = { navController.popBackStack() },
@@ -151,8 +151,8 @@ fun MainNavHost(
             composable(Routes.Settings) {
                 SettingsScreen(
                     prefs = prefs,
-                    climaxUnlocked = climaxUnlocked,
-                    onUnlockClimax = onUnlockClimax,
+                    extremeUnlocked = extremeUnlocked,
+                    onUnlockExtreme = onUnlockExtreme,
                     onResetSession = { },
                 )
             }

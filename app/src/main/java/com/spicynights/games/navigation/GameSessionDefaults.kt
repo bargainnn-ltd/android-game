@@ -11,14 +11,14 @@ import com.spicynights.games.data.local.DefaultIntensity
 fun gameConfigFromSessionPrefs(
     defaultIntensity: Int,
     turnTimerSeconds: Int,
-    climaxUnlocked: Boolean,
+    extremeUnlocked: Boolean,
 ): GameConfig {
     val level = when (defaultIntensity) {
-        DefaultIntensity.MILD.storageValue -> Level.TRIALS
-        DefaultIntensity.SPICY.storageValue -> Level.WANDERINGS
+        DefaultIntensity.MILD.storageValue -> Level.MILD
+        DefaultIntensity.SPICY.storageValue -> Level.SPICY
         DefaultIntensity.EXTREME.storageValue ->
-            if (climaxUnlocked) Level.CLIMAX else Level.WANDERINGS
-        else -> Level.TRIALS
+            if (extremeUnlocked) Level.EXTREME else Level.SPICY
+        else -> Level.MILD
     }
     return GameConfig(
         firstTurnIsPlayerOne = true,

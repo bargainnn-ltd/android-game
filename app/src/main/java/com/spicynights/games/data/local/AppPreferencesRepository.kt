@@ -31,7 +31,8 @@ class AppPreferencesRepository(private val context: Context) {
     private object Keys {
         val disclaimerAccepted = booleanPreferencesKey("disclaimer_accepted")
         val ageVerified = booleanPreferencesKey("age_verified")
-        val climaxUnlocked = booleanPreferencesKey("climax_unlocked")
+        val extremeUnlocked = booleanPreferencesKey("extreme_unlocked")
+        val climaxUnlockedLegacy = booleanPreferencesKey("climax_unlocked")
         val favoritesJson = stringPreferencesKey("favorites_json")
 
         val defaultIntensity = intPreferencesKey("default_intensity")
@@ -52,7 +53,10 @@ class AppPreferencesRepository(private val context: Context) {
         prefs[Keys.ageVerified] == true || prefs[Keys.disclaimerAccepted] == true
     }
 
-    val climaxUnlocked: Flow<Boolean> = context.dataStore.data.map { it[Keys.climaxUnlocked] == true }
+    /** True if extreme unlocked, or legacy `climax_unlocked` from before the rename. */
+    val extremeUnlocked: Flow<Boolean> = context.dataStore.data.map { prefs ->
+        prefs[Keys.extremeUnlocked] == true || prefs[Keys.climaxUnlockedLegacy] == true
+    }
 
     val favoritesJson: Flow<String?> = context.dataStore.data.map { it[Keys.favoritesJson] }
 
@@ -90,8 +94,11 @@ class AppPreferencesRepository(private val context: Context) {
         }
     }
 
-    suspend fun setClimaxUnlocked(value: Boolean) {
-        context.dataStore.edit { it[Keys.climaxUnlocked] = value }
+    suspend fun setExtremeUnlocked(value: Boolean) {
+        context.dataStore.edit {
+            it[Keys.extremeUnlocked] = value
+            it.remove(Keys.climaxUnlockedLegacy)
+        }
     }
 
     suspend fun setFavoritesJson(json: String) {

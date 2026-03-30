@@ -45,7 +45,7 @@ data class GameUiState(
     val playerNames: List<String> = listOf("", ""),
     /** Set before flip; null means user must pick Truth or Dare (unless auto-filled). */
     val selectedChoice: TruthDareChoice? = null,
-    val level: Level = Level.TRIALS,
+    val level: Level = Level.MILD,
     val lastWasDare: Boolean = false,
     /** From session [GameConfig]; used for timer bar denominator. */
     val turnTimerSeconds: Int = 30,

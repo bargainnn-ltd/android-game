@@ -119,7 +119,7 @@ class NeverGameplayViewModel(
             includeTruths = true,
             includeDares = true,
             turnTimerOn = false,
-            level = Level.WANDERINGS,
+            level = Level.SPICY,
             turnTimerSeconds = 30,
             playerNames = listOf("Player 1", "Player 2"),
         )
