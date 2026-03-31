@@ -15,17 +15,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -68,44 +64,23 @@ fun GameHubScreen(
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
         ) {
-            IconButton(onClick = onOpenMenu) {
-                Icon(Icons.Outlined.Menu, contentDescription = null, tint = Color.White)
-            }
-            Row(
-                modifier = Modifier.weight(1f),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.ic_spicy_night_logo),
-                    contentDescription = stringResource(R.string.cd_app_logo),
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(RoundedCornerShape(10.dp)),
-                    contentScale = ContentScale.Crop,
-                )
-                Spacer(Modifier.width(10.dp))
-                Text(
-                    text = stringResource(R.string.hub_game_hub),
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White,
-                )
-            }
-            Box {
-                IconButton(onClick = { }) {
-                    Icon(Icons.Filled.Notifications, contentDescription = null, tint = Color.White)
-                }
-                Box(
-                    modifier = Modifier
-                        .padding(top = 8.dp, end = 8.dp)
-                        .size(8.dp)
-                        .clip(CircleShape)
-                        .background(Color(0xFFFF2E95))
-                        .align(Alignment.TopEnd),
-                )
-            }
+            Image(
+                painter = painterResource(R.drawable.ic_spicy_night_logo),
+                contentDescription = stringResource(R.string.cd_app_logo),
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(10.dp)),
+                contentScale = ContentScale.Crop,
+            )
+            Spacer(Modifier.width(10.dp))
+            Text(
+                text = stringResource(R.string.hub_game_hub),
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color = Color.White,
+            )
         }
         Spacer(Modifier.height(12.dp))
         Text(
@@ -217,7 +192,6 @@ fun GameHubScreen(
         Spacer(Modifier.height(8.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             QuickLinkChip("?", stringResource(R.string.how_to_play_title), onHowToPlay)
-            QuickLinkChip("♥", stringResource(R.string.nav_saved), onFavorites)
             QuickLinkChip("⚙", stringResource(R.string.nav_settings), onSettings)
         }
     }

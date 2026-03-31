@@ -178,10 +178,6 @@ fun SettingsScreen(
             }
         }
         Spacer(Modifier.height(16.dp))
-        OutlinedButton(onClick = onResetSession, modifier = Modifier.fillMaxWidth()) {
-            androidx.compose.material3.Icon(Icons.Filled.Refresh, contentDescription = null, modifier = Modifier.padding(end = 8.dp))
-            Text(stringResource(R.string.settings_reset_session))
-        }
         OutlinedButton(
             onClick = { scope.launch { prefs.clearFavorites() } },
             modifier = Modifier.fillMaxWidth(),
