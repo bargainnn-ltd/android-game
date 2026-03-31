@@ -42,8 +42,8 @@ class DataManager(
         val extraTruths = customTruthLines.map { it.trim() }.filter { it.isNotEmpty() }
         val extraDares = customDareLines.map { it.trim() }.filter { it.isNotEmpty() }
         return PromptPack(
-            truths = base.truths + extraTruths,
-            dares = base.dares + extraDares,
+            truths = base.truths + extraTruths.map { PromptLine(it, 0) },
+            dares = base.dares + extraDares.map { PromptLine(it, 0) },
         )
     }
 }

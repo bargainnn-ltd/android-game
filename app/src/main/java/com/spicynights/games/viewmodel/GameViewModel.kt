@@ -6,6 +6,7 @@ import com.spicynights.games.data.DataManager
 import com.spicynights.games.data.GameConfig
 import com.spicynights.games.data.Level
 import com.spicynights.games.data.PoolMode
+import com.spicynights.games.data.PromptLine
 import com.spicynights.games.data.PromptPack
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
@@ -93,8 +94,16 @@ class GameViewModel(
     fun startSession() {
         val pack = if (config.useCustomSessionPool) {
             PromptPack(
-                truths = if (config.includeTruths) config.sessionTruths else emptyList(),
-                dares = if (config.includeDares) config.sessionDares else emptyList(),
+                truths = if (config.includeTruths) {
+                    config.sessionTruths.map { PromptLine(it, 0) }
+                } else {
+                    emptyList()
+                },
+                dares = if (config.includeDares) {
+                    config.sessionDares.map { PromptLine(it, 0) }
+                } else {
+                    emptyList()
+                },
             )
         } else {
             dataManager.buildSessionPack(
@@ -340,6 +349,31 @@ class GameViewModel(
     }
 }
 
+/**
+ * Sorts by tier ascending, then shuffles within each tier run.
+ * If every line has [PromptLine.tier] == 0, behaves as a full shuffle (legacy string-only packs).
+ */
+internal fun orderPromptLines(lines: List<PromptLine>, random: Random): List<PromptLine> {
+    if (lines.isEmpty()) return emptyList()
+    if (lines.all { it.tier == 0 }) {
+        return lines.shuffled(random)
+    }
+    val sorted = lines.sortedBy { it.tier }
+    val result = mutableListOf<PromptLine>()
+    var i = 0
+    while (i < sorted.size) {
+        val tier = sorted[i].tier
+        val run = mutableListOf<PromptLine>()
+        while (i < sorted.size && sorted[i].tier == tier) {
+            run.add(sorted[i])
+            i++
+        }
+        run.shuffle(random)
+        result.addAll(run)
+    }
+    return result
+}
+
 internal fun buildSessionQueues(
     pack: PromptPack,
     includeTruths: Boolean,
@@ -349,9 +383,14 @@ internal fun buildSessionQueues(
 ): Pair<MutableList<String>, MutableList<String>> {
     var truths = if (includeTruths) pack.truths.toMutableList() else mutableListOf()
     var dares = if (includeDares) pack.dares.toMutableList() else mutableListOf()
-    truths.shuffle(random)
-    dares.shuffle(random)
-    if (poolMode == PoolMode.ALL) return Pair(truths, dares)
+    truths = orderPromptLines(truths, random).toMutableList()
+    dares = orderPromptLines(dares, random).toMutableList()
+    if (poolMode == PoolMode.ALL) {
+        return Pair(
+            truths.map { it.text }.toMutableList(),
+            dares.map { it.text }.toMutableList(),
+        )
+    }
     val n = when (poolMode) {
         PoolMode.RANDOM_20 -> 20
         PoolMode.RANDOM_50 -> 50
@@ -359,14 +398,15 @@ internal fun buildSessionQueues(
     }
     val totalAvailable = truths.size + dares.size
     val take = minOf(n, totalAvailable)
-    val tagged = mutableListOf<Pair<Boolean, String>>()
+    val tagged = mutableListOf<Pair<Boolean, PromptLine>>()
     truths.forEach { tagged.add(true to it) }
     dares.forEach { tagged.add(false to it) }
     tagged.shuffle(random)
     val selected = tagged.take(take)
-    val tOut = selected.filter { it.first }.map { it.second }.toMutableList()
-    val dOut = selected.filter { !it.first }.map { it.second }.toMutableList()
-    tOut.shuffle(random)
-    dOut.shuffle(random)
-    return Pair(tOut, dOut)
+    val tOutLines = selected.filter { it.first }.map { it.second }
+    val dOutLines = selected.filter { !it.first }.map { it.second }
+    return Pair(
+        orderPromptLines(tOutLines, random).map { it.text }.toMutableList(),
+        orderPromptLines(dOutLines, random).map { it.text }.toMutableList(),
+    )
 }

@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PromptPack(
-    val truths: List<String> = emptyList(),
-    val dares: List<String> = emptyList(),
+    val truths: List<PromptLine> = emptyList(),
+    val dares: List<PromptLine> = emptyList(),
 )
