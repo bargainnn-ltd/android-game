@@ -169,8 +169,8 @@ fun SettingsScreen(
         }
         Spacer(Modifier.height(20.dp))
         SectionTitle(stringResource(R.string.settings_data_legal))
-        TextButtonLink(stringResource(R.string.settings_privacy)) { uriHandler.openUri("https://example.com/privacy") }
-        TextButtonLink(stringResource(R.string.settings_terms)) { uriHandler.openUri("https://example.com/terms") }
+        TextButtonLink(stringResource(R.string.settings_privacy)) { uriHandler.openUri("https://bargainn.io/privacy-policy") }
+        TextButtonLink(stringResource(R.string.settings_terms)) { uriHandler.openUri("https://bargainn.io/terms-of-service") }
         Surface(shape = RoundedCornerShape(12.dp), color = Color(0xFF2A2510), modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.padding(12.dp)) {
                 Text("⚠️ ${stringResource(R.string.settings_adult_card)}", color = Color(0xFFFFC107), fontWeight = FontWeight.Bold)

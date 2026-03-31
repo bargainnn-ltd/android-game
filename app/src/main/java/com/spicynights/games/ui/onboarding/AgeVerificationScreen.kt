@@ -55,8 +55,8 @@ private val PurpleGradient = Brush.verticalGradient(
 fun AgeVerificationScreen(
     onAgeVerified: () -> Unit,
     onUnderAgeExit: () -> Unit,
-    termsUrl: String = "https://example.com/terms",
-    privacyUrl: String = "https://example.com/privacy",
+    termsUrl: String = "https://bargainn.io/terms-of-service",
+    privacyUrl: String = "https://bargainn.io/privacy-policy",
 ) {
     var accepted by remember { mutableStateOf(false) }
     val uriHandler = LocalUriHandler.current
