@@ -56,6 +56,7 @@ import com.spicynights.games.data.local.AppPreferencesRepository
 import com.spicynights.games.data.local.AppThemePreference
 import com.spicynights.games.data.local.DefaultIntensity
 import kotlinx.coroutines.launch
+import com.spicynights.games.ui.theme.NeonTokens
 
 @Composable
 fun SettingsScreen(
@@ -82,7 +83,7 @@ fun SettingsScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF0A0A0A))
+            .background(NeonTokens.screenBackgroundBrush())
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
     ) {
@@ -97,8 +98,8 @@ fun SettingsScreen(
             )
             Spacer(Modifier.width(12.dp))
             Column {
-                Text(stringResource(R.string.settings_title), style = MaterialTheme.typography.headlineSmall, color = Color.White, fontWeight = FontWeight.Bold)
-                Text(stringResource(R.string.settings_subtitle), style = MaterialTheme.typography.labelMedium, color = Color.Gray)
+                Text(stringResource(R.string.settings_title), style = MaterialTheme.typography.headlineSmall, color = NeonTokens.TextPrimary, fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.settings_subtitle), style = MaterialTheme.typography.labelMedium, color = NeonTokens.TextDim)
             }
         }
         Spacer(Modifier.height(20.dp))
@@ -110,13 +111,13 @@ fun SettingsScreen(
                 scope.launch { prefs.setDefaultIntensity(v) }
             }
         }
-        Text(stringResource(R.string.settings_default_intensity_hint), style = MaterialTheme.typography.bodySmall, color = Color.Gray, modifier = Modifier.padding(bottom = 8.dp))
+        Text(stringResource(R.string.settings_default_intensity_hint), style = MaterialTheme.typography.bodySmall, color = NeonTokens.TextDim, modifier = Modifier.padding(bottom = 8.dp))
         ToggleRow(stringResource(R.string.settings_category_romance), romance) { scope.launch { prefs.setCategoryRomance(it) } }
         ToggleRow(stringResource(R.string.settings_category_party), party) { scope.launch { prefs.setCategoryPartyDrinking(it) } }
         ToggleRow(stringResource(R.string.settings_category_nsfw), nsfw) { scope.launch { prefs.setCategoryNsfw(it) } }
         Spacer(Modifier.height(8.dp))
-        Text(stringResource(R.string.settings_turn_timer), color = Color.White, fontWeight = FontWeight.Medium)
-        Text("${sliderValue}s", color = Color(0xFFFF9800), style = MaterialTheme.typography.titleMedium)
+        Text(stringResource(R.string.settings_turn_timer), color = NeonTokens.TextPrimary, fontWeight = FontWeight.Medium)
+        Text("${sliderValue}s", color = NeonTokens.NeonCyan, style = MaterialTheme.typography.titleMedium)
         Slider(
             value = sliderValue.toFloat(),
             onValueChange = { sliderValue = it.toInt() },
@@ -126,22 +127,22 @@ fun SettingsScreen(
             valueRange = 10f..120f,
             steps = 21,
             colors = SliderDefaults.colors(
-                thumbColor = Color(0xFFFF9800),
-                activeTrackColor = Color(0xFFFF9800),
+                thumbColor = NeonTokens.NeonMagenta,
+                activeTrackColor = NeonTokens.NeonMagenta,
             ),
         )
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text("10s", color = Color.Gray, style = MaterialTheme.typography.labelSmall)
-            Text("60s", color = Color.Gray, style = MaterialTheme.typography.labelSmall)
-            Text("120s", color = Color.Gray, style = MaterialTheme.typography.labelSmall)
+            Text("10s", color = NeonTokens.TextDim, style = MaterialTheme.typography.labelSmall)
+            Text("60s", color = NeonTokens.TextDim, style = MaterialTheme.typography.labelSmall)
+            Text("120s", color = NeonTokens.TextDim, style = MaterialTheme.typography.labelSmall)
         }
-        Text(stringResource(R.string.settings_turn_timer_hint), style = MaterialTheme.typography.bodySmall, color = Color.Gray)
+        Text(stringResource(R.string.settings_turn_timer_hint), style = MaterialTheme.typography.bodySmall, color = NeonTokens.TextDim)
         Spacer(Modifier.height(20.dp))
         SectionTitle(stringResource(R.string.settings_app_experience))
         ToggleRow(stringResource(R.string.settings_sound), soundOn) { scope.launch { prefs.setSoundEffectsEnabled(it) } }
         ToggleRow(stringResource(R.string.settings_haptics), hapticsOn) { scope.launch { prefs.setHapticFeedbackEnabled(it) } }
         Spacer(Modifier.height(8.dp))
-        Text("Theme", color = Color.White, fontWeight = FontWeight.Medium)
+        Text("Theme", color = NeonTokens.TextPrimary, fontWeight = FontWeight.Medium)
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             ThemeCard(
                 modifier = Modifier.weight(1f),
@@ -157,24 +158,24 @@ fun SettingsScreen(
             )
         }
         Spacer(Modifier.height(12.dp))
-        Surface(shape = RoundedCornerShape(12.dp), color = Color(0xFF1A1A1A), modifier = Modifier.fillMaxWidth()) {
+        Surface(shape = RoundedCornerShape(12.dp), color = NeonTokens.BgElevated, modifier = Modifier.fillMaxWidth()) {
             Row(
                 Modifier.padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text("🌐", modifier = Modifier.padding(end = 8.dp))
-                Text(stringResource(R.string.settings_language), color = Color.White, modifier = Modifier.weight(1f))
-                Text("English ›", color = Color.Gray)
+                Text(stringResource(R.string.settings_language), color = NeonTokens.TextPrimary, modifier = Modifier.weight(1f))
+                Text("English ›", color = NeonTokens.TextDim)
             }
         }
         Spacer(Modifier.height(20.dp))
         SectionTitle(stringResource(R.string.settings_data_legal))
         TextButtonLink(stringResource(R.string.settings_privacy)) { uriHandler.openUri("https://bargainn.io/privacy-policy") }
         TextButtonLink(stringResource(R.string.settings_terms)) { uriHandler.openUri("https://bargainn.io/terms-of-service") }
-        Surface(shape = RoundedCornerShape(12.dp), color = Color(0xFF2A2510), modifier = Modifier.fillMaxWidth()) {
+        Surface(shape = RoundedCornerShape(12.dp), color = NeonTokens.BgElevated, modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.padding(12.dp)) {
-                Text("⚠️ ${stringResource(R.string.settings_adult_card)}", color = Color(0xFFFFC107), fontWeight = FontWeight.Bold)
-                Text(stringResource(R.string.settings_adult_card_body), color = Color.White.copy(alpha = 0.9f), style = MaterialTheme.typography.bodySmall)
+                Text("⚠️ ${stringResource(R.string.settings_adult_card)}", color = NeonTokens.NeonMagenta, fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.settings_adult_card_body), color = NeonTokens.TextMuted, style = MaterialTheme.typography.bodySmall)
             }
         }
         Spacer(Modifier.height(16.dp))
@@ -189,10 +190,10 @@ fun SettingsScreen(
         Spacer(Modifier.height(24.dp))
         Text(
             stringResource(R.string.settings_version_fmt, BuildConfig.VERSION_NAME),
-            color = Color.Gray,
+            color = NeonTokens.TextDim,
             style = MaterialTheme.typography.labelMedium,
         )
-        Text(stringResource(R.string.settings_made_with), color = Color.Gray, style = MaterialTheme.typography.labelSmall)
+        Text(stringResource(R.string.settings_made_with), color = NeonTokens.TextDim, style = MaterialTheme.typography.labelSmall)
     }
 
     if (showExtremeDialog) {
@@ -222,7 +223,7 @@ fun SettingsScreen(
 
 @Composable
 private fun SectionTitle(text: String) {
-    Text(text, color = Color.Gray, style = MaterialTheme.typography.labelMedium, modifier = Modifier.padding(bottom = 8.dp))
+    Text(text, color = NeonTokens.TextDim, style = MaterialTheme.typography.labelMedium, modifier = Modifier.padding(bottom = 8.dp))
 }
 
 @Composable
@@ -239,8 +240,8 @@ private fun IntensityRow(selected: Int, onSelect: (Int) -> Unit) {
             val sel = selected == value
             Surface(
                 shape = RoundedCornerShape(12.dp),
-                color = if (sel) Color(0xFF3A2A10) else Color(0xFF1A1A1A),
-                border = if (sel) BorderStroke(2.dp, Color(0xFFFF9800)) else null,
+                color = if (sel) NeonTokens.BgElevated else NeonTokens.BgVoid.copy(alpha = 0.9f),
+                border = if (sel) BorderStroke(2.dp, NeonTokens.NeonMagenta) else BorderStroke(1.dp, NeonTokens.GlassBorderStrong),
                 modifier = Modifier
                     .weight(1f)
                     .clickable { onSelect(value) },
@@ -248,7 +249,7 @@ private fun IntensityRow(selected: Int, onSelect: (Int) -> Unit) {
                 Text(
                     label,
                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 10.dp),
-                    color = if (sel) Color(0xFFFF9800) else Color.White,
+                    color = if (sel) NeonTokens.NeonMagenta else NeonTokens.TextPrimary,
                     fontWeight = if (sel) FontWeight.Bold else FontWeight.Normal,
                     style = MaterialTheme.typography.labelMedium,
                 )
@@ -266,7 +267,8 @@ private fun ThemeCard(
 ) {
     Surface(
         shape = RoundedCornerShape(12.dp),
-        color = if (selected) Color(0xFF1A3D1A) else Color(0xFF1A1A1A),
+        color = if (selected) NeonTokens.BgElevated else NeonTokens.BgVoid.copy(alpha = 0.9f),
+        border = if (selected) BorderStroke(1.dp, NeonTokens.NeonCyan) else BorderStroke(1.dp, NeonTokens.GlassBorderStrong),
         modifier = modifier.clickable(onClick = onClick),
     ) {
         Column(Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -276,9 +278,9 @@ private fun ThemeCard(
                     .fillMaxWidth(),
                 contentAlignment = Alignment.Center,
             ) {
-                if (selected) Text("✓", color = Color(0xFF4CAF50))
+                if (selected) Text("✓", color = NeonTokens.NeonCyan)
             }
-            Text(title, color = Color.White, style = MaterialTheme.typography.labelMedium)
+            Text(title, color = NeonTokens.TextPrimary, style = MaterialTheme.typography.labelMedium)
         }
     }
 }
@@ -291,7 +293,7 @@ private fun ToggleRow(label: String, checked: Boolean, onChecked: (Boolean) -> U
             .padding(vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(label, color = Color.White, modifier = Modifier.weight(1f))
+        Text(label, color = NeonTokens.TextPrimary, modifier = Modifier.weight(1f))
         Switch(checked = checked, onCheckedChange = onChecked)
     }
 }
@@ -300,7 +302,7 @@ private fun ToggleRow(label: String, checked: Boolean, onChecked: (Boolean) -> U
 private fun TextButtonLink(text: String, onClick: () -> Unit) {
     Button(
         onClick = onClick,
-        colors = ButtonDefaults.textButtonColors(contentColor = Color(0xFF64B5F6)),
+        colors = ButtonDefaults.textButtonColors(contentColor = NeonTokens.NeonCyan),
     ) {
         Text(text)
     }

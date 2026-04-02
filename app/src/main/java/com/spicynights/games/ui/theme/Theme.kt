@@ -7,30 +7,30 @@ import androidx.compose.ui.graphics.Color
 import com.spicynights.games.data.local.AppThemePreference
 
 private val MidnightColors = darkColorScheme(
-    primary = Color(0xFFFF2E6A),
+    primary = NeonTokens.NeonMagenta,
     onPrimary = Color.White,
-    secondary = Color(0xFFFFEB3B),
-    onSecondary = Color(0xFF1A1020),
-    tertiary = Color(0xFFE63946),
-    background = Color(0xFF1A0A10),
-    surface = Color(0xFF2A1218),
-    onBackground = Color(0xFFF5F5F5),
-    onSurface = Color(0xFFF5F5F5),
-    surfaceVariant = Color(0xFF3D1820),
-    onSurfaceVariant = Color(0xFFE0E0E0),
+    secondary = NeonTokens.NeonCyan,
+    onSecondary = Color(0xFF0A1218),
+    tertiary = Color(0xFFE040FB),
+    background = NeonTokens.BgDeep,
+    surface = NeonTokens.BgElevated,
+    onBackground = NeonTokens.TextPrimary,
+    onSurface = NeonTokens.TextPrimary,
+    surfaceVariant = Color(0xFF2A2A38),
+    onSurfaceVariant = NeonTokens.TextMuted,
 )
 
 private val TwilightColors = darkColorScheme(
     primary = Color(0xFFFF4D7D),
     onPrimary = Color.White,
-    secondary = Color(0xFFFFF176),
-    onSecondary = Color(0xFF1A1020),
+    secondary = NeonTokens.NeonCyan.copy(alpha = 0.95f),
+    onSecondary = Color(0xFF0A1218),
     tertiary = Color(0xFFFF6B6B),
-    background = Color(0xFF252030),
-    surface = Color(0xFF353045),
+    background = Color(0xFF1E1A28),
+    surface = Color(0xFF2E2A38),
     onBackground = Color(0xFFF0F0F5),
     onSurface = Color(0xFFF0F0F5),
-    surfaceVariant = Color(0xFF454058),
+    surfaceVariant = Color(0xFF3A3648),
     onSurfaceVariant = Color(0xFFD0D0DD),
 )
 

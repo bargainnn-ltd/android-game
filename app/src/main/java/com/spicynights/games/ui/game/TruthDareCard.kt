@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.spicynights.games.R
 import com.spicynights.games.ui.theme.ModColors
+import com.spicynights.games.ui.theme.NeonTokens
 
 @Composable
 fun TruthDareCard(
@@ -70,12 +71,13 @@ fun TruthDareCard(
     ) {
         val shape = RoundedCornerShape(28.dp)
         val cardFill = when {
-            lightPromptStyle && showBack -> Color(0xFF2A1828)
-            lightPromptStyle && !showBack -> Color.White
+            lightPromptStyle && showBack -> NeonTokens.BgDeep
+            lightPromptStyle && !showBack -> NeonTokens.BgElevated
             else -> ModColors.cardFill(isMaleTurn)
         }
         val borderColor = when {
-            lightPromptStyle && !showBack -> Color(0xFFE0D8E8)
+            lightPromptStyle && !showBack ->
+                if (isTruth) NeonTokens.NeonCyan.copy(alpha = 0.75f) else NeonTokens.NeonMagenta.copy(alpha = 0.75f)
             extremeBorderPulse -> {
                 lerp(
                     ModColors.StrokeBlack,
@@ -128,7 +130,7 @@ fun TruthDareCard(
                             )
                             Spacer(Modifier.height(8.dp))
                         }
-                        val promptColor = if (lightPromptStyle) ModColors.StrokeBlack else Color.White
+                        val promptColor = if (lightPromptStyle) NeonTokens.TextPrimary else Color.White
                         Box(
                             modifier = Modifier
                                 .weight(1f)
@@ -168,27 +170,30 @@ private fun PromptTagsRow(
     ) {
         Surface(
             shape = RoundedCornerShape(20.dp),
-            color = if (isTruth) Color(0xFFE8E0FF) else Color(0xFFFFE0ED),
-            border = BorderStroke(1.dp, ModColors.StrokeBlack.copy(alpha = 0.12f)),
+            color = NeonTokens.BgVoid.copy(alpha = 0.85f),
+            border = BorderStroke(
+                1.dp,
+                if (isTruth) NeonTokens.NeonCyan.copy(alpha = 0.65f) else NeonTokens.NeonMagenta.copy(alpha = 0.65f),
+            ),
         ) {
             Text(
                 text = if (isTruth) truth else dare,
                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                 style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Black),
-                color = ModColors.StrokeBlack,
+                color = if (isTruth) NeonTokens.NeonCyan else NeonTokens.NeonMagenta,
             )
         }
         if (intensityLabel.isNotEmpty()) {
             Surface(
                 shape = RoundedCornerShape(20.dp),
-                color = Color(0xFFFFF8E1),
-                border = BorderStroke(1.dp, ModColors.StrokeBlack.copy(alpha = 0.15f)),
+                color = NeonTokens.BgElevated,
+                border = BorderStroke(1.dp, NeonTokens.GlassBorderStrong),
             ) {
                 Text(
                     text = intensityLabel,
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
                     style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
-                    color = ModColors.StrokeBlack,
+                    color = NeonTokens.TextPrimary,
                 )
             }
         }

@@ -38,6 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.spicynights.games.R
+import com.spicynights.games.ui.theme.NeonTokens
 
 @Composable
 fun HowToPlayScreen(
@@ -53,7 +54,7 @@ fun HowToPlayScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF0A0A0C))
+            .background(NeonTokens.screenBackgroundBrush())
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
     ) {
@@ -69,26 +70,26 @@ fun HowToPlayScreen(
         Text(
             stringResource(R.string.how_to_play_title),
             style = MaterialTheme.typography.headlineSmall,
-            color = Color.White,
+            color = NeonTokens.TextPrimary,
             fontWeight = FontWeight.Bold,
         )
         Text(
             stringResource(R.string.how_to_play_subtitle),
             style = MaterialTheme.typography.labelMedium,
-            color = Color.Gray,
+            color = NeonTokens.TextDim,
         )
         Spacer(Modifier.height(16.dp))
         Spacer(Modifier.height(12.dp))
-        Text(stringResource(R.string.how_to_master_title), style = MaterialTheme.typography.headlineSmall, color = Color.White, fontWeight = FontWeight.Bold)
-        Text(stringResource(R.string.how_to_master_body), color = Color.Gray, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(top = 4.dp))
+        Text(stringResource(R.string.how_to_master_title), style = MaterialTheme.typography.headlineSmall, color = NeonTokens.TextPrimary, fontWeight = FontWeight.Bold)
+        Text(stringResource(R.string.how_to_master_body), color = NeonTokens.TextMuted, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(top = 4.dp))
         Spacer(Modifier.height(20.dp))
-        Text(stringResource(R.string.game_guides), style = MaterialTheme.typography.labelSmall, color = Color.Gray)
+        Text(stringResource(R.string.game_guides), style = MaterialTheme.typography.labelSmall, color = NeonTokens.TextDim)
         Spacer(Modifier.height(8.dp))
         guides.forEachIndexed { index, (titleRes, emoji) ->
             val isOpen = expanded[index]
             Surface(
                 shape = RoundedCornerShape(12.dp),
-                color = Color(0xFF222228),
+                color = NeonTokens.BgElevated,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
@@ -99,13 +100,13 @@ fun HowToPlayScreen(
                 Column(Modifier.padding(12.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
                         Text(emoji, modifier = Modifier.padding(end = 8.dp))
-                        Text(stringResource(titleRes), color = Color.White, modifier = Modifier.weight(1f))
-                        Icon(Icons.Filled.ExpandMore, contentDescription = null, tint = Color.Gray)
+                        Text(stringResource(titleRes), color = NeonTokens.TextPrimary, modifier = Modifier.weight(1f))
+                        Icon(Icons.Filled.ExpandMore, contentDescription = null, tint = NeonTokens.TextDim)
                     }
                     if (isOpen) {
                         Text(
                             stringResource(R.string.mode_placeholder_body),
-                            color = Color.Gray,
+                            color = NeonTokens.TextMuted,
                             style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier.padding(top = 8.dp),
                         )
@@ -114,30 +115,30 @@ fun HowToPlayScreen(
             }
         }
         Spacer(Modifier.height(20.dp))
-        Text(stringResource(R.string.intensity_levels), style = MaterialTheme.typography.labelSmall, color = Color.Gray)
+        Text(stringResource(R.string.intensity_levels), style = MaterialTheme.typography.labelSmall, color = NeonTokens.TextDim)
         Spacer(Modifier.height(8.dp))
-        Surface(shape = RoundedCornerShape(12.dp), color = Color(0xFF222228), modifier = Modifier.fillMaxWidth()) {
+        Surface(shape = RoundedCornerShape(12.dp), color = NeonTokens.BgElevated, modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.padding(12.dp)) {
-                IntensityLine(Color(0xFF4CAF50), stringResource(R.string.intensity_mild), "Icebreakers and light fun.")
-                IntensityLine(Color(0xFFFF9800), stringResource(R.string.intensity_spicy), "Flirty and suggestive.")
-                IntensityLine(Color(0xFFE91E63), stringResource(R.string.intensity_extreme), "Explicit and wild.")
+                IntensityLine(NeonTokens.NeonCyan, stringResource(R.string.intensity_mild), "Icebreakers and light fun.")
+                IntensityLine(NeonTokens.NeonMagenta, stringResource(R.string.intensity_spicy), "Flirty and suggestive.")
+                IntensityLine(Color(0xFFE040FB), stringResource(R.string.intensity_extreme), "Explicit and wild.")
             }
         }
         Spacer(Modifier.height(20.dp))
-        Text(stringResource(R.string.house_rules), style = MaterialTheme.typography.labelSmall, color = Color.Gray)
+        Text(stringResource(R.string.house_rules), style = MaterialTheme.typography.labelSmall, color = NeonTokens.TextDim)
         Spacer(Modifier.height(8.dp))
-        Surface(shape = RoundedCornerShape(12.dp), color = Color(0xFF222228), modifier = Modifier.fillMaxWidth()) {
+        Surface(shape = RoundedCornerShape(12.dp), color = NeonTokens.BgElevated, modifier = Modifier.fillMaxWidth()) {
             Text(
                 "Everyone gets 1 free skip per game.",
-                color = Color.White,
+                color = NeonTokens.TextPrimary,
                 modifier = Modifier.padding(16.dp),
             )
         }
         Spacer(Modifier.height(8.dp))
-        Surface(shape = RoundedCornerShape(12.dp), color = Color(0xFF222228), modifier = Modifier.fillMaxWidth()) {
+        Surface(shape = RoundedCornerShape(12.dp), color = NeonTokens.BgElevated, modifier = Modifier.fillMaxWidth()) {
             Text(
                 "Establish a safe word to end a turn immediately.",
-                color = Color.White,
+                color = NeonTokens.TextPrimary,
                 modifier = Modifier.padding(16.dp),
             )
         }
@@ -145,7 +146,10 @@ fun HowToPlayScreen(
         Button(
             onClick = onGoToSettings,
             modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = Color.Black),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = NeonTokens.NeonMagenta,
+                contentColor = Color.White,
+            ),
         ) {
             Icon(Icons.Filled.Settings, contentDescription = null, modifier = Modifier.padding(end = 8.dp))
             Text(stringResource(R.string.go_to_settings), fontWeight = FontWeight.Bold)
@@ -162,8 +166,8 @@ private fun IntensityLine(dot: Color, title: String, desc: String) {
                 .background(dot, CircleShape),
         )
         Column(Modifier.padding(start = 10.dp)) {
-            Text(title, color = Color.White, fontWeight = FontWeight.Bold)
-            Text(desc, color = Color.Gray, style = MaterialTheme.typography.bodySmall)
+            Text(title, color = NeonTokens.TextPrimary, fontWeight = FontWeight.Bold)
+            Text(desc, color = NeonTokens.TextMuted, style = MaterialTheme.typography.bodySmall)
         }
     }
 }

@@ -63,13 +63,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.spicynights.games.R
 import com.spicynights.games.data.Level
 import com.spicynights.games.ui.theme.ModColors
+import com.spicynights.games.ui.theme.NeonTokens
 import com.spicynights.games.viewmodel.CardPhase
 import com.spicynights.games.viewmodel.GameViewModel
 import com.spicynights.games.viewmodel.TruthDareChoice
 import kotlinx.coroutines.launch
 
-private val GameHeaderPurple = Color(0xFF5B2D8C)
-private val GameBodyLight = Color(0xFFF5F0FA)
 private val MaleIconColor = Color(0xFF64B5F6)
 private val MaleBgColor = Color(0xFF1A3F6E)
 private val FemaleIconColor = Color(0xFFFF80AB)
@@ -162,7 +161,7 @@ fun GameScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(GameBodyLight)
+            .background(NeonTokens.screenBackgroundBrush())
             .testTag("game_screen"),
     ) {
         GameTopBar(
@@ -217,7 +216,7 @@ fun GameScreen(
                     ui.totalInSession.coerceAtLeast(0),
                 ),
                 style = MaterialTheme.typography.bodySmall,
-                color = ModColors.StrokeBlack.copy(alpha = 0.55f),
+                color = NeonTokens.TextMuted,
                 modifier = Modifier.testTag("progress_label"),
             )
 
@@ -232,7 +231,7 @@ fun GameScreen(
                         Text(
                             text = stringResource(R.string.deck_empty),
                             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                            color = ModColors.StrokeBlack,
+                            color = NeonTokens.TextPrimary,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -316,8 +315,8 @@ private fun GameTopBar(
     onBookmark: () -> Unit,
 ) {
     Surface(
-        color = GameHeaderPurple,
-        shadowElevation = 4.dp,
+        color = NeonTokens.BgDeep,
+        shadowElevation = 6.dp,
     ) {
         Row(
             modifier = Modifier
@@ -417,11 +416,11 @@ private fun ModeSegment(
     modifier: Modifier = Modifier,
 ) {
     val bg = when {
-        selected -> GameHeaderPurple
-        else -> Color.White
+        selected -> NeonTokens.NeonMagenta
+        else -> NeonTokens.BgElevated
     }
-    val fg = if (selected) Color.White else ModColors.StrokeBlack
-    val borderC = if (selected) GameHeaderPurple else ModColors.StrokeBlack.copy(alpha = 0.2f)
+    val fg = if (selected) Color.White else NeonTokens.TextPrimary
+    val borderC = if (selected) NeonTokens.NeonMagenta else NeonTokens.NeonCyan.copy(alpha = 0.35f)
     Surface(
         modifier = modifier
             .clip(RoundedCornerShape(12.dp))
@@ -488,7 +487,7 @@ private fun PlayerTimerRow(
             Text(
                 text = stringResource(R.string.turn_line, currentPlayerLabel),
                 style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                color = ModColors.StrokeBlack,
+                color = NeonTokens.TextPrimary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.testTag("current_player_label"),
@@ -500,8 +499,8 @@ private fun PlayerTimerRow(
                     .fillMaxWidth()
                     .height(6.dp)
                     .clip(RoundedCornerShape(4.dp)),
-                color = GameHeaderPurple,
-                trackColor = ModColors.StrokeBlack.copy(alpha = 0.08f),
+                color = NeonTokens.NeonMagenta,
+                trackColor = NeonTokens.BgElevated.copy(alpha = 0.65f),
             )
             Text(
                 text = if (total <= 0) {
@@ -510,7 +509,7 @@ private fun PlayerTimerRow(
                     stringResource(R.string.timer_remaining_fmt, remaining.coerceAtLeast(0), total)
                 },
                 style = MaterialTheme.typography.labelSmall,
-                color = ModColors.StrokeBlack.copy(alpha = 0.5f),
+                color = NeonTokens.TextDim,
                 modifier = Modifier.padding(top = 2.dp),
             )
         }
@@ -530,16 +529,16 @@ private fun PenaltyRow(
         Text(
             text = stringResource(R.string.penalty_row_label),
             style = MaterialTheme.typography.bodyMedium,
-            color = ModColors.StrokeBlack,
+            color = NeonTokens.TextMuted,
         )
         Switch(
             checked = checked,
             onCheckedChange = onCheckedChange,
             colors = SwitchDefaults.colors(
                 checkedThumbColor = Color.White,
-                checkedTrackColor = GameHeaderPurple,
+                checkedTrackColor = NeonTokens.NeonMagenta,
                 uncheckedThumbColor = Color.White,
-                uncheckedTrackColor = ModColors.StrokeBlack.copy(alpha = 0.25f),
+                uncheckedTrackColor = NeonTokens.BgElevated.copy(alpha = 0.8f),
             ),
             modifier = Modifier.testTag("penalty_switch"),
         )
@@ -555,8 +554,8 @@ private fun HouseRulesAccordion(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, ModColors.StrokeBlack.copy(alpha = 0.12f), RoundedCornerShape(12.dp))
-            .background(Color.White)
+            .border(1.dp, NeonTokens.GlassBorderStrong, RoundedCornerShape(12.dp))
+            .background(NeonTokens.BgElevated)
             .testTag("house_rules"),
     ) {
         Row(
@@ -570,18 +569,18 @@ private fun HouseRulesAccordion(
             Text(
                 text = stringResource(R.string.house_rules_game_title),
                 style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                color = ModColors.StrokeBlack,
+                color = NeonTokens.TextPrimary,
             )
             Text(
                 text = if (expanded) "▲" else "▼",
-                color = ModColors.StrokeBlack.copy(alpha = 0.6f),
+                color = NeonTokens.TextDim,
             )
         }
         if (expanded) {
             Text(
                 text = stringResource(R.string.house_rules_game_body),
                 style = MaterialTheme.typography.bodySmall,
-                color = ModColors.StrokeBlack.copy(alpha = 0.75f),
+                color = NeonTokens.TextMuted,
                 modifier = Modifier.padding(start = 10.dp, end = 10.dp, bottom = 10.dp),
             )
         }

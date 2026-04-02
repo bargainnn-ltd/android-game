@@ -72,16 +72,10 @@ import com.spicynights.games.ui.dice.FlirtyPointerOverlay
 import com.spicynights.games.ui.sound.FlipSoundEffects
 import com.spicynights.games.viewmodel.CouplesDiceRules
 import com.spicynights.games.viewmodel.WyrGameplayViewModel
+import com.spicynights.games.ui.theme.NeonTokens
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-private val NeverAccent = Color(0xFF4DD0E1)
-private val DicePink = Color(0xFFFF2E95)
-private val CardBg = Color(0xFF2C2C35)
-
-private val WyrScreenBg = Color(0xFF1A1A1A)
-private val WyrOptionBlue = Color(0xFF0099FF)
-private val WyrOptionRed = Color(0xFFE62E2E)
 private val WyrCardRadius = 28.dp
 private val WyrOrBadgeSize = 56.dp
 
@@ -114,21 +108,11 @@ fun NeverGameplayScreen(prefs: AppPreferencesRepository) {
         }
     }
 
-    val bgGradient =
-        Brush.verticalGradient(
-            colors =
-                listOf(
-                    Color(0xFF2D1B69),
-                    Color(0xFF12182E),
-                    Color(0xFF070A12),
-                ),
-        )
-
     Box(
         modifier =
             Modifier
                 .fillMaxSize()
-                .background(bgGradient),
+                .background(NeonTokens.screenBackgroundBrush()),
     ) {
         Column(
             modifier =
@@ -140,7 +124,7 @@ fun NeverGameplayScreen(prefs: AppPreferencesRepository) {
         ) {
             val titleBrush =
                 Brush.linearGradient(
-                    colors = listOf(Color.White, NeverAccent.copy(alpha = 0.95f)),
+                    colors = listOf(NeonTokens.TextPrimary, NeonTokens.NeonCyan.copy(alpha = 0.95f)),
                 )
             Text(
                 stringResource(R.string.never_game_title),
@@ -166,7 +150,7 @@ fun NeverGameplayScreen(prefs: AppPreferencesRepository) {
                         Text(
                             stringResource(R.string.never_reads_prompt, state.currentReaderName),
                             style = MaterialTheme.typography.labelSmall,
-                            color = Color(0xFF9FA8DA),
+                            color = NeonTokens.TextMuted,
                         )
                         Text(
                             state.currentReaderName,
@@ -190,7 +174,7 @@ fun NeverGameplayScreen(prefs: AppPreferencesRepository) {
                 ) {
                     Text(
                         state.intensityLine,
-                        color = Color(0xFFCBD3FF),
+                        color = NeonTokens.TextMuted,
                         style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
                     )
@@ -225,7 +209,7 @@ fun NeverGameplayScreen(prefs: AppPreferencesRepository) {
                             Brush.radialGradient(
                                 colors =
                                     listOf(
-                                        NeverAccent.copy(alpha = 0.12f),
+                                        NeonTokens.NeonCyan.copy(alpha = 0.12f),
                                         Color.Transparent,
                                     ),
                                 radius = 520f,
@@ -241,7 +225,7 @@ fun NeverGameplayScreen(prefs: AppPreferencesRepository) {
                     Column(Modifier.padding(18.dp)) {
                         Text(
                             stringResource(R.string.never_have_prefix).uppercase(),
-                            color = NeverAccent.copy(alpha = 0.95f),
+                            color = NeonTokens.NeonCyan.copy(alpha = 0.95f),
                             style = MaterialTheme.typography.labelLarge,
                             fontWeight = FontWeight.Medium,
                         )
@@ -257,12 +241,12 @@ fun NeverGameplayScreen(prefs: AppPreferencesRepository) {
                             Surface(
                                 shape = RoundedCornerShape(20.dp),
                                 color = Color.White.copy(alpha = 0.06f),
-                                border = BorderStroke(1.dp, NeverAccent.copy(alpha = 0.35f)),
+                                border = BorderStroke(1.dp, NeonTokens.NeonCyan.copy(alpha = 0.35f)),
                             ) {
                                 Text(
                                     "🥂  ${stringResource(R.string.never_sip_hint)}",
                                     modifier = Modifier.padding(12.dp),
-                                    color = NeverAccent,
+                                    color = NeonTokens.NeonCyan,
                                     style = MaterialTheme.typography.labelMedium,
                                 )
                             }
@@ -318,7 +302,7 @@ fun NeverGameplayScreen(prefs: AppPreferencesRepository) {
                 Brush.horizontalGradient(
                     colors =
                         listOf(
-                            NeverAccent,
+                            NeonTokens.NeonCyan,
                             Color(0xFFE040FB),
                         ),
                 )
@@ -376,11 +360,11 @@ private fun FilterChipStyle(label: String, selected: Boolean, onClick: () -> Uni
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(20.dp),
-        color = if (selected) NeverAccent.copy(alpha = 0.35f) else Color.White.copy(alpha = 0.06f),
+        color = if (selected) NeonTokens.NeonCyan.copy(alpha = 0.35f) else Color.White.copy(alpha = 0.06f),
         border =
             BorderStroke(
                 1.dp,
-                if (selected) NeverAccent.copy(alpha = 0.55f) else Color.White.copy(alpha = 0.14f),
+                if (selected) NeonTokens.NeonCyan.copy(alpha = 0.55f) else Color.White.copy(alpha = 0.14f),
             ),
     ) {
         Text(
@@ -467,7 +451,7 @@ fun SpicySpinnerGameplayScreen(
         ) {
         Text(
             stringResource(R.string.game_spicy_spinner),
-            color = DicePink,
+            color = NeonTokens.NeonMagenta,
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
         )
@@ -526,7 +510,7 @@ fun SpicySpinnerGameplayScreen(
                     bodyLabel ?: "—",
                     actionLabel ?: "—",
                 ),
-                color = DicePink,
+                color = NeonTokens.NeonMagenta,
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(top = 4.dp),
@@ -544,7 +528,7 @@ fun SpicySpinnerGameplayScreen(
                     .fillMaxWidth()
                     .hoverable(rollInteraction),
                 interactionSource = rollInteraction,
-                colors = ButtonDefaults.buttonColors(containerColor = DicePink),
+                colors = ButtonDefaults.buttonColors(containerColor = NeonTokens.NeonMagenta),
             ) {
                 Text(stringResource(R.string.dice_spin))
             }
@@ -557,7 +541,7 @@ fun SpicySpinnerGameplayScreen(
         )
         Spacer(Modifier.height(8.dp))
 
-        Surface(shape = RoundedCornerShape(16.dp), color = CardBg, modifier = Modifier.fillMaxWidth()) {
+        Surface(shape = RoundedCornerShape(16.dp), color = NeonTokens.BgElevated, modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.padding(12.dp)) {
                 when {
                     isRolling -> {
@@ -597,7 +581,7 @@ fun SpicySpinnerGameplayScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(top = 12.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = DicePink),
+                            colors = ButtonDefaults.buttonColors(containerColor = NeonTokens.NeonMagenta),
                         ) {
                             Text(stringResource(R.string.dice_free_choice_confirm))
                         }
@@ -676,7 +660,7 @@ fun SpicySpinnerGameplayScreen(
                 Button(
                     onClick = onBack,
                     modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF333333)),
+                    colors = ButtonDefaults.buttonColors(containerColor = NeonTokens.BgElevated),
                 ) {
                     Text(stringResource(R.string.dice_back))
                 }
@@ -686,7 +670,7 @@ fun SpicySpinnerGameplayScreen(
                 Button(
                     onClick = { runRollAnimation { vm.reRoll() } },
                     modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF333333)),
+                    colors = ButtonDefaults.buttonColors(containerColor = NeonTokens.BgElevated),
                     enabled = state.sessionReRollsRemaining > 0 && state.bodyRoll != null && !isRolling,
                 ) {
                     Text(stringResource(R.string.dice_reroll_fmt, state.sessionReRollsRemaining))
@@ -694,7 +678,7 @@ fun SpicySpinnerGameplayScreen(
                 Button(
                     onClick = { vm.nextPlayer() },
                     modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.buttonColors(containerColor = DicePink),
+                    colors = ButtonDefaults.buttonColors(containerColor = NeonTokens.NeonMagenta),
                     enabled = state.bodyRoll != null && !isRolling,
                 ) {
                     Text(stringResource(R.string.next_player))
@@ -749,7 +733,7 @@ fun WyrGameplayScreen(prefs: AppPreferencesRepository) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(WyrScreenBg)
+            .background(NeonTokens.BgDeep)
             .padding(horizontal = 20.dp),
     ) {
         Spacer(Modifier.height(28.dp))
@@ -798,7 +782,7 @@ fun WyrGameplayScreen(prefs: AppPreferencesRepository) {
                         .weight(1f)
                         .fillMaxWidth()
                         .clip(topShape)
-                        .background(WyrOptionBlue)
+                        .background(NeonTokens.NeonCyan)
                         .padding(horizontal = 20.dp, vertical = 24.dp),
                     contentAlignment = Alignment.Center,
                 ) {
@@ -815,7 +799,7 @@ fun WyrGameplayScreen(prefs: AppPreferencesRepository) {
                         .weight(1f)
                         .fillMaxWidth()
                         .clip(bottomShape)
-                        .background(WyrOptionRed)
+                        .background(NeonTokens.NeonMagenta)
                         .padding(horizontal = 20.dp, vertical = 24.dp),
                     contentAlignment = Alignment.Center,
                 ) {
@@ -833,7 +817,7 @@ fun WyrGameplayScreen(prefs: AppPreferencesRepository) {
                     .align(Alignment.Center)
                     .size(WyrOrBadgeSize)
                     .clip(CircleShape)
-                    .background(WyrScreenBg),
+                    .background(NeonTokens.BgDeep),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(

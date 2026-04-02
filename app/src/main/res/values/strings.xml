@@ -76,6 +76,9 @@
     <string name="nav_help">Help</string>
 
     <string name="age_verification_title">Age Verification Required</string>
+    <string name="age_verify_banner">VERIFY AGE</string>
+    <string name="age_adults_only">ADULTS ONLY</string>
+    <string name="age_are_you_18">ARE YOU 18+?</string>
     <string name="spicynights_tagline">Truth or Dare, Spicy Spinner &amp; More</string>
     <string name="age_includes_games">INCLUDES 4 PARTY GAMES</string>
     <string name="age_consent_checkbox">I am 18 years or older and I agree to the Terms of Service and Privacy Policy.</string>

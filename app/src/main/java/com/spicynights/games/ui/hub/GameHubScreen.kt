@@ -48,13 +48,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.spicynights.games.R
-import com.spicynights.games.ui.theme.ModColors
-
-private val CosmicTop = Color(0xFF0D1528)
-private val CosmicMid = Color(0xFF1A0F35)
-private val CosmicBottom = Color(0xFF0A0618)
-private val TitleGradientA = Color(0xFFE1BEE7)
-private val TitleGradientB = Color(0xFF64B5F6)
+import com.spicynights.games.ui.theme.NeonTokens
 
 private data class HubGameTile(
     val titleRes: Int,
@@ -84,7 +78,7 @@ fun GameHubScreen(
                 titleRes = R.string.game_never,
                 descRes = R.string.hub_tile_never_desc,
                 emoji = "🥂",
-                accent = Color(0xFFCE93D8),
+                accent = NeonTokens.NeonCyan,
                 onClick = onGameNever,
                 testTag = "hub_game_never",
             ),
@@ -92,21 +86,21 @@ fun GameHubScreen(
                 titleRes = R.string.game_truth_dare,
                 descRes = R.string.hub_tile_truth_dare_desc,
                 emoji = "🎭",
-                accent = Color(0xFF7986CB),
+                accent = NeonTokens.NeonMagenta,
                 onClick = onGameTruthDare,
             ),
             HubGameTile(
                 titleRes = R.string.game_spicy_spinner,
                 descRes = R.string.hub_tile_spicy_desc,
                 emoji = "🎡",
-                accent = Color(0xFFEF5350),
+                accent = Color(0xFFFF7043),
                 onClick = onGameSpicySpinner,
             ),
             HubGameTile(
                 titleRes = R.string.game_wyr,
                 descRes = R.string.hub_tile_wyr_desc,
                 emoji = "⚖",
-                accent = Color(0xFFFFB74D),
+                accent = Color(0xFFE040FB),
                 onClick = onGameWyr,
             ),
         )
@@ -120,16 +114,7 @@ fun GameHubScreen(
         )
     }
 
-    val bgBrush = remember {
-        Brush.verticalGradient(
-            listOf(
-                CosmicTop,
-                Color(0xFF15102A),
-                CosmicMid,
-                CosmicBottom,
-            ),
-        )
-    }
+    val bgBrush = remember { NeonTokens.screenBackgroundBrush() }
 
     Box(
         modifier = Modifier
@@ -163,7 +148,7 @@ fun GameHubScreen(
                     style = MaterialTheme.typography.headlineSmall.merge(
                         TextStyle(
                             brush = Brush.linearGradient(
-                                listOf(TitleGradientA, TitleGradientB),
+                                listOf(NeonTokens.NeonMagenta, NeonTokens.NeonCyan),
                             ),
                         ),
                     ),
@@ -174,7 +159,7 @@ fun GameHubScreen(
             Text(
                 text = stringResource(R.string.hub_welcome_line),
                 style = MaterialTheme.typography.bodySmall,
-                color = Color.White.copy(alpha = 0.8f),
+                color = NeonTokens.TextMuted,
                 modifier = Modifier.fillMaxWidth(),
             )
             Spacer(Modifier.height(20.dp))
@@ -182,12 +167,12 @@ fun GameHubScreen(
                 text = stringResource(R.string.hub_ready_title),
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
-                color = Color.White,
+                color = NeonTokens.TextPrimary,
             )
             Text(
                 text = stringResource(R.string.hub_ready_subtitle),
                 style = MaterialTheme.typography.bodyMedium,
-                color = Color.White.copy(alpha = 0.72f),
+                color = NeonTokens.TextDim,
                 modifier = Modifier.padding(top = 6.dp),
             )
             Spacer(Modifier.height(18.dp))
@@ -212,11 +197,11 @@ fun GameHubScreen(
                 }
             }
 
-            Spacer(Modifier.height(28.dp))
+            Spacer(Modifier.height(18.dp))
             Text(
                 stringResource(R.string.quick_links),
                 style = MaterialTheme.typography.labelSmall,
-                color = Color.White.copy(alpha = 0.45f),
+                color = NeonTokens.TextDim,
             )
             Spacer(Modifier.height(10.dp))
             Row(
@@ -242,13 +227,13 @@ fun GameHubScreen(
                     stringResource(R.string.hub_feed_section),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.SemiBold,
-                    color = Color.White.copy(alpha = 0.9f),
+                    color = NeonTokens.TextPrimary,
                     modifier = Modifier.weight(1f),
                 )
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                     contentDescription = null,
-                    tint = Color.White.copy(alpha = 0.5f),
+                    tint = NeonTokens.TextDim,
                 )
             }
             Spacer(Modifier.height(12.dp))
@@ -298,14 +283,14 @@ private fun HubGameGlassCard(
     val accent = tile.accent
     Surface(
         shape = RoundedCornerShape(20.dp),
-        color = Color.White.copy(alpha = 0.07f),
+        color = NeonTokens.GlassFill,
+        tonalElevation = 2.dp,
+        shadowElevation = 6.dp,
         modifier = modifier
             .heightIn(min = 168.dp)
             .border(
                 width = 1.dp,
-                brush = Brush.linearGradient(
-                    listOf(accent.copy(alpha = 0.55f), accent.copy(alpha = 0.15f)),
-                ),
+                brush = NeonTokens.glassBorderBrush(accent),
                 shape = RoundedCornerShape(20.dp),
             )
             .clip(RoundedCornerShape(20.dp))
@@ -323,20 +308,20 @@ private fun HubGameGlassCard(
             Spacer(Modifier.height(8.dp))
             Text(
                 stringResource(tile.titleRes),
-                color = Color.White,
+                color = NeonTokens.TextPrimary,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.titleSmall,
             )
             Spacer(Modifier.height(8.dp))
             Surface(
                 shape = RoundedCornerShape(12.dp),
-                color = Color.Black.copy(alpha = 0.38f),
+                color = NeonTokens.BgVoid.copy(alpha = 0.55f),
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
                     stringResource(tile.descRes),
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color.White.copy(alpha = 0.82f),
+                    color = NeonTokens.TextMuted,
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
                     lineHeight = MaterialTheme.typography.bodySmall.lineHeight,
                 )
@@ -353,10 +338,10 @@ private fun PlayBadge(accent: Color) {
             .clip(RoundedCornerShape(10.dp))
             .background(
                 Brush.linearGradient(
-                    listOf(accent.copy(alpha = 0.95f), accent.copy(alpha = 0.45f)),
+                    listOf(accent.copy(alpha = 0.95f), accent.copy(alpha = 0.4f)),
                 ),
             )
-            .border(1.dp, Color.White.copy(alpha = 0.25f), RoundedCornerShape(10.dp)),
+            .border(1.dp, accent.copy(alpha = 0.65f), RoundedCornerShape(10.dp)),
         contentAlignment = Alignment.Center,
     ) {
         Icon(
@@ -372,19 +357,19 @@ private fun PlayBadge(accent: Color) {
 private fun QuickLinkChip(symbol: String, label: String, onClick: () -> Unit) {
     Surface(
         shape = RoundedCornerShape(20.dp),
-        color = Color.White.copy(alpha = 0.05f),
+        color = NeonTokens.GlassFill,
         modifier = Modifier
-            .border(1.dp, Color.White.copy(alpha = 0.18f), RoundedCornerShape(20.dp))
+            .border(1.dp, NeonTokens.glassBorderBrush(NeonTokens.NeonCyan), RoundedCornerShape(20.dp))
             .clickable(onClick = onClick),
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(symbol, color = ModColors.BubbleYellow)
+            Text(symbol, color = NeonTokens.NeonCyan)
             Text(
                 label,
-                color = Color.White,
+                color = NeonTokens.TextPrimary,
                 style = MaterialTheme.typography.labelLarge,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -398,10 +383,10 @@ private fun QuickLinkChip(symbol: String, label: String, onClick: () -> Unit) {
 private fun ActivityFeedCard(item: FeedItem) {
     Surface(
         shape = RoundedCornerShape(16.dp),
-        color = Color.White.copy(alpha = 0.06f),
+        color = NeonTokens.GlassFill,
         modifier = Modifier
             .width(200.dp)
-            .border(1.dp, Color.White.copy(alpha = 0.12f), RoundedCornerShape(16.dp)),
+            .border(1.dp, NeonTokens.glassBorderBrush(NeonTokens.NeonMagenta), RoundedCornerShape(16.dp)),
     ) {
         Column(Modifier.padding(12.dp)) {
             Text(item.emoji, style = MaterialTheme.typography.titleMedium)
@@ -410,12 +395,12 @@ private fun ActivityFeedCard(item: FeedItem) {
                 stringResource(item.titleRes),
                 style = MaterialTheme.typography.labelLarge,
                 fontWeight = FontWeight.Bold,
-                color = Color.White,
+                color = NeonTokens.TextPrimary,
             )
             Text(
                 stringResource(item.subtitleRes),
                 style = MaterialTheme.typography.bodySmall,
-                color = Color.White.copy(alpha = 0.65f),
+                color = NeonTokens.TextMuted,
                 modifier = Modifier.padding(top = 4.dp),
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis,

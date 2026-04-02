@@ -68,13 +68,10 @@ import com.spicynights.games.data.PoolMode
 import com.spicynights.games.data.local.AppPreferencesRepository
 import com.spicynights.games.navigation.SessionGameMode
 import com.spicynights.games.session.SessionSnapshot
+import com.spicynights.games.ui.theme.NeonTokens
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.UUID
-
-private val Bg = Color(0xFF12121D)
-private val AccentPink = Color(0xFFFF4081)
-private val CardBg = Color(0xFF1E1E2A)
 
 data class SessionPlayerUi(
     val id: String = UUID.randomUUID().toString(),
@@ -203,7 +200,7 @@ fun SessionSetupScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Bg)
+            .background(NeonTokens.screenBackgroundBrush())
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
             .testTag("session_setup_screen"),
@@ -255,7 +252,7 @@ fun SessionSetupScreen(
             )
             Surface(
                 shape = RoundedCornerShape(12.dp),
-                color = Color(0xFF2A2A38),
+                color = NeonTokens.BgElevated,
             ) {
                 Text(
                     stringResource(R.string.session_n_selected, players.count { it.selected }),
@@ -299,13 +296,13 @@ fun SessionSetupScreen(
             players.forEachIndexed { index, p ->
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Box {
-                        val ringColor = if (p.selected) AccentPink else Color.Transparent
+                        val ringColor = if (p.selected) NeonTokens.NeonMagenta else Color.Transparent
                         Box(
                             modifier = Modifier
                                 .size(64.dp)
                                 .clip(CircleShape)
                                 .border(BorderStroke(3.dp, ringColor), CircleShape)
-                                .background(CardBg)
+                                .background(NeonTokens.BgElevated)
                                 .clickable {
                                     players[index] = p.copy(selected = !p.selected)
                                 },
@@ -323,7 +320,7 @@ fun SessionSetupScreen(
                                     .align(Alignment.TopEnd)
                                     .size(20.dp)
                                     .clip(CircleShape)
-                                    .background(AccentPink),
+                                    .background(NeonTokens.NeonMagenta),
                                 contentAlignment = Alignment.Center,
                             ) {
                                 Icon(
@@ -572,13 +569,13 @@ private fun PlayModeSegment(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val border = if (selected) BorderStroke(2.dp, AccentPink) else BorderStroke(1.dp, Color.Gray.copy(alpha = 0.3f))
+    val border = if (selected) BorderStroke(2.dp, NeonTokens.NeonMagenta) else BorderStroke(1.dp, Color.Gray.copy(alpha = 0.3f))
     Surface(
         modifier = modifier
             .clip(RoundedCornerShape(14.dp))
             .clickable(enabled = enabled, onClick = onClick),
         shape = RoundedCornerShape(14.dp),
-        color = CardBg,
+        color = NeonTokens.BgElevated,
         border = border,
     ) {
         Text(
@@ -599,13 +596,13 @@ private fun PromptMixSegment(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val border = if (selected) BorderStroke(2.dp, AccentPink) else BorderStroke(1.dp, Color.Gray.copy(alpha = 0.3f))
+    val border = if (selected) BorderStroke(2.dp, NeonTokens.NeonMagenta) else BorderStroke(1.dp, Color.Gray.copy(alpha = 0.3f))
     Surface(
         modifier = modifier
             .clip(RoundedCornerShape(14.dp))
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(14.dp),
-        color = CardBg,
+        color = NeonTokens.BgElevated,
         border = border,
     ) {
         Column(
@@ -622,7 +619,7 @@ private fun PromptMixSegment(
                     Icon(
                         Icons.Filled.Check,
                         contentDescription = null,
-                        tint = AccentPink,
+                        tint = NeonTokens.NeonMagenta,
                         modifier = Modifier.size(18.dp),
                     )
                 }
@@ -650,8 +647,8 @@ private fun IntensityCard(
     modifier: Modifier = Modifier,
 ) {
     val borderColor = when {
-        selected && accent -> AccentPink
-        selected -> Color(0xFF7E57C2)
+        selected && accent -> NeonTokens.NeonMagenta
+        selected -> NeonTokens.NeonCyan
         else -> Color.Gray.copy(alpha = 0.25f)
     }
     Surface(
@@ -659,7 +656,7 @@ private fun IntensityCard(
             .clip(RoundedCornerShape(16.dp))
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(16.dp),
-        color = CardBg,
+        color = NeonTokens.BgElevated,
         border = BorderStroke(2.dp, borderColor),
     ) {
         Column(Modifier.padding(12.dp)) {
@@ -668,14 +665,14 @@ private fun IntensityCard(
                     title,
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    color = if (accent && selected) AccentPink else Color.White,
+                    color = if (accent && selected) NeonTokens.NeonMagenta else Color.White,
                 )
                 Box(
                     modifier = Modifier
                         .size(18.dp)
                         .clip(CircleShape)
                         .border(BorderStroke(2.dp, Color.Gray), CircleShape)
-                        .background(if (selected) AccentPink else Color.Transparent),
+                        .background(if (selected) NeonTokens.NeonMagenta else Color.Transparent),
                 )
             }
             Spacer(Modifier.height(6.dp))
@@ -693,7 +690,7 @@ private fun ContentRow(
 ) {
     Surface(
         shape = RoundedCornerShape(12.dp),
-        color = CardBg,
+        color = NeonTokens.BgElevated,
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp),
@@ -711,7 +708,7 @@ private fun ContentRow(
                 onCheckedChange = onCheckedChange,
                 colors = SwitchDefaults.colors(
                     checkedThumbColor = Color.White,
-                    checkedTrackColor = AccentPink,
+                    checkedTrackColor = NeonTokens.NeonMagenta,
                     uncheckedThumbColor = Color.White,
                     uncheckedTrackColor = Color.Gray.copy(alpha = 0.4f),
                 ),

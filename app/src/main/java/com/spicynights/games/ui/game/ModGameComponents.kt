@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.spicynights.games.R
 import com.spicynights.games.ui.theme.ModColors
+import com.spicynights.games.ui.theme.NeonTokens
 
 @Composable
 fun ModScreenBackground(
@@ -131,8 +132,9 @@ fun ModFooterPillButton(
     testTag: String? = null,
 ) {
     val shape = RoundedCornerShape(percent = 50)
-    val bg = if (isBlack) ModColors.FooterBlack else ModColors.FooterWhite
-    val fg = if (isBlack) Color.White else ModColors.FooterBlack
+    val bg = if (isBlack) NeonTokens.NeonMagenta else NeonTokens.BgElevated
+    val fg = if (isBlack) Color.White else NeonTokens.TextPrimary
+    val borderCol = if (isBlack) NeonTokens.NeonMagenta else NeonTokens.NeonCyan.copy(alpha = 0.55f)
     val interactionSource = remember { MutableInteractionSource() }
 
     Box(
@@ -161,7 +163,7 @@ fun ModFooterPillButton(
                     .offset(x = (-2).dp)
                     .clip(shape)
                     .background(bg.copy(alpha = if (enabled) 1f else 0.42f))
-                    .border(2.dp, ModColors.StrokeBlack, shape)
+                    .border(2.dp, borderCol, shape)
                     .padding(start = 40.dp, end = 14.dp),
                 contentAlignment = Alignment.Center,
             ) {
@@ -199,8 +201,9 @@ fun ModChoicePillButton(
     testTag: String? = null,
 ) {
     val shape = RoundedCornerShape(percent = 50)
-    val bg = if (isBlack) ModColors.FooterBlack else ModColors.FooterWhite
-    val fg = if (isBlack) Color.White else ModColors.StrokeBlack
+    val bg = if (isBlack) NeonTokens.NeonMagenta else NeonTokens.BgElevated
+    val fg = if (isBlack) Color.White else NeonTokens.TextPrimary
+    val borderCol = if (isBlack) NeonTokens.NeonMagenta else NeonTokens.NeonCyan.copy(alpha = 0.55f)
     val interactionSource = remember { MutableInteractionSource() }
 
     Box(
@@ -209,7 +212,7 @@ fun ModChoicePillButton(
             .height(48.dp)
             .clip(shape)
             .background(bg.copy(alpha = if (enabled) 1f else 0.45f))
-            .border(2.dp, ModColors.StrokeBlack, shape)
+            .border(2.dp, borderCol, shape)
             .then(
                 if (testTag != null) Modifier.testTag(testTag) else Modifier,
             )
