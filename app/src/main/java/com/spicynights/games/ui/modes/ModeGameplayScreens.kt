@@ -53,11 +53,12 @@ import com.spicynights.games.data.local.AppPreferencesRepository
 import com.spicynights.games.R
 import com.spicynights.games.data.DataManager
 import com.spicynights.games.session.SessionStateHolder
-import com.spicynights.games.viewmodel.DirtyDiceGameplayViewModel
+import com.spicynights.games.viewmodel.SpicySpinnerGameplayViewModel
 import com.spicynights.games.viewmodel.NeverGameplayViewModel
 import com.spicynights.games.ui.dice.CouplesDiceBackground
-import com.spicynights.games.ui.dice.D6CouplesDie
+import com.spicynights.games.ui.dice.CouplesDualRingSpinner
 import com.spicynights.games.ui.dice.DiceSoundEffects
+import com.spicynights.games.ui.dice.SpicySpinnerSpinTotalMs
 import com.spicynights.games.ui.dice.FlirtyPointerOverlay
 import com.spicynights.games.viewmodel.CouplesDiceRules
 import com.spicynights.games.viewmodel.WyrGameplayViewModel
@@ -210,15 +211,15 @@ private fun FilterChipStyle(label: String, selected: Boolean, onClick: () -> Uni
 }
 
 @Composable
-fun DirtyDiceGameplayScreen(
+fun SpicySpinnerGameplayScreen(
     prefs: AppPreferencesRepository,
     onBack: () -> Unit = {},
 ) {
     val snapshot = remember {
         SessionStateHolder.pending.also { SessionStateHolder.pending = null }
     }
-    val vm: DirtyDiceGameplayViewModel = viewModel(
-        factory = DirtyDiceGameplayViewModel.factory(snapshot),
+    val vm: SpicySpinnerGameplayViewModel = viewModel(
+        factory = SpicySpinnerGameplayViewModel.factory(snapshot),
     )
     val state by vm.state.collectAsStateWithLifecycle()
     val soundOn by prefs.soundEffectsEnabled.collectAsStateWithLifecycle(initialValue = true)
@@ -228,6 +229,7 @@ fun DirtyDiceGameplayScreen(
         onDispose { diceSound.release() }
     }
     var isRolling by remember { mutableStateOf(false) }
+    var spinGeneration by remember { mutableIntStateOf(0) }
     val scope = rememberCoroutineScope()
     val rollInteraction = remember { MutableInteractionSource() }
     val rollHovered by rollInteraction.collectIsHoveredAsState()
@@ -238,7 +240,8 @@ fun DirtyDiceGameplayScreen(
             isRolling = true
             if (soundOn) diceSound.playRoll()
             rollAction()
-            delay(850)
+            spinGeneration++
+            delay(SpicySpinnerSpinTotalMs.toLong())
             isRolling = false
             if (soundOn) diceSound.playDing()
         }
@@ -278,7 +281,7 @@ fun DirtyDiceGameplayScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
         Text(
-            stringResource(R.string.game_dirty_dice),
+            stringResource(R.string.game_spicy_spinner),
             color = DicePink,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Bold,
@@ -315,23 +318,28 @@ fun DirtyDiceGameplayScreen(
         }
         Spacer(Modifier.height(16.dp))
 
-        Row(
+        CouplesDualRingSpinner(
+            bodyRoll = state.bodyRoll,
+            actionRoll = state.actionRoll,
+            isRolling = isRolling,
+            animationKey = spinGeneration,
+            outerLabel = stringResource(R.string.dice_body_die),
+            innerLabel = stringResource(R.string.dice_action_die),
+            outerLabels = bodies,
+            innerLabels = actions,
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            D6CouplesDie(
-                categoryLabel = stringResource(R.string.dice_body_die),
-                faceWord = bodyLabel,
-                rollKey = state.bodyRoll,
-                isRolling = isRolling,
-                modifier = Modifier.weight(1f),
-            )
-            D6CouplesDie(
-                categoryLabel = stringResource(R.string.dice_action_die),
-                faceWord = actionLabel,
-                rollKey = state.actionRoll,
-                isRolling = isRolling,
-                modifier = Modifier.weight(1f),
+        )
+        if (!isRolling && state.bodyRoll != null && state.actionRoll != null) {
+            Text(
+                stringResource(
+                    R.string.dice_result_pair_words_fmt,
+                    bodyLabel ?: "—",
+                    actionLabel ?: "—",
+                ),
+                color = DicePink,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(top = 12.dp),
             )
         }
         Spacer(Modifier.height(12.dp))
@@ -348,11 +356,11 @@ fun DirtyDiceGameplayScreen(
                 interactionSource = rollInteraction,
                 colors = ButtonDefaults.buttonColors(containerColor = DicePink),
             ) {
-                Text(stringResource(R.string.dice_roll_both))
+                Text(stringResource(R.string.dice_spin))
             }
         }
         Text(
-            stringResource(R.string.dice_tap_to_roll),
+            stringResource(R.string.dice_tap_to_spin),
             color = Color.Gray,
             style = MaterialTheme.typography.labelSmall,
             modifier = Modifier.padding(top = 4.dp),

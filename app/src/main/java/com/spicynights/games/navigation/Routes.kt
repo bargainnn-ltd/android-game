@@ -6,7 +6,7 @@ object Routes {
     /** Argument: [SessionGameMode.routeArg]. */
     const val SessionSetup = "session_setup/{gameMode}"
     const val NeverGameplay = "never_gameplay"
-    const val DirtyDiceGameplay = "dirty_dice_gameplay"
+    const val SpicySpinnerGameplay = "spicy_spinner_gameplay"
     const val WyrGameplay = "wyr_gameplay"
     const val HowToPlay = "how_to_play"
     const val Settings = "settings"

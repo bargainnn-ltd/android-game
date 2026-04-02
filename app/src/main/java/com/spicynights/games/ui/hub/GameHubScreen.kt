@@ -47,7 +47,7 @@ fun GameHubScreen(
     onQuickSession: () -> Unit,
     onGameNever: () -> Unit,
     onGameTruthDare: () -> Unit,
-    onGameDirtyDice: () -> Unit,
+    onGameSpicySpinner: () -> Unit,
     onGameWyr: () -> Unit,
     onHowToPlay: () -> Unit,
     onFavorites: () -> Unit,
@@ -133,7 +133,7 @@ fun GameHubScreen(
         val games = listOf(
             Triple(R.string.game_never, "🥂", Color(0xFF2196F3)) to onGameNever,
             Triple(R.string.game_truth_dare, "🎭", Color(0xFF9C27B0)) to onGameTruthDare,
-            Triple(R.string.game_dirty_dice, "🎲", Color(0xFFE91E63)) to onGameDirtyDice,
+            Triple(R.string.game_spicy_spinner, "🎡", Color(0xFFE91E63)) to onGameSpicySpinner,
             Triple(R.string.game_wyr, "⚖", Color(0xFFFFC107)) to onGameWyr,
         )
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {

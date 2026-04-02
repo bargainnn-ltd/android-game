@@ -47,7 +47,7 @@ fun HowToPlayScreen(
     val guides = listOf(
         R.string.game_never to "🥂",
         R.string.game_truth_dare to "🎭",
-        R.string.game_dirty_dice to "🎲",
+        R.string.game_spicy_spinner to "🎡",
         R.string.game_wyr to "⚖",
     )
     Column(

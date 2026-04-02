@@ -11,10 +11,10 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.application.eatbts"
+        applicationId = "com.spicynights.games"
         minSdk = 26
         targetSdk = 35
-        versionCode = 20
+        versionCode = 21
         versionName = "8.9.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -153,7 +153,7 @@ fun AgeVerificationScreen(
         val games = listOf(
             stringResource(R.string.game_never) to "🥂",
             stringResource(R.string.game_truth_dare) to "🎭",
-            stringResource(R.string.game_dirty_dice) to "🎲",
+            stringResource(R.string.game_spicy_spinner) to "🎡",
             stringResource(R.string.game_wyr) to "⚖",
         )
         Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {

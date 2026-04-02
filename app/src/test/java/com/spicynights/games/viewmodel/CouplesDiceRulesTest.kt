@@ -15,10 +15,11 @@ class CouplesDiceRulesTest {
     }
 
     @Test
-    fun `body and action indices map 1 to 6`() {
+    fun `body and action indices map 1 to 8`() {
         assertEquals(0, CouplesDiceRules.bodyPartIndex(1))
-        assertEquals(5, CouplesDiceRules.bodyPartIndex(6))
+        assertEquals(7, CouplesDiceRules.bodyPartIndex(8))
         assertEquals(2, CouplesDiceRules.actionIndex(3))
+        assertEquals(7, CouplesDiceRules.actionIndex(8))
     }
 
     @Test

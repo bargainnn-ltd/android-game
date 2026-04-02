@@ -9,13 +9,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlin.random.Random
 
-data class DirtyDiceUiState(
+data class SpicySpinnerUiState(
     val playerNames: List<String>,
     val intensityLine: String,
     val turnIndex: Int,
     val bodyRoll: Int?,
     val actionRoll: Int?,
-    /** True when both dice show the same number — roller picks any body + action. */
+    /** True when both rings land on the same number — roller picks any body + action. */
     val isDoubleRoll: Boolean,
     /** After a double, user confirmed they will choose freely. */
     val freeChoiceActive: Boolean,
@@ -31,7 +31,7 @@ data class DirtyDiceUiState(
     val modifierIndex: Int?,
 )
 
-class DirtyDiceGameplayViewModel(
+class SpicySpinnerGameplayViewModel(
     snapshot: SessionSnapshot?,
 ) : ViewModel() {
     private val snap = snapshot ?: NeverGameplayViewModel.defaultSnapshot()
@@ -44,7 +44,7 @@ class DirtyDiceGameplayViewModel(
     private val spicyModifierCount = 8
 
     private val _state = MutableStateFlow(
-        DirtyDiceUiState(
+        SpicySpinnerUiState(
             playerNames = names,
             intensityLine = "${snap.intensityLabel} • ${if (snap.drinkingRulesOn) "Drinking on" else "Drinking off"}",
             turnIndex = 0,
@@ -61,7 +61,7 @@ class DirtyDiceGameplayViewModel(
             modifierIndex = null,
         ),
     )
-    val state: StateFlow<DirtyDiceUiState> = _state.asStateFlow()
+    val state: StateFlow<SpicySpinnerUiState> = _state.asStateFlow()
 
     fun rollDice() {
         val s = _state.value
@@ -138,8 +138,8 @@ class DirtyDiceGameplayViewModel(
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    if (modelClass != DirtyDiceGameplayViewModel::class.java) throw IllegalArgumentException()
-                    return DirtyDiceGameplayViewModel(snapshot) as T
+                    if (modelClass != SpicySpinnerGameplayViewModel::class.java) throw IllegalArgumentException()
+                    return SpicySpinnerGameplayViewModel(snapshot) as T
                 }
             }
     }

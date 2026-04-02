@@ -183,7 +183,7 @@ fun SessionSetupScreen(
                     ),
                 )
             }
-            SessionGameMode.NEVER, SessionGameMode.DIRTY_DICE, SessionGameMode.WYR -> {
+            SessionGameMode.NEVER, SessionGameMode.SPICY_SPINNER, SessionGameMode.WYR -> {
                 onStartInAppMode(snapshot)
             }
         }

@@ -18,7 +18,7 @@ import com.spicynights.games.data.local.AppPreferencesRepository
 import com.spicynights.games.session.SessionStateHolder
 import com.spicynights.games.ui.help.HowToPlayScreen
 import com.spicynights.games.ui.hub.GameHubScreen
-import com.spicynights.games.ui.modes.DirtyDiceGameplayScreen
+import com.spicynights.games.ui.modes.SpicySpinnerGameplayScreen
 import com.spicynights.games.ui.modes.NeverGameplayScreen
 import com.spicynights.games.ui.modes.WyrGameplayScreen
 import com.spicynights.games.ui.navigation.AppBottomBar
@@ -40,7 +40,7 @@ fun MainNavHost(
     val turnTimerSeconds by prefs.turnTimerSeconds.collectAsStateWithLifecycle(initialValue = 30)
 
     val bottomStyle = when (currentRoute) {
-        Routes.NeverGameplay, Routes.DirtyDiceGameplay, Routes.WyrGameplay -> BottomNavStyle.GAMEPLAY
+        Routes.NeverGameplay, Routes.SpicySpinnerGameplay, Routes.WyrGameplay -> BottomNavStyle.GAMEPLAY
         Routes.Settings -> BottomNavStyle.SETTINGS_APP
         else -> BottomNavStyle.HUB
     }
@@ -86,8 +86,8 @@ fun MainNavHost(
                     onGameTruthDare = {
                         navController.navigate(sessionSetupRoute(SessionGameMode.TRUTH_DARE))
                     },
-                    onGameDirtyDice = {
-                        navController.navigate(sessionSetupRoute(SessionGameMode.DIRTY_DICE))
+                    onGameSpicySpinner = {
+                        navController.navigate(sessionSetupRoute(SessionGameMode.SPICY_SPINNER))
                     },
                     onGameWyr = {
                         navController.navigate(sessionSetupRoute(SessionGameMode.WYR))
@@ -122,8 +122,8 @@ fun MainNavHost(
                         when (mode) {
                             SessionGameMode.NEVER ->
                                 navController.navigate(Routes.NeverGameplay) { launchSingleTop = true }
-                            SessionGameMode.DIRTY_DICE ->
-                                navController.navigate(Routes.DirtyDiceGameplay) { launchSingleTop = true }
+                            SessionGameMode.SPICY_SPINNER ->
+                                navController.navigate(Routes.SpicySpinnerGameplay) { launchSingleTop = true }
                             SessionGameMode.WYR ->
                                 navController.navigate(Routes.WyrGameplay) { launchSingleTop = true }
                             else -> {}
@@ -132,8 +132,8 @@ fun MainNavHost(
                 )
             }
             composable(Routes.NeverGameplay) { NeverGameplayScreen() }
-            composable(Routes.DirtyDiceGameplay) {
-                DirtyDiceGameplayScreen(
+            composable(Routes.SpicySpinnerGameplay) {
+                SpicySpinnerGameplayScreen(
                     prefs = prefs,
                     onBack = { navController.popBackStack() },
                 )

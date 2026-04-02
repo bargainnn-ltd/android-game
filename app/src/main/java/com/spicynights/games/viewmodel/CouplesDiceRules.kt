@@ -1,10 +1,10 @@
 package com.spicynights.games.viewmodel
 
 /**
- * Two-dice couples edition: die 1 = body, die 2 = action (faces 1–6 each, d6).
+ * Two-dice couples edition: die 1 = body, die 2 = action (faces 1–8 each, d8).
  */
 object CouplesDiceRules {
-    const val SIDES = 6
+    const val SIDES = 8
     const val TURNS_PER_PLAYER = 5
 
     fun bodyPartIndex(roll: Int): Int = (roll - 1).coerceIn(0, SIDES - 1)

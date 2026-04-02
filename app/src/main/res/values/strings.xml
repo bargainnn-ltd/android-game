@@ -76,7 +76,7 @@
     <string name="nav_help">Help</string>
 
     <string name="age_verification_title">Age Verification Required</string>
-    <string name="spicynights_tagline">Truth or Dare, Dice &amp; More</string>
+    <string name="spicynights_tagline">Truth or Dare, Spicy Spinner &amp; More</string>
     <string name="age_includes_games">INCLUDES 4 PARTY GAMES</string>
     <string name="age_consent_checkbox">I am 18 years or older and I agree to the Terms of Service and Privacy Policy.</string>
     <string name="age_consent_prefix">I am 18 years or older and I agree to the </string>
@@ -98,7 +98,10 @@
     <string name="quick_links">QUICK LINKS</string>
     <string name="game_never">I Have Never</string>
     <string name="game_truth_dare">Truth or Dare</string>
-    <string name="game_dirty_dice">Dirty Dice</string>
+    <!-- Kept id "game_dirty_dice" for stable R.string field across installs; label is Spicy Spinner. -->
+    <string name="game_dirty_dice">Spicy Spinner</string>
+    <!-- Primary id for UI; duplicate text (not @string ref) so merged R always includes this field. -->
+    <string name="game_spicy_spinner">Spicy Spinner</string>
     <string name="game_wyr">Would You Rather?</string>
 
     <string name="session_setup_title">Session Setup</string>
@@ -175,7 +178,7 @@
     <string name="never_next_prompt">Next prompt</string>
     <string name="never_deck_empty">No prompts left in this deck.</string>
     <string name="never_sip_hint">If you have, take 1 sip!</string>
-    <string name="dice_couples_subtitle">Couples\' edition · two d6 dice</string>
+    <string name="dice_couples_subtitle">Couples\' edition · dual spinner (d8 + d8)</string>
     <string name="dice_your_turn">Your turn</string>
     <string name="dice_named_turn">%1$s\'s turn</string>
     <string name="dice_body_die">Body</string>
@@ -185,7 +188,7 @@
     <string name="dice_instruction_fmt">%1$s — %2$s</string>
     <string name="dice_instruction_natural">%1$s on the %2$s</string>
     <string name="dice_double_roll_title">Double roll</string>
-    <string name="dice_double_roll_body">Both dice show the same number. Pick any body part and any action you both agree on.</string>
+    <string name="dice_double_roll_body">Both rings landed on the same number. Pick any body part and any action you both agree on.</string>
     <string name="dice_free_choice_confirm">We\'re choosing freely</string>
     <string name="dice_free_choice_hint">Your choice — any combo until you tap Next player.</string>
     <string name="dice_consent_line">Consent: tap a hand to pause · smile or nod to continue.</string>
@@ -198,22 +201,30 @@
     <string name="dice_back">Back</string>
     <string name="dice_timer_fmt">Action: %1$ds</string>
     <string name="dice_reroll_fmt">Re-roll (%1$d)</string>
+    <string name="dice_spin">Spin</string>
+    <string name="dice_tap_to_spin">Tap to spin</string>
+    <string name="dice_result_pair_fmt">You got %1$d &amp; %2$d</string>
+    <string name="dice_result_pair_words_fmt">You got %1$s &amp; %2$s</string>
 
     <string-array name="dice_body_parts">
-        <item>Lips</item>
         <item>Neck</item>
+        <item>Lips</item>
+        <item>Ears</item>
         <item>Chest</item>
         <item>Thighs</item>
-        <item>Ears</item>
-        <item>Nipple</item>
+        <item>Hands</item>
+        <item>Back</item>
+        <item>&quot;Partner Chooses&quot;</item>
     </string-array>
     <string-array name="dice_actions">
         <item>Kiss</item>
         <item>Lick</item>
-        <item>Caress</item>
-        <item>Bite</item>
-        <item>Whisper</item>
-        <item>Tease</item>
+        <item>Massage</item>
+        <item>Bite (playful)</item>
+        <item>Trace slowly</item>
+        <item>Blow (soft air)</item>
+        <item>Hold</item>
+        <item>&quot;You Choose&quot;</item>
     </string-array>
     <string-array name="dice_spicy_modifiers">
         <item>Try it blindfolded</item>
@@ -226,12 +237,12 @@
         <item>Count down from 6 before you start</item>
     </string-array>
     <string-array name="dice_rules">
-        <item>Each player rolls two six-sided (d6) dice — one for body, one for action.</item>
-        <item>Die 1 is body zones (6 faces). Die 2 is actions (6 faces). Match the on-screen words to your comfort.</item>
-        <item>Die 2 (action, d6): Kiss, Lick, Caress, Bite, Whisper, Tease.</item>
-        <item>On your turn, roll both dice and perform the action on the body part rolled.</item>
-        <item>Take turns rolling. Use the timer if you turned it on in session setup.</item>
-        <item>Double roll: if both dice show the same number, you choose any body part and any action (by agreement).</item>
+        <item>Each player spins the dual wheel — outer ring is body, inner ring is action (8 segments each).</item>
+        <item>Outer ring is body zones (8 segments). Inner ring is actions (8 segments). Match the on-screen words to your comfort.</item>
+        <item>Actions include Kiss, Lick, Massage, playful bite, trace slowly, soft blow, hold, and You Choose — body zones include neck through Partner Chooses.</item>
+        <item>On your turn, spin and perform the action on the body part you landed on.</item>
+        <item>Take turns spinning. Use the timer if you turned it on in session setup.</item>
+        <item>Double spin: if both rings land on the same number, you choose any body part and any action (by agreement).</item>
         <item>Keep a consent signal — tap a hand to stop, smile or nod to continue.</item>
         <item>Optional spicy extras appear sometimes — use them if you want.</item>
         <item>The round ends after five turns each (or when you stop).</item>

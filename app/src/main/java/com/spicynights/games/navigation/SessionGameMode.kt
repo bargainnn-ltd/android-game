@@ -5,7 +5,7 @@ enum class SessionGameMode(val routeArg: String) {
     QUICK_SESSION("quick"),
     TRUTH_DARE("truth_dare"),
     NEVER("never"),
-    DIRTY_DICE("dirty_dice"),
+    SPICY_SPINNER("spicy_spinner"),
     WYR("wyr"),
     ;
 
