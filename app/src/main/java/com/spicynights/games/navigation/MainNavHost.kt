@@ -88,7 +88,14 @@ fun MainNavHost(
                 onNavigate = { route ->
                     when (route) {
                         Routes.Settings -> navController.navigate(Routes.Settings) { launchSingleTop = true }
-                        Routes.Hub, Routes.Social, Routes.Store, Routes.Profile -> {
+                        Routes.Hub -> {
+                            if (navController.currentBackStackEntry?.destination?.route != Routes.Hub) {
+                                if (!navController.popBackStack(Routes.Hub, inclusive = false, saveState = false)) {
+                                    navController.navigate(Routes.Hub) { launchSingleTop = true }
+                                }
+                            }
+                        }
+                        Routes.Social, Routes.Store, Routes.Profile -> {
                             navController.navigate(route) {
                                 popUpTo(Routes.Hub) {
                                     saveState = true
@@ -99,9 +106,15 @@ fun MainNavHost(
                             }
                         }
                         "decks_stub", "saved_stub", "profile_stub", "leaderboard_stub", "play_stub" -> {
-                            navController.navigate(Routes.Hub) { launchSingleTop = true }
+                            if (!navController.popBackStack(Routes.Hub, inclusive = false, saveState = false)) {
+                                navController.navigate(Routes.Hub) { launchSingleTop = true }
+                            }
                         }
-                        else -> navController.navigate(Routes.Hub) { launchSingleTop = true }
+                        else -> {
+                            if (!navController.popBackStack(Routes.Hub, inclusive = false, saveState = false)) {
+                                navController.navigate(Routes.Hub) { launchSingleTop = true }
+                            }
+                        }
                     }
                 },
             )

@@ -146,15 +146,14 @@
     <string name="hub_landing_subhead">Four high-octane modes designed for those who don\'t play by the rules. Curate your night.</string>
     <string name="hub_landing_play_now">PLAY NOW</string>
     <string name="hub_landing_tag_classic">CLASSIC</string>
-    <string name="hub_landing_tag_players">3–12 PLAYERS</string>
     <string name="hub_landing_never_title">NEVER HAVE I EVER</string>
-    <string name="hub_landing_never_desc">Reveal your secrets or pay the price. The editorial classic for breaking the ice—or shattering it.</string>
+    <string name="hub_landing_never_desc">Reveal your secrets or pay the price.</string>
     <string name="hub_landing_high_stakes">HIGH STAKES</string>
     <string name="hub_landing_spicy_title">SPICY SPINNER</string>
     <string name="hub_landing_spicy_desc">Let fate decide the forfeit. Randomized chaos for the bold and the brave.</string>
     <string name="hub_landing_trending">TRENDING</string>
     <string name="hub_landing_wyr_title">WOULD YOU RATHER</string>
-    <string name="hub_landing_wyr_desc">Impossible choices. Unforgettable debates. Curated for maximum conflict.</string>
+    <string name="hub_landing_wyr_desc">Impossible choices. Unforgettable debates.</string>
     <string name="hub_landing_community_pick">COMMUNITY PICK</string>
     <string name="hub_landing_truth_dare_title">TRUTH &amp; DARE</string>
     <string name="hub_landing_truth_dare_desc">The ultimate test of integrity and insanity. Updated for the new age.</string>
@@ -162,7 +161,7 @@
     <string name="hub_landing_truth_strip_sub">SAFE FOR WORK</string>
     <string name="hub_landing_deck_title_1">CUSTOM DECK</string>
     <string name="hub_landing_deck_title_2">BUILDER</string>
-    <string name="hub_landing_deck_desc">Create your own rules and curate the perfect vibe for your squad.</string>
+    <string name="hub_landing_deck_desc">Create your own rules and curate the perfect vibe.</string>
     <string name="hub_landing_start_building">START BUILDING</string>
     <string name="cd_hub_menu">Open menu</string>
     <string name="cd_hub_notifications">Notifications</string>

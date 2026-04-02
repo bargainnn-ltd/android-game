@@ -222,13 +222,8 @@ private fun HubNeverCard(
                         container = HubLandingColors.BrandPurple,
                         content = Color.White,
                     )
-                    HubPill(
-                        text = stringResource(R.string.hub_landing_tag_players),
-                        container = HubLandingColors.SurfaceElevated,
-                        content = HubLandingColors.White,
-                    )
                 }
-                Spacer(Modifier.height(12.dp))
+                Spacer(Modifier.height(10.dp))
                 Text(
                     text = stringResource(R.string.hub_landing_never_title),
                     style = MaterialTheme.typography.titleMedium,
@@ -236,14 +231,14 @@ private fun HubNeverCard(
                     color = HubLandingColors.White,
                     letterSpacing = 0.5.sp,
                 )
-                Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(6.dp))
                 Text(
                     text = stringResource(R.string.hub_landing_never_desc),
                     style = MaterialTheme.typography.bodySmall,
                     color = HubLandingColors.BodyGrey,
                     lineHeight = 18.sp,
                 )
-                Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(12.dp))
                 Button(
                     onClick = onPlay,
                     modifier = Modifier.fillMaxWidth(),
@@ -295,7 +290,7 @@ private fun HubSpicyCard(
                     modifier = Modifier.size(22.dp),
                 )
             }
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(6.dp))
             Text(
                 text = stringResource(R.string.hub_landing_spicy_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -303,14 +298,14 @@ private fun HubSpicyCard(
                 color = HubLandingColors.White,
                 letterSpacing = 0.5.sp,
             )
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(6.dp))
             Text(
                 text = stringResource(R.string.hub_landing_spicy_desc),
                 style = MaterialTheme.typography.bodySmall,
                 color = HubLandingColors.BodyGrey,
                 lineHeight = 18.sp,
             )
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(12.dp))
             OutlinedButton(
                 onClick = onPlay,
                 modifier = Modifier.fillMaxWidth(),
@@ -360,7 +355,7 @@ private fun HubWyrCard(
                     content = Color(0xFF1A1A1A),
                 )
             }
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(6.dp))
             Text(
                 text = stringResource(R.string.hub_landing_wyr_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -368,14 +363,14 @@ private fun HubWyrCard(
                 color = HubLandingColors.White,
                 letterSpacing = 0.5.sp,
             )
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(6.dp))
             Text(
                 text = stringResource(R.string.hub_landing_wyr_desc),
                 style = MaterialTheme.typography.bodySmall,
                 color = HubLandingColors.BodyGrey,
                 lineHeight = 18.sp,
             )
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(12.dp))
             Button(
                 onClick = onPlay,
                 modifier = Modifier.fillMaxWidth(),
@@ -415,7 +410,7 @@ private fun HubTruthDareCardBody(
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 0.8.sp,
             )
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(6.dp))
             Text(
                 text = stringResource(R.string.hub_landing_truth_dare_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -423,14 +418,14 @@ private fun HubTruthDareCardBody(
                 color = HubLandingColors.White,
                 letterSpacing = 0.5.sp,
             )
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(6.dp))
             Text(
                 text = stringResource(R.string.hub_landing_truth_dare_desc),
                 style = MaterialTheme.typography.bodySmall,
                 color = HubLandingColors.BodyGrey,
                 lineHeight = 18.sp,
             )
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(12.dp))
             Button(
                 onClick = onPlay,
                 modifier = Modifier.fillMaxWidth(),
@@ -457,27 +452,6 @@ private fun HubTruthDareStrip() {
         color = HubLandingColors.SurfaceElevated,
         modifier = Modifier.fillMaxWidth(),
     ) {
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .padding(vertical = 20.dp, horizontal = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text(
-                text = stringResource(R.string.hub_landing_truth_strip_title),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                color = HubLandingColors.White,
-                letterSpacing = 1.sp,
-            )
-            Spacer(Modifier.height(4.dp))
-            Text(
-                text = stringResource(R.string.hub_landing_truth_strip_sub),
-                style = MaterialTheme.typography.labelMedium,
-                color = HubLandingColors.TextDim,
-                letterSpacing = 1.sp,
-            )
-        }
     }
 }
 
