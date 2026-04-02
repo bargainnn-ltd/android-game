@@ -1,8 +1,12 @@
 package com.spicynights.games.ui.modes
 
 import android.content.Intent
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.hoverable
@@ -49,8 +53,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -60,8 +66,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -91,7 +100,6 @@ import com.spicynights.games.viewmodel.WyrGameplayViewModel
 import com.spicynights.games.ui.hub.HubLandingColors
 import com.spicynights.games.ui.theme.NeonTokens
 import com.spicynights.games.viewmodel.SpicySpinLogEntry
-import kotlin.math.absoluteValue
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -567,7 +575,6 @@ fun SpicySpinnerGameplayScreen(
     prefs: AppPreferencesRepository,
     onBack: () -> Unit = {},
     onOpenMenu: () -> Unit = {},
-    onViewStore: () -> Unit = {},
 ) {
     val snapshot = remember {
         SessionStateHolder.pending.also { SessionStateHolder.pending = null }
@@ -847,42 +854,6 @@ fun SpicySpinnerGameplayScreen(
                 }
             }
 
-            Surface(
-                shape = RoundedCornerShape(20.dp),
-                color = HubLandingColors.SurfaceElevated,
-                modifier = Modifier.fillMaxWidth(),
-                border = BorderStroke(1.dp, HubLandingColors.DeckGold.copy(alpha = 0.35f)),
-            ) {
-                Column(Modifier.padding(16.dp)) {
-                    Text(
-                        stringResource(R.string.spicy_premium),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = HubLandingColors.DeckGold,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 1.sp,
-                    )
-                    Text(
-                        stringResource(R.string.spicy_dirty_packs),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = HubLandingColors.White,
-                    )
-                    Spacer(Modifier.height(10.dp))
-                    Button(
-                        onClick = onViewStore,
-                        modifier = Modifier.fillMaxWidth(),
-                        colors =
-                            ButtonDefaults.buttonColors(
-                                containerColor = HubLandingColors.Surface,
-                                contentColor = HubLandingColors.White,
-                            ),
-                        shape = RoundedCornerShape(14.dp),
-                    ) {
-                        Text(stringResource(R.string.spicy_view_store), fontWeight = FontWeight.Bold)
-                    }
-                }
-            }
-
             if (state.isDoubleRoll && !state.freeChoiceActive) {
                 Surface(
                     shape = RoundedCornerShape(16.dp),
@@ -1010,14 +981,6 @@ fun SpicySpinnerGameplayScreen(
     }
 }
 
-private fun wyrIllustrativeStats(optionA: String?, optionB: String?): Triple<Int, Int, String> {
-    if (optionA.isNullOrEmpty()) return Triple(50, 50, "—")
-    val h = (optionA + (optionB ?: "")).hashCode().absoluteValue
-    val pctA = 38 + (h % 25)
-    val votes = listOf("1.2M", "684K", "982K", "1.1M", "890K")[h % 5]
-    return Triple(pctA, (100 - pctA).coerceIn(0, 100), votes)
-}
-
 @Composable
 fun WyrGameplayScreen(
     prefs: AppPreferencesRepository,
@@ -1040,6 +1003,30 @@ fun WyrGameplayScreen(
     }
     val soundOn by prefs.soundEffectsEnabled.collectAsStateWithLifecycle(initialValue = true)
     val scope = rememberCoroutineScope()
+    val rotation = remember { Animatable(0f) }
+    val rotY by produceState(initialValue = 0f, rotation) {
+        snapshotFlow { rotation.value }.collect { value = it }
+    }
+    val density = LocalDensity.current
+    val flipCameraDistance = 12f * density.density
+    var wyrFlipBusy by remember { mutableStateOf(false) }
+
+    fun launchWyrFlipThenAdvance(advance: () -> Unit) {
+        if (wyrFlipBusy) return
+        scope.launch {
+            wyrFlipBusy = true
+            try {
+                if (soundOn) flipSound.playFlip()
+                val half = tween<Float>(durationMillis = 220, easing = LinearEasing)
+                rotation.animateTo(90f, half)
+                advance()
+                rotation.animateTo(180f, half)
+                rotation.snapTo(0f)
+            } finally {
+                wyrFlipBusy = false
+            }
+        }
+    }
 
     var timerLeft by remember { mutableIntStateOf(state.timerSecondsTotal) }
     val cardVisible = state.optionA != null && state.optionB != null
@@ -1054,9 +1041,6 @@ fun WyrGameplayScreen(
         }
     }
 
-    val (pctA, pctB, votesLabel) = remember(state.optionA, state.optionB) {
-        wyrIllustrativeStats(state.optionA, state.optionB)
-    }
     val totalPairs = state.totalPairs.coerceAtLeast(1)
     val roundNum = (totalPairs - state.cardsRemaining).coerceIn(1, totalPairs)
 
@@ -1135,64 +1119,33 @@ fun WyrGameplayScreen(
             )
             Spacer(Modifier.height(8.dp))
         }
-        WyrOptionCard(
-            label = stringResource(R.string.wyr_option_a_label),
-            labelColor = HubLandingColors.BrandPurple,
-            bodyText = state.optionA ?: stringResource(R.string.wyr_deck_empty),
-            percent = pctA,
-            votesLabel = votesLabel,
-            accentIcon = Icons.Filled.Bolt,
-            buttonText = stringResource(R.string.wyr_choose_reality),
-            isOutlined = false,
-            onPick = {
-                if (soundOn) flipSound.playFlip()
-                vm.pickOptionA()
-            },
-        )
         Box(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-            contentAlignment = Alignment.Center,
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .graphicsLayer {
+                        cameraDistance = flipCameraDistance
+                        rotationY = rotY
+                        transformOrigin = TransformOrigin(0.5f, 0.5f)
+                        scaleX = if (rotY > 90f) -1f else 1f
+                    },
         ) {
-            Surface(
-                modifier = Modifier.size(WyrOrBadgeSize),
-                shape = CircleShape,
-                color = HubLandingColors.SurfaceElevated,
-                border = BorderStroke(2.dp, Color.White.copy(alpha = 0.15f)),
-            ) {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(
-                        stringResource(R.string.wyr_or),
-                        color = HubLandingColors.White,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                    )
-                }
-            }
+            WyrCombinedOptionCard(
+                optionALabel = stringResource(R.string.wyr_option_a_label),
+                optionBLabel = stringResource(R.string.wyr_option_b_label),
+                bodyA = state.optionA ?: stringResource(R.string.wyr_deck_empty),
+                bodyB = state.optionB ?: "—",
+                onPickTop = { launchWyrFlipThenAdvance { vm.pickOptionA() } },
+                onPickBottom = { launchWyrFlipThenAdvance { vm.pickOptionB() } },
+            )
         }
-        WyrOptionCard(
-            label = stringResource(R.string.wyr_option_b_label),
-            labelColor = HubLandingColors.WyrCoral,
-            bodyText = state.optionB ?: "—",
-            percent = pctB,
-            votesLabel = votesLabel,
-            accentIcon = Icons.AutoMirrored.Filled.MenuBook,
-            buttonText = stringResource(R.string.wyr_select_wisdom),
-            isOutlined = true,
-            onPick = {
-                if (soundOn) flipSound.playFlip()
-                vm.pickOptionB()
-            },
-        )
         Spacer(Modifier.height(12.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             OutlinedButton(
-                onClick = {
-                    if (soundOn) flipSound.playFlip()
-                    vm.nextCard()
-                },
+                onClick = { launchWyrFlipThenAdvance { vm.nextCard() } },
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(22.dp),
                 border = BorderStroke(1.dp, HubLandingColors.TextDim),
@@ -1276,12 +1229,7 @@ fun WyrGameplayScreen(
         )
         }
         Button(
-            onClick = {
-                scope.launch {
-                    if (soundOn) flipSound.playFlip()
-                    vm.nextCard()
-                }
-            },
+            onClick = { launchWyrFlipThenAdvance { vm.nextCard() } },
             modifier =
                 Modifier
                     .fillMaxWidth()
@@ -1299,112 +1247,170 @@ fun WyrGameplayScreen(
 }
 
 @Composable
-private fun WyrOptionCard(
-    label: String,
-    labelColor: Color,
-    bodyText: String,
-    percent: Int,
-    votesLabel: String,
-    accentIcon: ImageVector,
-    buttonText: String,
-    isOutlined: Boolean,
-    onPick: () -> Unit,
+private fun WyrCombinedOptionCard(
+    optionALabel: String,
+    optionBLabel: String,
+    bodyA: String,
+    bodyB: String,
+    onPickTop: () -> Unit,
+    onPickBottom: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Surface(
-        shape = RoundedCornerShape(WyrCardRadius),
-        color = HubLandingColors.Surface,
-        modifier = modifier.fillMaxWidth(),
-        border = BorderStroke(1.dp, labelColor.copy(alpha = 0.35f)),
+    val purple = HubLandingColors.BrandPurple
+    val coral = HubLandingColors.WyrCoral
+    val shape = RoundedCornerShape(WyrCardRadius)
+    val orFloatOffset = WyrOrBadgeSize / 2
+    val bodyStyle =
+        MaterialTheme.typography.headlineSmall.copy(
+            fontWeight = FontWeight.Bold,
+            lineHeight = 30.sp,
+        )
+    Box(
+        modifier
+            .fillMaxWidth()
+            .padding(top = orFloatOffset),
     ) {
-        Box(Modifier.fillMaxWidth()) {
-            Icon(
-                accentIcon,
-                contentDescription = null,
-                tint = labelColor.copy(alpha = 0.12f),
+        Column(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(380.dp)
+                    .clip(shape)
+                    .border(2.dp, Color.White.copy(alpha = 0.14f), shape),
+        ) {
+            Box(
                 modifier =
                     Modifier
-                        .align(Alignment.CenterEnd)
-                        .size(120.dp)
-                        .offset(x = 24.dp),
-            )
-            Column(Modifier.padding(18.dp)) {
-                Text(
-                    label,
-                    style = MaterialTheme.typography.labelLarge,
-                    color = labelColor,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 1.sp,
-                )
-                Spacer(Modifier.height(10.dp))
-                val bodyScroll = rememberScrollState()
-                Box(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .heightIn(max = 100.dp)
-                            .verticalScroll(bodyScroll),
-                ) {
-                    Text(
-                        bodyText,
-                        color = HubLandingColors.White,
-                        style = MaterialTheme.typography.bodyLarge,
-                        lineHeight = 24.sp,
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .background(
+                            Brush.verticalGradient(
+                                colors =
+                                    listOf(
+                                        purple.copy(alpha = 0.45f),
+                                        HubLandingColors.Surface.copy(alpha = 0.92f),
+                                    ),
+                            ),
+                        )
+                        .clickable(onClick = onPickTop),
+            ) {
+                Box(Modifier.fillMaxSize()) {
+                    Icon(
+                        Icons.Filled.Bolt,
+                        contentDescription = null,
+                        tint = purple.copy(alpha = 0.1f),
+                        modifier =
+                            Modifier
+                                .align(Alignment.Center)
+                                .size(120.dp),
                     )
-                }
-                Spacer(Modifier.height(14.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Column {
-                        Text(
-                            stringResource(R.string.wyr_global_choice),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = HubLandingColors.TextDim,
-                        )
-                        Text(
-                            "$percent%",
-                            style = MaterialTheme.typography.titleLarge,
-                            fontWeight = FontWeight.Bold,
-                            color = labelColor,
-                        )
-                    }
-                    Column(horizontalAlignment = Alignment.End) {
-                        Text(
-                            stringResource(R.string.wyr_total_votes),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = HubLandingColors.TextDim,
-                        )
-                        Text(
-                            votesLabel,
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
-                            color = HubLandingColors.White,
-                        )
-                    }
-                }
-                Spacer(Modifier.height(14.dp))
-                if (isOutlined) {
-                    OutlinedButton(
-                        onClick = onPick,
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(22.dp),
-                        border = BorderStroke(2.dp, HubLandingColors.WyrCoral),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = HubLandingColors.WyrCoral),
+                    val scrollA = rememberScrollState()
+                    Column(
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.Center)
+                                .verticalScroll(scrollA)
+                                .padding(horizontal = 16.dp)
+                                .padding(top = 8.dp, bottom = 16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
-                        Text(buttonText, fontWeight = FontWeight.Bold)
-                    }
-                } else {
-                    Button(
-                        onClick = onPick,
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(22.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = HubLandingColors.BrandPurple),
-                    ) {
-                        Text(buttonText, fontWeight = FontWeight.Bold, color = Color.White)
+                        Text(
+                            optionALabel,
+                            style = MaterialTheme.typography.labelLarge,
+                            color = purple,
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 1.sp,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                        Spacer(Modifier.height(12.dp))
+                        Text(
+                            text = bodyA,
+                            color = Color.White,
+                            style = bodyStyle,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
                     }
                 }
+            }
+            Box(
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .background(
+                            Brush.verticalGradient(
+                                colors =
+                                    listOf(
+                                        HubLandingColors.Surface.copy(alpha = 0.92f),
+                                        coral.copy(alpha = 0.45f),
+                                    ),
+                            ),
+                        )
+                        .clickable(onClick = onPickBottom),
+            ) {
+                Box(Modifier.fillMaxSize()) {
+                    Icon(
+                        Icons.AutoMirrored.Filled.MenuBook,
+                        contentDescription = null,
+                        tint = coral.copy(alpha = 0.1f),
+                        modifier =
+                            Modifier
+                                .align(Alignment.Center)
+                                .size(120.dp),
+                    )
+                    val scrollB = rememberScrollState()
+                    Column(
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.Center)
+                                .verticalScroll(scrollB)
+                                .padding(horizontal = 16.dp, vertical = 16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text(
+                            optionBLabel,
+                            style = MaterialTheme.typography.labelLarge,
+                            color = coral,
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 1.sp,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                        Spacer(Modifier.height(12.dp))
+                        Text(
+                            text = bodyB,
+                            color = Color.White,
+                            style = bodyStyle,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    }
+                }
+            }
+        }
+        Surface(
+            modifier =
+                Modifier
+                    .align(Alignment.TopCenter)
+                    .offset(y = -orFloatOffset)
+                    .size(WyrOrBadgeSize)
+                    .shadow(12.dp, CircleShape, ambientColor = Color.Black.copy(alpha = 0.35f), spotColor = Color.Black.copy(alpha = 0.4f)),
+            shape = CircleShape,
+            color = HubLandingColors.SurfaceElevated,
+            border = BorderStroke(2.dp, Color.White.copy(alpha = 0.22f)),
+            tonalElevation = 6.dp,
+        ) {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(
+                    stringResource(R.string.wyr_or),
+                    color = Color.White,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                )
             }
         }
     }

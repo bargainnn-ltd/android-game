@@ -171,7 +171,6 @@ fun MainNavHost(
                     prefs = prefs,
                     onBack = { navController.popBackStack() },
                     onOpenMenu = { navController.navigate(Routes.Settings) { launchSingleTop = true } },
-                    onViewStore = { navController.navigate(Routes.Store) { launchSingleTop = true } },
                 )
             }
             composable(Routes.WyrGameplay) {
