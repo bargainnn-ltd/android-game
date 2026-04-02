@@ -32,7 +32,7 @@ import com.spicynights.games.data.local.AppThemePreference
 import com.spicynights.games.ui.game.GameScreen
 import com.spicynights.games.ui.navigation.AppBottomBar
 import com.spicynights.games.ui.navigation.BottomNavStyle
-import com.spicynights.games.ui.theme.SpicyNightsTheme
+import com.spicynights.games.ui.theme.CoupleGamesTheme
 import com.spicynights.games.viewmodel.GameViewModel
 
 class GameActivity : ComponentActivity() {
@@ -47,7 +47,7 @@ class GameActivity : ComponentActivity() {
     }
 
     private val viewModel: GameViewModel by viewModels {
-        GameViewModel.factory(application as SpicyNightsApp, config)
+        GameViewModel.factory(application as CoupleGamesApp, config)
     }
 
     private var soundPool: SoundPool? = null
@@ -61,7 +61,7 @@ class GameActivity : ComponentActivity() {
         initSounds()
 
         setContent {
-            val prefs = (application as SpicyNightsApp).preferencesRepository
+            val prefs = (application as CoupleGamesApp).preferencesRepository
             val appTheme by prefs.appThemePreference.collectAsStateWithLifecycle(
                 initialValue = AppThemePreference.MIDNIGHT,
             )
@@ -76,7 +76,7 @@ class GameActivity : ComponentActivity() {
             }
             val soundOn by prefs.soundEffectsEnabled.collectAsStateWithLifecycle(initialValue = true)
             val hapticsOn by prefs.hapticFeedbackEnabled.collectAsStateWithLifecycle(initialValue = true)
-            SpicyNightsTheme(appTheme = appTheme) {
+            CoupleGamesTheme(appTheme = appTheme) {
                 val view = LocalView.current
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),

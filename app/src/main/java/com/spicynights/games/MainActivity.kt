@@ -20,14 +20,14 @@ import com.spicynights.games.data.GameConfig
 import com.spicynights.games.data.local.AppThemePreference
 import com.spicynights.games.navigation.MainNavHost
 import com.spicynights.games.ui.onboarding.AgeVerificationScreen
-import com.spicynights.games.ui.theme.SpicyNightsTheme
+import com.spicynights.games.ui.theme.CoupleGamesTheme
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val app = application as SpicyNightsApp
+        val app = application as CoupleGamesApp
         val prefs = app.preferencesRepository
 
         setContent {
@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
                 }
                 window.navigationBarColor = if (light) Color.White.toArgb() else android.graphics.Color.BLACK
             }
-            SpicyNightsTheme(appTheme = appTheme) {
+            CoupleGamesTheme(appTheme = appTheme) {
                 val scope = rememberCoroutineScope()
                 val ageVerified by prefs.ageVerified.collectAsStateWithLifecycle(initialValue = false)
                 val extremeUnlocked by prefs.extremeUnlocked.collectAsStateWithLifecycle(initialValue = false)

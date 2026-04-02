@@ -60,7 +60,7 @@ fun HowToPlayScreen(
             .padding(16.dp),
     ) {
         Image(
-            painter = painterResource(R.drawable.ic_spicy_night_logo),
+            painter = painterResource(R.drawable.ic_couple_games_logo),
             contentDescription = stringResource(R.string.cd_app_logo),
             modifier = Modifier
                 .size(88.dp)

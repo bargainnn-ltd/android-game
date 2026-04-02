@@ -4,7 +4,7 @@ import android.app.Application
 import com.spicynights.games.data.DataManager
 import com.spicynights.games.data.local.AppPreferencesRepository
 
-class SpicyNightsApp : Application() {
+class CoupleGamesApp : Application() {
     lateinit var dataManager: DataManager
         private set
     lateinit var preferencesRepository: AppPreferencesRepository

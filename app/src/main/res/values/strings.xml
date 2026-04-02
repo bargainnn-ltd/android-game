@@ -61,7 +61,7 @@
     <string name="clear_custom_pool">Clear custom pool</string>
     <string name="pool_ignored_for_custom">Pool size applies to the full deck. It is ignored while a custom prompt pool is active.</string>
 
-    <string name="cd_app_logo">Spicy Night logo</string>
+    <string name="cd_app_logo">Couple Games logo</string>
 
     <!-- Navigation & shell -->
     <string name="nav_hub">Hub</string>
@@ -82,7 +82,7 @@
     <string name="age_verify_banner">VERIFY AGE</string>
     <string name="age_adults_only">ADULTS ONLY</string>
     <string name="age_are_you_18">ARE YOU 18+?</string>
-    <string name="spicynights_tagline">Truth or Dare, Spicy Spinner &amp; More</string>
+    <string name="couple_games_tagline">Truth or Dare, spinner &amp; more</string>
     <string name="age_includes_games">INCLUDES 4 PARTY GAMES</string>
     <string name="age_consent_checkbox">I am 18 years or older and I agree to the Terms of Service and Privacy Policy.</string>
     <string name="age_consent_prefix">I am 18 years or older and I agree to the </string>
@@ -205,8 +205,8 @@
 
     <string name="how_to_play_title">How to Play</string>
     <string name="how_to_play_subtitle">RULES &amp; TIPS</string>
-    <string name="how_to_master_title">Master Spicy Night</string>
-    <string name="how_to_master_body">Everything you need to know to keep the party going safely and smoothly in Spicy Night.</string>
+    <string name="how_to_master_title">Master Couple Games</string>
+    <string name="how_to_master_body">Everything you need to know to keep the party going safely and smoothly in Couple Games.</string>
     <string name="game_guides">GAME GUIDES</string>
     <string name="intensity_levels">INTENSITY LEVELS</string>
     <string name="house_rules">SUGGESTED HOUSE RULES</string>
@@ -239,8 +239,8 @@
     <string name="settings_adult_card_body">This application is for users 18 years or older.</string>
     <string name="settings_reset_session">Reset Current Session</string>
     <string name="settings_clear_favorites">Clear All Favorites</string>
-    <string name="settings_made_with">Made with passion for late nights — Spicy Night.</string>
-    <string name="settings_version_fmt">Spicy Night v%1$s</string>
+    <string name="settings_made_with">Made with passion for late nights — Couple Games.</string>
+    <string name="settings_version_fmt">Couple Games v%1$s</string>
 
     <string name="mode_placeholder_title">Coming soon</string>
     <string name="mode_placeholder_body">This game mode is under construction.</string>

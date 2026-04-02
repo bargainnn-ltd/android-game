@@ -323,7 +323,7 @@ class GameViewModel(
 
     companion object {
         fun factory(
-            app: com.spicynights.games.SpicyNightsApp,
+            app: com.spicynights.games.CoupleGamesApp,
             config: GameConfig,
             random: Random = Random(System.nanoTime()),
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {

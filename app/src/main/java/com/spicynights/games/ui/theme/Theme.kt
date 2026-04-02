@@ -39,7 +39,7 @@ private val LightColors = lightColorScheme(
 )
 
 @Composable
-fun SpicyNightsTheme(
+fun CoupleGamesTheme(
     appTheme: AppThemePreference = AppThemePreference.MIDNIGHT,
     content: @Composable () -> Unit,
 ) {
@@ -49,7 +49,7 @@ fun SpicyNightsTheme(
     }
     MaterialTheme(
         colorScheme = scheme,
-        typography = SpicyNightsTypography,
+        typography = CoupleGamesTypography,
         content = content,
     )
 }

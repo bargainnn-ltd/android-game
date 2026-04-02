@@ -1,4 +1,4 @@
-## SpicyNights
+## Couple Games
 
 Android party game built with Jetpack Compose.
 
