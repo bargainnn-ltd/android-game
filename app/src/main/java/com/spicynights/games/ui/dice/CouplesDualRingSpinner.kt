@@ -212,7 +212,7 @@ fun CouplesDualRingSpinner(
         modifier = modifier
             .fillMaxWidth()
             .aspectRatio(1f)
-            .padding(8.dp),
+            .padding(4.dp),
         contentAlignment = Alignment.Center,
     ) {
         // Outer ring (body)

@@ -192,7 +192,6 @@
     <string name="dice_free_choice_confirm">We\'re choosing freely</string>
     <string name="dice_free_choice_hint">Your choice — any combo until you tap Next player.</string>
     <string name="dice_consent_line">Consent: tap a hand to pause · smile or nod to continue.</string>
-    <string name="dice_modifier_label">Spicy extra</string>
     <string name="dice_rules_title">How to play</string>
     <string name="dice_turns_fmt">Turns: %1$d / %2$d</string>
     <string name="dice_session_complete">Session complete</string>
@@ -226,16 +225,6 @@
         <item>Hold</item>
         <item>&quot;You Choose&quot;</item>
     </string-array>
-    <string-array name="dice_spicy_modifiers">
-        <item>Try it blindfolded</item>
-        <item>Add an ice cube</item>
-        <item>Go slow for 10 extra seconds</item>
-        <item>No talking — eye contact only</item>
-        <item>Switch who leads halfway</item>
-        <item>Whisper what you\'ll do first</item>
-        <item>Feather-light touch only</item>
-        <item>Count down from 6 before you start</item>
-    </string-array>
     <string-array name="dice_rules">
         <item>Each player spins the dual wheel — outer ring is body, inner ring is action (8 segments each).</item>
         <item>Outer ring is body zones (8 segments). Inner ring is actions (8 segments). Match the on-screen words to your comfort.</item>
@@ -244,7 +233,6 @@
         <item>Take turns spinning. Use the timer if you turned it on in session setup.</item>
         <item>Double spin: if both rings land on the same number, you choose any body part and any action (by agreement).</item>
         <item>Keep a consent signal — tap a hand to stop, smile or nod to continue.</item>
-        <item>Optional spicy extras appear sometimes — use them if you want.</item>
         <item>The round ends after five turns each (or when you stop).</item>
         <item>Always prioritize fun, consent, and teasing. Stop or skip anything that doesn\'t feel right.</item>
     </string-array>

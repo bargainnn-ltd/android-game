@@ -27,8 +27,6 @@ data class SpicySpinnerUiState(
     /** Seconds for action timer when session had timer on; 0 = disabled. */
     val actionTimerSeconds: Int,
     val turnTimerEnabled: Boolean,
-    /** Random index into `dice_spicy_modifiers` string array, or null. */
-    val modifierIndex: Int?,
 )
 
 class SpicySpinnerGameplayViewModel(
@@ -41,7 +39,6 @@ class SpicySpinnerGameplayViewModel(
     private val maxTurns = CouplesDiceRules.maxTurns(names.size)
 
     private val timerSec = snap.turnTimerSeconds.coerceIn(10, 120)
-    private val spicyModifierCount = 8
 
     private val _state = MutableStateFlow(
         SpicySpinnerUiState(
@@ -58,7 +55,6 @@ class SpicySpinnerGameplayViewModel(
             sessionComplete = false,
             actionTimerSeconds = if (snap.turnTimerOn && timerSec > 0) timerSec else 0,
             turnTimerEnabled = snap.turnTimerOn && timerSec > 0,
-            modifierIndex = null,
         ),
     )
     val state: StateFlow<SpicySpinnerUiState> = _state.asStateFlow()
@@ -69,14 +65,12 @@ class SpicySpinnerGameplayViewModel(
         val b = random.nextInt(1, CouplesDiceRules.SIDES + 1)
         val a = random.nextInt(1, CouplesDiceRules.SIDES + 1)
         val double = CouplesDiceRules.isDoubleRoll(b, a)
-        val mod = if (!double) random.nextInt(0, spicyModifierCount) else null
         _state.update {
             it.copy(
                 bodyRoll = b,
                 actionRoll = a,
                 isDoubleRoll = double,
                 freeChoiceActive = false,
-                modifierIndex = mod,
             )
         }
     }
@@ -110,7 +104,6 @@ class SpicySpinnerGameplayViewModel(
                 freeChoiceActive = false,
                 turnsCompleted = completed,
                 sessionComplete = done,
-                modifierIndex = null,
             )
         }
     }
@@ -126,7 +119,6 @@ class SpicySpinnerGameplayViewModel(
                 sessionReRollsRemaining = MAX_SESSION_REROLLS,
                 turnsCompleted = 0,
                 sessionComplete = false,
-                modifierIndex = null,
             )
         }
     }

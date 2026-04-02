@@ -249,7 +249,6 @@ fun SpicySpinnerGameplayScreen(
 
     val bodies = stringArrayResource(R.array.dice_body_parts)
     val actions = stringArrayResource(R.array.dice_actions)
-    val modifiers = stringArrayResource(R.array.dice_spicy_modifiers)
     val rules = stringArrayResource(R.array.dice_rules)
 
     var rulesExpanded by remember { mutableStateOf(false) }
@@ -276,22 +275,21 @@ fun SpicySpinnerGameplayScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(16.dp),
+                .padding(horizontal = 12.dp, vertical = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
         Text(
             stringResource(R.string.game_spicy_spinner),
             color = DicePink,
-            style = MaterialTheme.typography.headlineSmall,
+            style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
         )
         Text(
             stringResource(R.string.dice_couples_subtitle),
             color = Color.Gray,
-            style = MaterialTheme.typography.labelMedium,
+            style = MaterialTheme.typography.labelSmall,
         )
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(4.dp))
         Text(
             if (currentName.equals("You", ignoreCase = true)) {
                 stringResource(R.string.dice_your_turn)
@@ -311,24 +309,29 @@ fun SpicySpinnerGameplayScreen(
             Text(
                 stringResource(R.string.dice_timer_fmt, timerLeft),
                 color = Color(0xFFFF9800),
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 8.dp),
+                modifier = Modifier.padding(top = 4.dp),
             )
         }
-        Spacer(Modifier.height(16.dp))
-
-        CouplesDualRingSpinner(
-            bodyRoll = state.bodyRoll,
-            actionRoll = state.actionRoll,
-            isRolling = isRolling,
-            animationKey = spinGeneration,
-            outerLabel = stringResource(R.string.dice_body_die),
-            innerLabel = stringResource(R.string.dice_action_die),
-            outerLabels = bodies,
-            innerLabels = actions,
-            modifier = Modifier.fillMaxWidth(),
-        )
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
+            contentAlignment = Alignment.Center,
+        ) {
+            CouplesDualRingSpinner(
+                bodyRoll = state.bodyRoll,
+                actionRoll = state.actionRoll,
+                isRolling = isRolling,
+                animationKey = spinGeneration,
+                outerLabel = stringResource(R.string.dice_body_die),
+                innerLabel = stringResource(R.string.dice_action_die),
+                outerLabels = bodies,
+                innerLabels = actions,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
         if (!isRolling && state.bodyRoll != null && state.actionRoll != null) {
             Text(
                 stringResource(
@@ -337,12 +340,12 @@ fun SpicySpinnerGameplayScreen(
                     actionLabel ?: "—",
                 ),
                 color = DicePink,
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 12.dp),
+                modifier = Modifier.padding(top = 4.dp),
             )
         }
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(6.dp))
         FlirtyPointerOverlay(
             showSparkles = rollHovered || rollPressed,
             modifier = Modifier.fillMaxWidth(),
@@ -363,18 +366,18 @@ fun SpicySpinnerGameplayScreen(
             stringResource(R.string.dice_tap_to_spin),
             color = Color.Gray,
             style = MaterialTheme.typography.labelSmall,
-            modifier = Modifier.padding(top = 4.dp),
+            modifier = Modifier.padding(top = 2.dp),
         )
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(8.dp))
 
         Surface(shape = RoundedCornerShape(16.dp), color = CardBg, modifier = Modifier.fillMaxWidth()) {
-            Column(Modifier.padding(16.dp)) {
+            Column(Modifier.padding(12.dp)) {
                 when {
                     isRolling -> {
                         Text(
                             "…",
                             color = Color.Gray,
-                            style = MaterialTheme.typography.titleMedium,
+                            style = MaterialTheme.typography.titleSmall,
                         )
                     }
                     state.sessionComplete -> {
@@ -426,22 +429,6 @@ fun SpicySpinnerGameplayScreen(
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.titleMedium,
                         )
-                        state.modifierIndex?.let { idx ->
-                            val mod = modifiers.getOrNull(idx)
-                            if (mod != null) {
-                                Text(
-                                    stringResource(R.string.dice_modifier_label),
-                                    color = Color.Gray,
-                                    style = MaterialTheme.typography.labelSmall,
-                                    modifier = Modifier.padding(top = 12.dp),
-                                )
-                                Text(
-                                    mod,
-                                    color = Color(0xFFFFB74D),
-                                    style = MaterialTheme.typography.bodyMedium,
-                                )
-                            }
-                        }
                     }
                     else -> {
                         Text(
@@ -455,12 +442,12 @@ fun SpicySpinnerGameplayScreen(
                     stringResource(R.string.dice_consent_line),
                     color = Color.Gray,
                     style = MaterialTheme.typography.labelSmall,
-                    modifier = Modifier.padding(top = 16.dp),
+                    modifier = Modifier.padding(top = 8.dp),
                 )
             }
         }
 
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(6.dp))
         Row(
             Modifier
                 .fillMaxWidth()
@@ -484,12 +471,12 @@ fun SpicySpinnerGameplayScreen(
                     "• $line",
                     color = Color.White.copy(alpha = 0.85f),
                     style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(top = 6.dp),
+                    modifier = Modifier.padding(top = 4.dp),
                 )
             }
         }
 
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(8.dp))
         if (state.sessionComplete) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Button(
