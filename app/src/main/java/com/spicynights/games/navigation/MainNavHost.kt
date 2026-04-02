@@ -128,14 +128,18 @@ fun MainNavHost(
                     },
                 )
             }
-            composable(Routes.NeverGameplay) { NeverGameplayScreen() }
+            composable(Routes.NeverGameplay) {
+                NeverGameplayScreen(prefs = prefs)
+            }
             composable(Routes.SpicySpinnerGameplay) {
                 SpicySpinnerGameplayScreen(
                     prefs = prefs,
                     onBack = { navController.popBackStack() },
                 )
             }
-            composable(Routes.WyrGameplay) { WyrGameplayScreen() }
+            composable(Routes.WyrGameplay) {
+                WyrGameplayScreen(prefs = prefs)
+            }
             composable(Routes.HowToPlay) {
                 HowToPlayScreen(
                     onGoToSettings = {

@@ -1,5 +1,8 @@
 package com.spicynights.games.ui.modes
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.hoverable
@@ -13,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.rememberScrollState
@@ -41,12 +45,17 @@ import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.spicynights.games.data.local.AppPreferencesRepository
@@ -60,6 +69,7 @@ import com.spicynights.games.ui.dice.CouplesDualRingSpinner
 import com.spicynights.games.ui.dice.DiceSoundEffects
 import com.spicynights.games.ui.dice.SpicySpinnerSpinTotalMs
 import com.spicynights.games.ui.dice.FlirtyPointerOverlay
+import com.spicynights.games.ui.sound.FlipSoundEffects
 import com.spicynights.games.viewmodel.CouplesDiceRules
 import com.spicynights.games.viewmodel.WyrGameplayViewModel
 import kotlinx.coroutines.delay
@@ -76,7 +86,7 @@ private val WyrCardRadius = 28.dp
 private val WyrOrBadgeSize = 56.dp
 
 @Composable
-fun NeverGameplayScreen() {
+fun NeverGameplayScreen(prefs: AppPreferencesRepository) {
     val context = LocalContext.current.applicationContext
     val snapshot = remember {
         SessionStateHolder.pending.also { SessionStateHolder.pending = null }
@@ -86,6 +96,12 @@ fun NeverGameplayScreen() {
         factory = NeverGameplayViewModel.factory(snapshot, dataManager),
     )
     val state by vm.state.collectAsStateWithLifecycle()
+
+    val flipSound = remember { FlipSoundEffects(context) }
+    DisposableEffect(Unit) {
+        onDispose { flipSound.release() }
+    }
+    val soundOn by prefs.soundEffectsEnabled.collectAsStateWithLifecycle(initialValue = true)
 
     var timerLeft by remember { mutableIntStateOf(state.turnTimerSecondsTotal) }
     LaunchedEffect(state.currentPrompt, state.turnIndex, state.turnTimerEnabled, state.turnTimerSecondsTotal) {
@@ -98,117 +114,259 @@ fun NeverGameplayScreen() {
         }
     }
 
-    val bg = Brush.verticalGradient(listOf(Color(0xFF121218), Color(0xFF0A0A10)))
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(bg)
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-    ) {
-        Text(
-            stringResource(R.string.never_game_title),
-            style = MaterialTheme.typography.titleLarge,
-            color = NeverAccent,
-            fontWeight = FontWeight.Bold,
+    val bgGradient =
+        Brush.verticalGradient(
+            colors =
+                listOf(
+                    Color(0xFF2D1B69),
+                    Color(0xFF12182E),
+                    Color(0xFF070A12),
+                ),
         )
-        Spacer(Modifier.height(8.dp))
-        Surface(shape = RoundedCornerShape(24.dp), color = Color(0xFF2A2A32)) {
-            Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                Text("👤", modifier = Modifier.padding(end = 8.dp))
-                Column {
-                    Text(
-                        stringResource(R.string.never_reads_prompt, state.currentReaderName),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = Color.Gray,
-                    )
-                    Text(
-                        state.currentReaderName,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                    )
-                }
-            }
-        }
-        Spacer(Modifier.height(8.dp))
-        Text(state.intensityLine, color = Color.White.copy(alpha = 0.7f), style = MaterialTheme.typography.labelMedium)
-        if (state.turnTimerEnabled && state.currentPrompt != null && state.turnTimerSecondsTotal > 0) {
+
+    Box(
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(bgGradient),
+    ) {
+        Column(
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 18.dp, vertical = 14.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+        ) {
+            val titleBrush =
+                Brush.linearGradient(
+                    colors = listOf(Color.White, NeverAccent.copy(alpha = 0.95f)),
+                )
             Text(
-                stringResource(R.string.never_turn_timer_fmt, timerLeft),
-                color = Color(0xFFFF9800),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 8.dp),
+                stringResource(R.string.never_game_title),
+                style =
+                    MaterialTheme.typography.headlineSmall.merge(
+                        TextStyle(brush = titleBrush),
+                    ),
+                fontWeight = FontWeight.SemiBold,
             )
-        }
-        Spacer(Modifier.height(16.dp))
-        state.error?.let {
-            Text(it, color = Color(0xFFFF5252), style = MaterialTheme.typography.bodySmall)
-            Spacer(Modifier.height(8.dp))
-        }
-        Surface(shape = RoundedCornerShape(16.dp), color = CardBg, modifier = Modifier.fillMaxWidth()) {
-            Column(Modifier.padding(16.dp)) {
-                Text(
-                    stringResource(R.string.never_have_prefix).uppercase(),
-                    color = NeverAccent,
-                    style = MaterialTheme.typography.labelMedium,
-                )
-                Spacer(Modifier.height(8.dp))
-                Text(
-                    state.currentPrompt ?: stringResource(R.string.never_deck_empty),
-                    color = Color.White,
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                )
-                if (state.drinkingRulesOn && state.currentPrompt != null) {
-                    Spacer(Modifier.height(12.dp))
-                    Surface(shape = RoundedCornerShape(20.dp), color = Color(0xFF1E2A30)) {
+
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(28.dp),
+                color = Color.White.copy(alpha = 0.06f),
+                border = BorderStroke(1.dp, Color.White.copy(alpha = 0.12f)),
+            ) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text("👤", modifier = Modifier.padding(end = 10.dp))
+                    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                         Text(
-                            "🥂  ${stringResource(R.string.never_sip_hint)}",
-                            modifier = Modifier.padding(12.dp),
-                            color = NeverAccent,
-                            style = MaterialTheme.typography.labelMedium,
+                            stringResource(R.string.never_reads_prompt, state.currentReaderName),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = Color(0xFF9FA8DA),
+                        )
+                        Text(
+                            state.currentReaderName,
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.titleMedium,
                         )
                     }
                 }
             }
-        }
-        Spacer(Modifier.height(16.dp))
-        Text(
-            stringResource(R.string.house_rules_game_title),
-            color = Color.Gray,
-            style = MaterialTheme.typography.labelSmall,
-        )
-        state.playerNames.forEachIndexed { index, name ->
-            Spacer(Modifier.height(8.dp))
+
             Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                Text(name, color = Color.White, modifier = Modifier.weight(1f))
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    val sel = state.playerAnswers.getOrNull(index)
-                    FilterChipStyle(
-                        label = stringResource(R.string.never_i_have),
-                        selected = sel == true,
-                        onClick = { vm.setPlayerAnswer(index, true) },
+                Surface(
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(18.dp),
+                    color = Color.White.copy(alpha = 0.05f),
+                    border = BorderStroke(1.dp, Color.White.copy(alpha = 0.1f)),
+                ) {
+                    Text(
+                        state.intensityLine,
+                        color = Color(0xFFCBD3FF),
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
                     )
-                    FilterChipStyle(
-                        label = stringResource(R.string.never_never),
-                        selected = sel == false,
-                        onClick = { vm.setPlayerAnswer(index, false) },
+                }
+                if (state.turnTimerEnabled && state.currentPrompt != null && state.turnTimerSecondsTotal > 0) {
+                    Surface(
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(18.dp),
+                        color = Color(0x14FF9800),
+                        border = BorderStroke(1.dp, Color(0x66FF9800)),
+                    ) {
+                        Text(
+                            stringResource(R.string.never_turn_timer_fmt, timerLeft),
+                            color = Color(0xFFFFB74D),
+                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
+                        )
+                    }
+                }
+            }
+
+            state.error?.let {
+                Text(it, color = Color(0xFFFF5252), style = MaterialTheme.typography.bodySmall)
+            }
+
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .background(
+                            Brush.radialGradient(
+                                colors =
+                                    listOf(
+                                        NeverAccent.copy(alpha = 0.12f),
+                                        Color.Transparent,
+                                    ),
+                                radius = 520f,
+                            ),
+                        ),
+            ) {
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(24.dp),
+                    color = Color.White.copy(alpha = 0.08f),
+                    border = BorderStroke(1.dp, Color.White.copy(alpha = 0.14f)),
+                ) {
+                    Column(Modifier.padding(18.dp)) {
+                        Text(
+                            stringResource(R.string.never_have_prefix).uppercase(),
+                            color = NeverAccent.copy(alpha = 0.95f),
+                            style = MaterialTheme.typography.labelLarge,
+                            fontWeight = FontWeight.Medium,
+                        )
+                        Spacer(Modifier.height(10.dp))
+                        Text(
+                            state.currentPrompt ?: stringResource(R.string.never_deck_empty),
+                            color = Color.White,
+                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                            lineHeight = 28.sp,
+                        )
+                        if (state.drinkingRulesOn && state.currentPrompt != null) {
+                            Spacer(Modifier.height(12.dp))
+                            Surface(
+                                shape = RoundedCornerShape(20.dp),
+                                color = Color.White.copy(alpha = 0.06f),
+                                border = BorderStroke(1.dp, NeverAccent.copy(alpha = 0.35f)),
+                            ) {
+                                Text(
+                                    "🥂  ${stringResource(R.string.never_sip_hint)}",
+                                    modifier = Modifier.padding(12.dp),
+                                    color = NeverAccent,
+                                    style = MaterialTheme.typography.labelMedium,
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            Text(
+                stringResource(R.string.house_rules_game_title),
+                color = Color(0xFF8A93B8),
+                style = MaterialTheme.typography.labelSmall,
+            )
+
+            state.playerNames.forEachIndexed { index, name ->
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    color = Color.White.copy(alpha = 0.04f),
+                    border = BorderStroke(1.dp, Color.White.copy(alpha = 0.08f)),
+                ) {
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 10.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            name,
+                            color = Color.White,
+                            modifier = Modifier.weight(1f),
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            val sel = state.playerAnswers.getOrNull(index)
+                            FilterChipStyle(
+                                label = stringResource(R.string.never_i_have),
+                                selected = sel == true,
+                                onClick = { vm.setPlayerAnswer(index, true) },
+                            )
+                            FilterChipStyle(
+                                label = stringResource(R.string.never_never),
+                                selected = sel == false,
+                                onClick = { vm.setPlayerAnswer(index, false) },
+                            )
+                        }
+                    }
+                }
+            }
+
+            val nextBrush =
+                Brush.horizontalGradient(
+                    colors =
+                        listOf(
+                            NeverAccent,
+                            Color(0xFFE040FB),
+                        ),
+                )
+            val canNext = state.currentPrompt != null
+            val nextFill =
+                if (canNext) {
+                    nextBrush
+                } else {
+                    Brush.horizontalGradient(
+                        colors =
+                            listOf(
+                                Color(0xFF3A3A44),
+                                Color(0xFF2A2A32),
+                            ),
+                    )
+                }
+            Button(
+                onClick = {
+                    if (soundOn) flipSound.playFlip()
+                    vm.nextPrompt()
+                },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(26.dp),
+                enabled = canNext,
+                colors =
+                    ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent,
+                        contentColor = Color.Black,
+                        disabledContainerColor = Color.Transparent,
+                        disabledContentColor = Color.White.copy(alpha = 0.4f),
+                    ),
+                contentPadding = PaddingValues(vertical = 4.dp),
+            ) {
+                Box(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .background(nextFill, RoundedCornerShape(26.dp))
+                            .padding(vertical = 14.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        stringResource(R.string.never_next_prompt),
+                        fontWeight = FontWeight.SemiBold,
+                        color = if (canNext) Color.Black else Color.White.copy(alpha = 0.4f),
                     )
                 }
             }
-        }
-        Spacer(Modifier.height(24.dp))
-        Button(
-            onClick = { vm.nextPrompt() },
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = Color.Black),
-            enabled = state.currentPrompt != null,
-        ) {
-            Text(stringResource(R.string.never_next_prompt))
         }
     }
 }
@@ -218,12 +376,17 @@ private fun FilterChipStyle(label: String, selected: Boolean, onClick: () -> Uni
     Surface(
         onClick = onClick,
         shape = RoundedCornerShape(20.dp),
-        color = if (selected) NeverAccent.copy(alpha = 0.35f) else Color(0xFF3A3A44),
+        color = if (selected) NeverAccent.copy(alpha = 0.35f) else Color.White.copy(alpha = 0.06f),
+        border =
+            BorderStroke(
+                1.dp,
+                if (selected) NeverAccent.copy(alpha = 0.55f) else Color.White.copy(alpha = 0.14f),
+            ),
     ) {
         Text(
             label,
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-            color = if (selected) Color.White else Color.White.copy(alpha = 0.85f),
+            color = if (selected) Color.White else Color.White.copy(alpha = 0.88f),
             style = MaterialTheme.typography.labelMedium,
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
         )
@@ -245,8 +408,12 @@ fun SpicySpinnerGameplayScreen(
     val soundOn by prefs.soundEffectsEnabled.collectAsStateWithLifecycle(initialValue = true)
     val context = LocalContext.current
     val diceSound = remember { DiceSoundEffects(context) }
+    val flipSound = remember { FlipSoundEffects(context) }
     DisposableEffect(Unit) {
-        onDispose { diceSound.release() }
+        onDispose {
+            diceSound.release()
+            flipSound.release()
+        }
     }
     var isRolling by remember { mutableStateOf(false) }
     var spinGeneration by remember { mutableIntStateOf(0) }
@@ -263,7 +430,7 @@ fun SpicySpinnerGameplayScreen(
             spinGeneration++
             delay(SpicySpinnerSpinTotalMs.toLong())
             isRolling = false
-            if (soundOn) diceSound.playDing()
+            if (soundOn) flipSound.playFlip()
         }
     }
 
@@ -539,7 +706,7 @@ fun SpicySpinnerGameplayScreen(
 }
 
 @Composable
-fun WyrGameplayScreen() {
+fun WyrGameplayScreen(prefs: AppPreferencesRepository) {
     val context = LocalContext.current.applicationContext
     val snapshot = remember {
         SessionStateHolder.pending.also { SessionStateHolder.pending = null }
@@ -549,6 +716,17 @@ fun WyrGameplayScreen() {
         factory = WyrGameplayViewModel.factory(snapshot, dataManager),
     )
     val state by vm.state.collectAsStateWithLifecycle()
+
+    val flipSound = remember { FlipSoundEffects(context) }
+    DisposableEffect(Unit) {
+        onDispose { flipSound.release() }
+    }
+    val soundOn by prefs.soundEffectsEnabled.collectAsStateWithLifecycle(initialValue = true)
+
+    val flipAnim = remember { Animatable(0f) }
+    var isFlipping by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    val density = LocalDensity.current
 
     var timerLeft by remember { mutableIntStateOf(state.timerSecondsTotal) }
     val cardVisible = state.optionA != null && state.optionB != null
@@ -565,6 +743,8 @@ fun WyrGameplayScreen() {
 
     val topShape = RoundedCornerShape(topStart = WyrCardRadius, topEnd = WyrCardRadius)
     val bottomShape = RoundedCornerShape(bottomStart = WyrCardRadius, bottomEnd = WyrCardRadius)
+
+    val flipRotationY = flipAnim.value
 
     Column(
         modifier = Modifier
@@ -605,7 +785,12 @@ fun WyrGameplayScreen() {
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .heightIn(min = 280.dp),
+                .heightIn(min = 280.dp)
+                .graphicsLayer {
+                    cameraDistance = 8f * density.density
+                    rotationY = flipRotationY
+                    transformOrigin = TransformOrigin(0.5f, 0.5f)
+                },
         ) {
             Column(Modifier.fillMaxSize()) {
                 Box(
@@ -696,10 +881,22 @@ fun WyrGameplayScreen() {
             textAlign = TextAlign.Center,
         )
         Button(
-            onClick = { vm.nextCard() },
+            onClick = {
+                if (isFlipping) return@Button
+                scope.launch {
+                    isFlipping = true
+                    if (soundOn) flipSound.playFlip()
+                    flipAnim.animateTo(90f, animationSpec = tween(200))
+                    vm.nextCard()
+                    flipAnim.snapTo(-90f)
+                    flipAnim.animateTo(0f, animationSpec = tween(200))
+                    isFlipping = false
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 24.dp),
+            enabled = !isFlipping,
             shape = RoundedCornerShape(24.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.White,
