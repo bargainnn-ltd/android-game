@@ -10,8 +10,16 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.json.Json
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "truth_or_dare_prefs")
+
+private val JsonLenient = Json {
+    ignoreUnknownKeys = true
+    isLenient = true
+}
 
 /** Default intensity: 0 mild, 1 spicy, 2 extreme — matches Settings UI. */
 enum class DefaultIntensity(val storageValue: Int) {
@@ -44,6 +52,7 @@ class AppPreferencesRepository(private val context: Context) {
         val hapticFeedbackEnabled = booleanPreferencesKey("haptic_feedback_enabled")
         val appTheme = stringPreferencesKey("app_theme")
         val languageTag = stringPreferencesKey("language_tag")
+        val sessionPlayerNamesJson = stringPreferencesKey("session_player_names_json")
     }
 
     val disclaimerAccepted: Flow<Boolean> = context.dataStore.data.map { it[Keys.disclaimerAccepted] == true }
@@ -82,6 +91,19 @@ class AppPreferencesRepository(private val context: Context) {
     }
 
     val languageTag: Flow<String> = context.dataStore.data.map { it[Keys.languageTag] ?: "en" }
+
+    /** Last saved session player names (Session Setup); empty if unset or invalid JSON. */
+    val sessionPlayerNames: Flow<List<String>> = context.dataStore.data.map { prefs ->
+        val json = prefs[Keys.sessionPlayerNamesJson] ?: return@map emptyList()
+        runCatching {
+            JsonLenient.decodeFromString(ListSerializer(String.serializer()), json)
+        }.getOrElse { emptyList() }
+    }
+
+    suspend fun setSessionPlayerNames(names: List<String>) {
+        val json = JsonLenient.encodeToString(ListSerializer(String.serializer()), names)
+        context.dataStore.edit { it[Keys.sessionPlayerNamesJson] = json }
+    }
 
     suspend fun setDisclaimerAccepted(value: Boolean) {
         context.dataStore.edit { it[Keys.disclaimerAccepted] = value }

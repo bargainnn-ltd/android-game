@@ -118,6 +118,10 @@
     <string name="session_whos_playing">Who\'s Playing?</string>
     <string name="session_n_selected">%1$d Selected</string>
     <string name="session_add_new">Add New</string>
+    <string name="session_add_player_title">Add player</string>
+    <string name="session_add_player_label">Name</string>
+    <string name="session_add_player_confirm">Add</string>
+    <string name="session_add_player_cancel">Cancel</string>
     <string name="session_play_mode">Play Mode</string>
     <string name="session_pass_and_play">Pass &amp; Play</string>
     <string name="session_host_online">Host Online</string>

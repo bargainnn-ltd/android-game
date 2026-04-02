@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -33,12 +34,14 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -54,6 +57,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -64,6 +68,7 @@ import com.spicynights.games.data.PoolMode
 import com.spicynights.games.data.local.AppPreferencesRepository
 import com.spicynights.games.navigation.SessionGameMode
 import com.spicynights.games.session.SessionSnapshot
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -112,13 +117,19 @@ fun SessionSetupScreen(
 ) {
     val scope = rememberCoroutineScope()
     var showExtremeDialog by remember { mutableStateOf(false) }
+    var showAddPlayerDialog by remember { mutableStateOf(false) }
+    var newPlayerNameInput by remember { mutableStateOf("") }
 
-    val players = remember {
-        mutableStateListOf(
-            SessionPlayerUi(name = "You"),
-            SessionPlayerUi(name = "Sarah"),
-            SessionPlayerUi(name = "Mike"),
-        )
+    val players = remember { mutableStateListOf<SessionPlayerUi>() }
+
+    LaunchedEffect(Unit) {
+        val names = prefs.sessionPlayerNames.first()
+        players.clear()
+        names.forEach { name ->
+            if (name.isNotBlank()) {
+                players.add(SessionPlayerUi(name = name.trim()))
+            }
+        }
     }
     var playMode by remember { mutableStateOf(PlayModeChoice.PASS_AND_PLAY) }
     var intensity by remember { mutableStateOf(SessionIntensityChoice.EXTRA_SPICY) }
@@ -269,7 +280,8 @@ fun SessionSetupScreen(
                             .clip(CircleShape)
                             .border(BorderStroke(2.dp, Color.Gray.copy(alpha = 0.5f)), CircleShape)
                             .clickable {
-                                players.add(SessionPlayerUi(name = "Player ${players.size + 1}"))
+                                newPlayerNameInput = ""
+                                showAddPlayerDialog = true
                             },
                         contentAlignment = Alignment.Center,
                     ) {
@@ -495,6 +507,57 @@ fun SessionSetupScreen(
             dismissButton = {
                 TextButton(onClick = { showExtremeDialog = false }) {
                     Text(stringResource(R.string.cancel))
+                }
+            },
+        )
+    }
+
+    if (showAddPlayerDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showAddPlayerDialog = false
+                newPlayerNameInput = ""
+            },
+            title = { Text(stringResource(R.string.session_add_player_title)) },
+            text = {
+                OutlinedTextField(
+                    value = newPlayerNameInput,
+                    onValueChange = { newPlayerNameInput = it },
+                    label = { Text(stringResource(R.string.session_add_player_label)) },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Words,
+                    ),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            },
+            confirmButton = {
+                val canAdd = newPlayerNameInput.trim().isNotEmpty() && players.size < 4
+                TextButton(
+                    enabled = canAdd,
+                    onClick = {
+                        val trimmed = newPlayerNameInput.trim()
+                        if (trimmed.isNotEmpty() && players.size < 4) {
+                            players.add(SessionPlayerUi(name = trimmed))
+                            scope.launch {
+                                prefs.setSessionPlayerNames(players.map { it.name })
+                            }
+                        }
+                        newPlayerNameInput = ""
+                        showAddPlayerDialog = false
+                    },
+                ) {
+                    Text(stringResource(R.string.session_add_player_confirm))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        newPlayerNameInput = ""
+                        showAddPlayerDialog = false
+                    },
+                ) {
+                    Text(stringResource(R.string.session_add_player_cancel))
                 }
             },
         )
