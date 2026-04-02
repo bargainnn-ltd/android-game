@@ -15,9 +15,13 @@ import kotlinx.coroutines.launch
 data class NeverUiState(
     val playerNames: List<String>,
     val intensityLine: String,
+    /** Shown as mood sub-label (e.g. intensity). */
+    val moodLabel: String,
     val drinkingRulesOn: Boolean,
     val currentPrompt: String?,
     val deckRemaining: Int,
+    /** Total prompts in deck at session start (for ROUND x OF y). */
+    val totalPrompts: Int,
     val turnIndex: Int,
     /** Per player: null = not set, true = have done, false = never */
     val playerAnswers: List<Boolean?>,
@@ -51,9 +55,11 @@ class NeverGameplayViewModel(
         NeverUiState(
             playerNames = resolvedNames,
             intensityLine = buildNeverIntensityLine(snap),
+            moodLabel = snap.intensityLabel,
             drinkingRulesOn = snap.drinkingRulesOn,
             currentPrompt = null,
             deckRemaining = 0,
+            totalPrompts = 0,
             turnIndex = 0,
             playerAnswers = List(resolvedNames.size) { null },
             error = null,
@@ -69,12 +75,14 @@ class NeverGameplayViewModel(
         viewModelScope.launch {
             dataManager.loadNeverPrompts(snap.level).fold(
                 onSuccess = { prompts ->
+                    val total = prompts.size
                     deck = prompts.shuffled().toMutableList()
                     val first = deck.removeFirstOrNull()
                     _state.update {
                         it.copy(
                             currentPrompt = first,
                             deckRemaining = deck.size,
+                            totalPrompts = total,
                             playerAnswers = List(resolvedNames.size) { null },
                         )
                     }
@@ -114,9 +122,17 @@ class NeverGameplayViewModel(
             it.copy(
                 currentPrompt = next,
                 deckRemaining = deck.size,
+                totalPrompts = it.totalPrompts,
                 turnIndex = (it.turnIndex + 1) % names.size.coerceAtLeast(1),
                 playerAnswers = List(names.size) { null },
             )
+        }
+    }
+
+    fun setAllPlayersAnswer(hasDone: Boolean) {
+        val n = _state.value.playerNames.size
+        _state.update { s ->
+            s.copy(playerAnswers = List(n) { hasDone })
         }
     }
 

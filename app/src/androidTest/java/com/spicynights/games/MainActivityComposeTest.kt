@@ -4,9 +4,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import com.spicynights.games.R
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Rule
 import org.junit.Test
@@ -33,7 +31,7 @@ class MainActivityComposeTest {
         }
         composeRule.onNodeWithTag("game_hub_screen").assertIsDisplayed()
 
-        composeRule.onNodeWithText(composeRule.activity.getString(R.string.game_never)).performClick()
+        composeRule.onNodeWithTag("hub_game_never").performClick()
         composeRule.waitUntil(timeoutMillis = 10_000) {
             composeRule.onAllNodesWithTag("session_setup_screen").fetchSemanticsNodes().isNotEmpty()
         }

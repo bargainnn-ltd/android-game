@@ -1,300 +1,279 @@
 package com.spicynights.games.ui.hub
 
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.LocalFireDepartment
+import androidx.compose.material.icons.filled.SwapHoriz
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.spicynights.games.R
-import com.spicynights.games.ui.theme.NeonTokens
-
-private data class HubGameTile(
-    val titleRes: Int,
-    val descRes: Int,
-    val emoji: String,
-    val accent: Color,
-    val onClick: () -> Unit,
-    val testTag: String? = null,
-)
-
-private data class FeedItem(val titleRes: Int, val subtitleRes: Int, val emoji: String)
 
 @Composable
 fun GameHubScreen(
     onOpenMenu: () -> Unit,
+    onNotifications: () -> Unit = {},
     onGameNever: () -> Unit,
     onGameTruthDare: () -> Unit,
     onGameSpicySpinner: () -> Unit,
     onGameWyr: () -> Unit,
-    onHowToPlay: () -> Unit,
-    onFavorites: () -> Unit,
-    onSettings: () -> Unit,
+    onCustomDeck: () -> Unit,
 ) {
-    val games = remember {
-        listOf(
-            HubGameTile(
-                titleRes = R.string.game_never,
-                descRes = R.string.hub_tile_never_desc,
-                emoji = "🥂",
-                accent = NeonTokens.NeonCyan,
-                onClick = onGameNever,
-                testTag = "hub_game_never",
-            ),
-            HubGameTile(
-                titleRes = R.string.game_truth_dare,
-                descRes = R.string.hub_tile_truth_dare_desc,
-                emoji = "🎭",
-                accent = NeonTokens.NeonMagenta,
-                onClick = onGameTruthDare,
-            ),
-            HubGameTile(
-                titleRes = R.string.game_spicy_spinner,
-                descRes = R.string.hub_tile_spicy_desc,
-                emoji = "🎡",
-                accent = Color(0xFFFF7043),
-                onClick = onGameSpicySpinner,
-            ),
-            HubGameTile(
-                titleRes = R.string.game_wyr,
-                descRes = R.string.hub_tile_wyr_desc,
-                emoji = "⚖",
-                accent = Color(0xFFE040FB),
-                onClick = onGameWyr,
-            ),
-        )
-    }
-
-    val feedItems = remember {
-        listOf(
-            FeedItem(R.string.hub_feed_new_title, R.string.hub_feed_new_sub, "🥂"),
-            FeedItem(R.string.hub_feed_popular_title, R.string.hub_feed_popular_sub, "🎭"),
-            FeedItem(R.string.hub_feed_icebreaker_title, R.string.hub_feed_icebreaker_sub, "✨"),
-        )
-    }
-
-    val bgBrush = remember { NeonTokens.screenBackgroundBrush() }
+    val bg = Brush.verticalGradient(
+        listOf(HubLandingColors.Black, HubLandingColors.Charcoal, HubLandingColors.Black),
+    )
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(bgBrush),
+            .background(bg),
     ) {
-        StarryBackdrop(Modifier.fillMaxSize())
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp, vertical = 12.dp)
+                .padding(horizontal = 16.dp, vertical = 8.dp)
                 .testTag("game_hub_screen"),
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.ic_spicy_night_logo),
-                    contentDescription = stringResource(R.string.cd_app_logo),
-                    modifier = Modifier
-                        .size(44.dp)
-                        .clip(RoundedCornerShape(12.dp)),
-                    contentScale = ContentScale.Crop,
-                )
-                Spacer(Modifier.width(12.dp))
-                Text(
-                    text = stringResource(R.string.app_name),
-                    style = MaterialTheme.typography.headlineSmall.merge(
-                        TextStyle(
-                            brush = Brush.linearGradient(
-                                listOf(NeonTokens.NeonMagenta, NeonTokens.NeonCyan),
-                            ),
-                        ),
-                    ),
-                    fontWeight = FontWeight.Bold,
-                )
-            }
-            Spacer(Modifier.height(10.dp))
-            Text(
-                text = stringResource(R.string.hub_welcome_line),
-                style = MaterialTheme.typography.bodySmall,
-                color = NeonTokens.TextMuted,
-                modifier = Modifier.fillMaxWidth(),
+            HubTopBar(
+                onOpenMenu = onOpenMenu,
+                onNotifications = onNotifications,
             )
             Spacer(Modifier.height(20.dp))
-            Text(
-                text = stringResource(R.string.hub_ready_title),
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold,
-                color = NeonTokens.TextPrimary,
-            )
-            Text(
-                text = stringResource(R.string.hub_ready_subtitle),
-                style = MaterialTheme.typography.bodyMedium,
-                color = NeonTokens.TextDim,
-                modifier = Modifier.padding(top = 6.dp),
-            )
-            Spacer(Modifier.height(18.dp))
+            HubHero()
+            Spacer(Modifier.height(20.dp))
 
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                games.chunked(2).forEach { row ->
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    ) {
-                        row.forEach { tile ->
-                            HubGameGlassCard(
-                                tile = tile,
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .then(
-                                        tile.testTag?.let { Modifier.testTag(it) } ?: Modifier,
-                                    ),
-                            )
-                        }
-                    }
-                }
-            }
-
-            Spacer(Modifier.height(18.dp))
-            Text(
-                stringResource(R.string.quick_links),
-                style = MaterialTheme.typography.labelSmall,
-                color = NeonTokens.TextDim,
-            )
-            Spacer(Modifier.height(10.dp))
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState()),
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                QuickLinkChip("?", stringResource(R.string.how_to_play_title), onHowToPlay)
-                QuickLinkChip("⚙", stringResource(R.string.nav_settings), onSettings)
-                QuickLinkChip("◆", stringResource(R.string.hub_link_premium), onFavorites)
-            }
-
-            Spacer(Modifier.height(24.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onFavorites() },
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                Text(
-                    stringResource(R.string.hub_feed_section),
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold,
-                    color = NeonTokens.TextPrimary,
+                HubNeverCard(
+                    onPlay = onGameNever,
                     modifier = Modifier.weight(1f),
                 )
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                    contentDescription = null,
-                    tint = NeonTokens.TextDim,
+                HubSpicyCard(
+                    onPlay = onGameSpicySpinner,
+                    modifier = Modifier.weight(1f),
                 )
             }
-            Spacer(Modifier.height(12.dp))
-            LazyRow(
+            Spacer(Modifier.height(14.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
-                contentPadding = PaddingValues(end = 8.dp),
             ) {
-                items(feedItems) { item ->
-                    ActivityFeedCard(item)
-                }
+                HubWyrCard(
+                    onPlay = onGameWyr,
+                    modifier = Modifier.weight(1f),
+                )
+                HubTruthDareCardBody(
+                    onPlay = onGameTruthDare,
+                    modifier = Modifier.weight(1f),
+                )
             }
+            Spacer(Modifier.height(10.dp))
+            HubTruthDareStrip()
+            Spacer(Modifier.height(20.dp))
+            HubCustomDeckCard(onStartBuilding = onCustomDeck)
             Spacer(Modifier.height(24.dp))
         }
     }
 }
 
 @Composable
-private fun StarryBackdrop(modifier: Modifier = Modifier) {
-    val starAlpha = 0.28f
-    val positions = remember {
-        listOf(
-            0.04f to 0.06f, 0.14f to 0.11f, 0.22f to 0.04f, 0.31f to 0.14f, 0.42f to 0.08f,
-            0.55f to 0.12f, 0.68f to 0.05f, 0.78f to 0.15f, 0.9f to 0.07f, 0.95f to 0.18f,
-            0.08f to 0.22f, 0.19f to 0.28f, 0.35f to 0.24f, 0.48f to 0.3f, 0.62f to 0.26f,
-            0.75f to 0.32f, 0.88f to 0.25f, 0.12f to 0.42f, 0.28f to 0.48f, 0.52f to 0.45f,
-            0.72f to 0.5f, 0.25f to 0.62f, 0.45f to 0.68f, 0.65f to 0.72f, 0.85f to 0.65f,
-        )
-    }
-    Canvas(modifier) {
-        val w = size.width
-        val h = size.height
-        positions.forEach { (nx, ny) ->
-            drawCircle(
-                color = Color.White.copy(alpha = starAlpha),
-                radius = 1.3f,
-                center = Offset(nx * w, ny * h),
+private fun HubTopBar(
+    onOpenMenu: () -> Unit,
+    onNotifications: () -> Unit,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        IconButton(onClick = onOpenMenu) {
+            Icon(
+                Icons.Filled.Menu,
+                contentDescription = stringResource(R.string.cd_hub_menu),
+                tint = HubLandingColors.White,
+            )
+        }
+        Box(
+            modifier = Modifier.weight(1f),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = stringResource(R.string.app_name),
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                fontStyle = FontStyle.Italic,
+                color = HubLandingColors.BrandPurple,
+                letterSpacing = 0.5.sp,
+                maxLines = 1,
+            )
+        }
+        IconButton(onClick = onNotifications) {
+            Icon(
+                Icons.Filled.Notifications,
+                contentDescription = stringResource(R.string.cd_hub_notifications),
+                tint = HubLandingColors.White,
             )
         }
     }
 }
 
 @Composable
-private fun HubGameGlassCard(
-    tile: HubGameTile,
+private fun HubHero() {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = stringResource(R.string.hub_landing_session_level),
+            style = MaterialTheme.typography.labelMedium,
+            color = HubLandingColors.BrandPurple.copy(alpha = 0.85f),
+            fontWeight = FontWeight.SemiBold,
+            letterSpacing = 1.2.sp,
+        )
+        Spacer(Modifier.height(10.dp))
+        Text(
+            text = stringResource(R.string.hub_landing_headline_1),
+            style = MaterialTheme.typography.headlineLarge,
+            fontWeight = FontWeight.Bold,
+            color = HubLandingColors.White,
+            letterSpacing = 2.sp,
+        )
+        Text(
+            text = stringResource(R.string.hub_landing_headline_2),
+            style = MaterialTheme.typography.headlineLarge,
+            fontWeight = FontWeight.Bold,
+            color = HubLandingColors.BrandPurple,
+            letterSpacing = 2.sp,
+        )
+        Spacer(Modifier.height(10.dp))
+        Text(
+            text = stringResource(R.string.hub_landing_subhead),
+            style = MaterialTheme.typography.bodyMedium,
+            color = HubLandingColors.BodyGrey,
+            lineHeight = 22.sp,
+        )
+    }
+}
+
+@Composable
+private fun HubNeverCard(
+    onPlay: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val accent = tile.accent
     Surface(
-        shape = RoundedCornerShape(20.dp),
-        color = NeonTokens.GlassFill,
+        shape = RoundedCornerShape(24.dp),
+        color = Color.Transparent,
         tonalElevation = 2.dp,
-        shadowElevation = 6.dp,
+        shadowElevation = 4.dp,
         modifier = modifier
-            .heightIn(min = 168.dp)
-            .border(
-                width = 1.dp,
-                brush = NeonTokens.glassBorderBrush(accent),
-                shape = RoundedCornerShape(20.dp),
-            )
-            .clip(RoundedCornerShape(20.dp))
-            .clickable(onClick = tile.onClick),
+            .fillMaxWidth()
+            .border(1.dp, HubLandingColors.BrandPurple.copy(alpha = 0.35f), RoundedCornerShape(24.dp))
+            .testTag("hub_game_never"),
+    ) {
+        Column(
+            Modifier
+                .background(
+                    Brush.verticalGradient(
+                        listOf(
+                            Color(0xFF1A1520),
+                            HubLandingColors.Surface,
+                        ),
+                    ),
+                    shape = RoundedCornerShape(24.dp),
+                )
+                .padding(12.dp),
+        ) {
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    HubPill(
+                        text = stringResource(R.string.hub_landing_tag_classic),
+                        container = HubLandingColors.BrandPurple,
+                        content = Color.White,
+                    )
+                    HubPill(
+                        text = stringResource(R.string.hub_landing_tag_players),
+                        container = HubLandingColors.SurfaceElevated,
+                        content = HubLandingColors.White,
+                    )
+                }
+                Spacer(Modifier.height(12.dp))
+                Text(
+                    text = stringResource(R.string.hub_landing_never_title),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = HubLandingColors.White,
+                    letterSpacing = 0.5.sp,
+                )
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = stringResource(R.string.hub_landing_never_desc),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = HubLandingColors.BodyGrey,
+                    lineHeight = 18.sp,
+                )
+                Spacer(Modifier.height(16.dp))
+                Button(
+                    onClick = onPlay,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(14.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = HubLandingColors.BrandPurple,
+                        contentColor = Color.White,
+                    ),
+                ) {
+                    Text(
+                        stringResource(R.string.hub_landing_play_now),
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 1.sp,
+                    )
+                }
+        }
+    }
+}
+
+@Composable
+private fun HubSpicyCard(
+    onPlay: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Surface(
+        shape = RoundedCornerShape(24.dp),
+        color = HubLandingColors.Surface,
+        modifier = modifier
+            .fillMaxWidth()
+            .testTag("hub_game_spicy"),
     ) {
         Column(Modifier.padding(12.dp)) {
             Row(
@@ -302,28 +281,49 @@ private fun HubGameGlassCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(tile.emoji, style = MaterialTheme.typography.headlineMedium)
-                PlayBadge(accent)
+                Text(
+                    text = stringResource(R.string.hub_landing_high_stakes),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = HubLandingColors.HighStakesRed,
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 0.8.sp,
+                )
+                Icon(
+                    Icons.Filled.LocalFireDepartment,
+                    contentDescription = null,
+                    tint = HubLandingColors.SpicyOrange,
+                    modifier = Modifier.size(22.dp),
+                )
             }
             Spacer(Modifier.height(8.dp))
             Text(
-                stringResource(tile.titleRes),
-                color = NeonTokens.TextPrimary,
+                text = stringResource(R.string.hub_landing_spicy_title),
+                style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.titleSmall,
+                color = HubLandingColors.White,
+                letterSpacing = 0.5.sp,
             )
             Spacer(Modifier.height(8.dp))
-            Surface(
-                shape = RoundedCornerShape(12.dp),
-                color = NeonTokens.BgVoid.copy(alpha = 0.55f),
+            Text(
+                text = stringResource(R.string.hub_landing_spicy_desc),
+                style = MaterialTheme.typography.bodySmall,
+                color = HubLandingColors.BodyGrey,
+                lineHeight = 18.sp,
+            )
+            Spacer(Modifier.height(16.dp))
+            OutlinedButton(
+                onClick = onPlay,
                 modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(14.dp),
+                border = BorderStroke(2.dp, HubLandingColors.SpicyOrange),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = HubLandingColors.SpicyOrange,
+                ),
             ) {
                 Text(
-                    stringResource(tile.descRes),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = NeonTokens.TextMuted,
-                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
-                    lineHeight = MaterialTheme.typography.bodySmall.lineHeight,
+                    stringResource(R.string.hub_landing_play_now),
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 1.sp,
                 )
             }
         }
@@ -331,80 +331,236 @@ private fun HubGameGlassCard(
 }
 
 @Composable
-private fun PlayBadge(accent: Color) {
-    Box(
-        modifier = Modifier
-            .size(40.dp)
-            .clip(RoundedCornerShape(10.dp))
-            .background(
-                Brush.linearGradient(
-                    listOf(accent.copy(alpha = 0.95f), accent.copy(alpha = 0.4f)),
-                ),
-            )
-            .border(1.dp, accent.copy(alpha = 0.65f), RoundedCornerShape(10.dp)),
-        contentAlignment = Alignment.Center,
-    ) {
-        Icon(
-            Icons.Filled.PlayArrow,
-            contentDescription = null,
-            tint = Color.White,
-            modifier = Modifier.size(22.dp),
-        )
-    }
-}
-
-@Composable
-private fun QuickLinkChip(symbol: String, label: String, onClick: () -> Unit) {
+private fun HubWyrCard(
+    onPlay: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Surface(
-        shape = RoundedCornerShape(20.dp),
-        color = NeonTokens.GlassFill,
-        modifier = Modifier
-            .border(1.dp, NeonTokens.glassBorderBrush(NeonTokens.NeonCyan), RoundedCornerShape(20.dp))
-            .clickable(onClick = onClick),
-    ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(symbol, color = NeonTokens.NeonCyan)
-            Text(
-                label,
-                color = NeonTokens.TextPrimary,
-                style = MaterialTheme.typography.labelLarge,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(start = 8.dp),
-            )
-        }
-    }
-}
-
-@Composable
-private fun ActivityFeedCard(item: FeedItem) {
-    Surface(
-        shape = RoundedCornerShape(16.dp),
-        color = NeonTokens.GlassFill,
-        modifier = Modifier
-            .width(200.dp)
-            .border(1.dp, NeonTokens.glassBorderBrush(NeonTokens.NeonMagenta), RoundedCornerShape(16.dp)),
+        shape = RoundedCornerShape(24.dp),
+        color = HubLandingColors.Surface,
+        modifier = modifier
+            .fillMaxWidth()
+            .testTag("hub_game_wyr"),
     ) {
         Column(Modifier.padding(12.dp)) {
-            Text(item.emoji, style = MaterialTheme.typography.titleMedium)
-            Spacer(Modifier.height(6.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    Icons.Filled.SwapHoriz,
+                    contentDescription = null,
+                    tint = HubLandingColors.TrendingYellow,
+                    modifier = Modifier.size(22.dp),
+                )
+                HubPill(
+                    text = stringResource(R.string.hub_landing_trending),
+                    container = HubLandingColors.TrendingYellow,
+                    content = Color(0xFF1A1A1A),
+                )
+            }
+            Spacer(Modifier.height(8.dp))
             Text(
-                stringResource(item.titleRes),
-                style = MaterialTheme.typography.labelLarge,
+                text = stringResource(R.string.hub_landing_wyr_title),
+                style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = NeonTokens.TextPrimary,
+                color = HubLandingColors.White,
+                letterSpacing = 0.5.sp,
             )
+            Spacer(Modifier.height(8.dp))
             Text(
-                stringResource(item.subtitleRes),
+                text = stringResource(R.string.hub_landing_wyr_desc),
                 style = MaterialTheme.typography.bodySmall,
-                color = NeonTokens.TextMuted,
-                modifier = Modifier.padding(top = 4.dp),
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis,
+                color = HubLandingColors.BodyGrey,
+                lineHeight = 18.sp,
+            )
+            Spacer(Modifier.height(16.dp))
+            Button(
+                onClick = onPlay,
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(14.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = HubLandingColors.SurfaceElevated,
+                    contentColor = HubLandingColors.White,
+                ),
+            ) {
+                Text(
+                    stringResource(R.string.hub_landing_play_now),
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 1.sp,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun HubTruthDareCardBody(
+    onPlay: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Surface(
+        shape = RoundedCornerShape(24.dp),
+        color = HubLandingColors.Surface,
+        modifier = modifier
+            .fillMaxWidth()
+            .testTag("hub_game_truth_dare"),
+    ) {
+        Column(Modifier.padding(12.dp)) {
+            Text(
+                text = stringResource(R.string.hub_landing_community_pick),
+                style = MaterialTheme.typography.labelMedium,
+                color = HubLandingColors.BrandPurple,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 0.8.sp,
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = stringResource(R.string.hub_landing_truth_dare_title),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = HubLandingColors.White,
+                letterSpacing = 0.5.sp,
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = stringResource(R.string.hub_landing_truth_dare_desc),
+                style = MaterialTheme.typography.bodySmall,
+                color = HubLandingColors.BodyGrey,
+                lineHeight = 18.sp,
+            )
+            Spacer(Modifier.height(16.dp))
+            Button(
+                onClick = onPlay,
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(14.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = HubLandingColors.BrandPurple,
+                    contentColor = Color.White,
+                ),
+            ) {
+                Text(
+                    stringResource(R.string.hub_landing_play_now),
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 1.sp,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun HubTruthDareStrip() {
+    Surface(
+        shape = RoundedCornerShape(16.dp),
+        color = HubLandingColors.SurfaceElevated,
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = 20.dp, horizontal = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                text = stringResource(R.string.hub_landing_truth_strip_title),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = HubLandingColors.White,
+                letterSpacing = 1.sp,
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(
+                text = stringResource(R.string.hub_landing_truth_strip_sub),
+                style = MaterialTheme.typography.labelMedium,
+                color = HubLandingColors.TextDim,
+                letterSpacing = 1.sp,
             )
         }
     }
+}
+
+@Composable
+private fun HubCustomDeckCard(onStartBuilding: () -> Unit) {
+    Surface(
+        shape = RoundedCornerShape(24.dp),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Box(
+            modifier = Modifier
+                .background(
+                    Brush.linearGradient(
+                        listOf(
+                            HubLandingColors.BrandPurpleDark.copy(alpha = 0.5f),
+                            HubLandingColors.Surface,
+                            HubLandingColors.BrandPurple.copy(alpha = 0.25f),
+                        ),
+                    ),
+                )
+                .padding(20.dp),
+        ) {
+            Column {
+                Row(
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    Text(
+                        text = stringResource(R.string.hub_landing_deck_title_1),
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = HubLandingColors.White,
+                    )
+                    Text(
+                        text = stringResource(R.string.hub_landing_deck_title_2),
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = HubLandingColors.DeckGold,
+                    )
+                }
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = stringResource(R.string.hub_landing_deck_desc),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = HubLandingColors.BodyGrey,
+                    lineHeight = 22.sp,
+                )
+                Spacer(Modifier.height(16.dp))
+                Button(
+                    onClick = onStartBuilding,
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(14.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.White,
+                        contentColor = Color.Black,
+                    ),
+                ) {
+                    Text(
+                        stringResource(R.string.hub_landing_start_building),
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 0.5.sp,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun HubPill(
+    text: String,
+    container: Color,
+    content: Color,
+) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.labelMedium,
+        fontWeight = FontWeight.Bold,
+        color = content,
+        modifier = Modifier
+            .clip(RoundedCornerShape(20.dp))
+            .background(container)
+            .padding(horizontal = 10.dp, vertical = 4.dp),
+        letterSpacing = 0.8.sp,
+    )
 }

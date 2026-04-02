@@ -16,6 +16,8 @@ data class WyrUiState(
     val optionA: String?,
     val optionB: String?,
     val cardsRemaining: Int,
+    /** Deck size after load (for ROUND x OF y). */
+    val totalPairs: Int,
     val debateTimerEnabled: Boolean,
     val timerSecondsTotal: Int,
     val error: String?,
@@ -34,6 +36,7 @@ class WyrGameplayViewModel(
             optionA = null,
             optionB = null,
             cardsRemaining = 0,
+            totalPairs = 0,
             debateTimerEnabled = snap.turnTimerOn,
             timerSecondsTotal = snap.turnTimerSeconds.coerceIn(10, 120),
             error = null,
@@ -47,6 +50,8 @@ class WyrGameplayViewModel(
                 onSuccess = { pairs ->
                     deck.clear()
                     deck.addAll(pairs.shuffled())
+                    val total = pairs.size
+                    _state.update { it.copy(totalPairs = total) }
                     showNextCardInternal()
                 },
                 onFailure = { e ->
@@ -58,7 +63,7 @@ class WyrGameplayViewModel(
 
     fun nextCard() {
         if (deck.isEmpty()) {
-            _state.update { it.copy(optionA = null, optionB = null, cardsRemaining = 0) }
+            _state.update { it.copy(optionA = null, optionB = null, cardsRemaining = 0, totalPairs = it.totalPairs) }
             return
         }
         showNextCardInternal()
@@ -77,6 +82,14 @@ class WyrGameplayViewModel(
                 cardsRemaining = deck.size,
             )
         }
+    }
+
+    fun pickOptionA() {
+        nextCard()
+    }
+
+    fun pickOptionB() {
+        nextCard()
     }
 
     fun setDebateTimerEnabled(enabled: Boolean) {

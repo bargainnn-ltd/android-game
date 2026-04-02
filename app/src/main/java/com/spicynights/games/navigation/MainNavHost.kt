@@ -27,6 +27,30 @@ import com.spicynights.games.ui.session.SessionSetupScreen
 import com.spicynights.games.ui.settings.SettingsScreen
 
 @Composable
+private fun HubLandingContent(navController: NavHostController) {
+    GameHubScreen(
+        onOpenMenu = { navController.navigate(Routes.Settings) { launchSingleTop = true } },
+        onNotifications = { },
+        onGameNever = {
+            navController.navigate(sessionSetupRoute(SessionGameMode.NEVER))
+        },
+        onGameTruthDare = {
+            navController.navigate(sessionSetupRoute(SessionGameMode.TRUTH_DARE))
+        },
+        onGameSpicySpinner = {
+            navController.navigate(sessionSetupRoute(SessionGameMode.SPICY_SPINNER))
+        },
+        onGameWyr = {
+            navController.navigate(sessionSetupRoute(SessionGameMode.WYR))
+        },
+        onCustomDeck = {
+            // Custom prompt pool lives under session/settings; Settings is the closest entry until a dedicated builder exists.
+            navController.navigate(Routes.Settings) { launchSingleTop = true }
+        },
+    )
+}
+
+@Composable
 fun MainNavHost(
     navController: NavHostController,
     prefs: AppPreferencesRepository,
@@ -45,19 +69,35 @@ fun MainNavHost(
         else -> BottomNavStyle.HUB
     }
 
+    val bottomSelectedRoute = when (bottomStyle) {
+        BottomNavStyle.HUB -> when (currentRoute) {
+            Routes.Social -> Routes.Social
+            Routes.Store -> Routes.Store
+            Routes.Profile -> Routes.Profile
+            else -> Routes.Hub
+        }
+        else -> currentRoute
+    }
+
     Scaffold(
         modifier = modifier.fillMaxSize(),
         bottomBar = {
             AppBottomBar(
                 style = bottomStyle,
-                selectedRoute = currentRoute,
+                selectedRoute = bottomSelectedRoute,
                 onNavigate = { route ->
                     when (route) {
-                        Routes.Hub -> navController.navigate(Routes.Hub) {
-                            launchSingleTop = true
-                            popUpTo(Routes.Hub) { inclusive = false }
-                        }
                         Routes.Settings -> navController.navigate(Routes.Settings) { launchSingleTop = true }
+                        Routes.Hub, Routes.Social, Routes.Store, Routes.Profile -> {
+                            navController.navigate(route) {
+                                popUpTo(Routes.Hub) {
+                                    saveState = true
+                                    inclusive = false
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        }
                         "decks_stub", "saved_stub", "profile_stub", "leaderboard_stub", "play_stub" -> {
                             navController.navigate(Routes.Hub) { launchSingleTop = true }
                         }
@@ -75,24 +115,16 @@ fun MainNavHost(
                 .padding(padding),
         ) {
             composable(Routes.Hub) {
-                GameHubScreen(
-                    onOpenMenu = { },
-                    onGameNever = {
-                        navController.navigate(sessionSetupRoute(SessionGameMode.NEVER))
-                    },
-                    onGameTruthDare = {
-                        navController.navigate(sessionSetupRoute(SessionGameMode.TRUTH_DARE))
-                    },
-                    onGameSpicySpinner = {
-                        navController.navigate(sessionSetupRoute(SessionGameMode.SPICY_SPINNER))
-                    },
-                    onGameWyr = {
-                        navController.navigate(sessionSetupRoute(SessionGameMode.WYR))
-                    },
-                    onHowToPlay = { navController.navigate(Routes.HowToPlay) },
-                    onFavorites = { },
-                    onSettings = { navController.navigate(Routes.Settings) },
-                )
+                HubLandingContent(navController)
+            }
+            composable(Routes.Social) {
+                HubLandingContent(navController)
+            }
+            composable(Routes.Store) {
+                HubLandingContent(navController)
+            }
+            composable(Routes.Profile) {
+                HubLandingContent(navController)
             }
             composable(
                 route = Routes.SessionSetup,
@@ -129,16 +161,24 @@ fun MainNavHost(
                 )
             }
             composable(Routes.NeverGameplay) {
-                NeverGameplayScreen(prefs = prefs)
+                NeverGameplayScreen(
+                    prefs = prefs,
+                    onOpenMenu = { navController.navigate(Routes.Settings) { launchSingleTop = true } },
+                )
             }
             composable(Routes.SpicySpinnerGameplay) {
                 SpicySpinnerGameplayScreen(
                     prefs = prefs,
                     onBack = { navController.popBackStack() },
+                    onOpenMenu = { navController.navigate(Routes.Settings) { launchSingleTop = true } },
+                    onViewStore = { navController.navigate(Routes.Store) { launchSingleTop = true } },
                 )
             }
             composable(Routes.WyrGameplay) {
-                WyrGameplayScreen(prefs = prefs)
+                WyrGameplayScreen(
+                    prefs = prefs,
+                    onOpenMenu = { navController.navigate(Routes.Settings) { launchSingleTop = true } },
+                )
             }
             composable(Routes.HowToPlay) {
                 HowToPlayScreen(

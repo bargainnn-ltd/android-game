@@ -3,8 +3,11 @@ package com.spicynights.games.ui.navigation
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Explore
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Groups
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.ShoppingBag
+import androidx.compose.material.icons.filled.SportsEsports
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -16,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.spicynights.games.R
 import com.spicynights.games.navigation.Routes
+import com.spicynights.games.ui.hub.HubLandingColors
 import com.spicynights.games.ui.theme.NeonTokens
 
 enum class BottomNavStyle {
@@ -43,11 +47,14 @@ private fun HubBottomBar(
     onNavigate: (String) -> Unit,
 ) {
     val items = listOf(
-        Triple(Routes.Hub, Icons.Filled.Home, R.string.nav_hub),
+        Triple(Routes.Hub, Icons.Filled.SportsEsports, R.string.nav_games),
+        Triple(Routes.Social, Icons.Filled.Groups, R.string.nav_social),
+        Triple(Routes.Store, Icons.Filled.ShoppingBag, R.string.nav_store),
+        Triple(Routes.Profile, Icons.Filled.Person, R.string.nav_profile),
     )
     NavigationBar(
-        containerColor = NeonTokens.NavBarContainer,
-        contentColor = NeonTokens.TextPrimary,
+        containerColor = HubLandingColors.Black,
+        contentColor = HubLandingColors.White,
     ) {
         items.forEach { (route, icon, labelRes) ->
             val selected = selectedRoute == route
@@ -56,7 +63,7 @@ private fun HubBottomBar(
                 onClick = { onNavigate(route) },
                 icon = { Icon(icon, contentDescription = null, modifier = Modifier.size(22.dp)) },
                 label = { Text(stringResource(labelRes)) },
-                colors = navItemColors(),
+                colors = hubNavItemColors(),
             )
         }
     }
@@ -111,6 +118,15 @@ private fun SettingsAppBottomBar(
         }
     }
 }
+
+@Composable
+private fun hubNavItemColors() = NavigationBarItemDefaults.colors(
+    selectedIconColor = HubLandingColors.BrandPurple,
+    selectedTextColor = HubLandingColors.BrandPurple,
+    unselectedIconColor = HubLandingColors.TextDim,
+    unselectedTextColor = HubLandingColors.TextDim,
+    indicatorColor = HubLandingColors.BrandPurple.copy(alpha = 0.28f),
+)
 
 @Composable
 private fun navItemColors() = NavigationBarItemDefaults.colors(

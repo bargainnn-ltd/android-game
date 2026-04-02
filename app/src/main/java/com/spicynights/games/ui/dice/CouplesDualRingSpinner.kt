@@ -156,26 +156,26 @@ fun CouplesDualRingSpinner(
 
     val outerPalette = remember {
         listOf(
-            Color(0xFF6A1B9A),
-            Color(0xFF8E24AA),
+            Color(0xFFFF2E95),
+            Color(0xFFB042F5),
+            Color(0xFF2A2A32),
             Color(0xFFAB47BC),
-            Color(0xFFBA68C8),
-            Color(0xFF6A1B9A),
-            Color(0xFF8E24AA),
-            Color(0xFFAB47BC),
-            Color(0xFFBA68C8),
+            Color(0xFFFF2E95),
+            Color(0xFFB042F5),
+            Color(0xFF2A2A32),
+            Color(0xFFE040FB),
         )
     }
     val innerPalette = remember {
         listOf(
             Color(0xFFAD1457),
-            Color(0xFFC2185B),
-            Color(0xFFD81B60),
+            Color(0xFFB042F5),
+            Color(0xFF2A2A32),
             Color(0xFFE91E63),
-            Color(0xFFAD1457),
             Color(0xFFC2185B),
-            Color(0xFFD81B60),
-            Color(0xFFE91E63),
+            Color(0xFF8E24AA),
+            Color(0xFF2A2A32),
+            Color(0xFFFF2E95),
         )
     }
 

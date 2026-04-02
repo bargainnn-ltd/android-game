@@ -9,6 +9,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlin.random.Random
 
+data class SpicySpinLogEntry(
+    val bodyIndex: Int,
+    val actionIndex: Int,
+    val timeMillis: Long,
+)
+
 data class SpicySpinnerUiState(
     val playerNames: List<String>,
     val intensityLine: String,
@@ -27,6 +33,7 @@ data class SpicySpinnerUiState(
     /** Seconds for action timer when session had timer on; 0 = disabled. */
     val actionTimerSeconds: Int,
     val turnTimerEnabled: Boolean,
+    val activityLog: List<SpicySpinLogEntry>,
 )
 
 class SpicySpinnerGameplayViewModel(
@@ -55,6 +62,7 @@ class SpicySpinnerGameplayViewModel(
             sessionComplete = false,
             actionTimerSeconds = if (snap.turnTimerOn && timerSec > 0) timerSec else 0,
             turnTimerEnabled = snap.turnTimerOn && timerSec > 0,
+            activityLog = emptyList(),
         ),
     )
     val state: StateFlow<SpicySpinnerUiState> = _state.asStateFlow()
@@ -95,6 +103,14 @@ class SpicySpinnerGameplayViewModel(
         val nextTurn = (s.turnIndex + 1) % n
         val completed = s.turnsCompleted + 1
         val done = completed >= s.maxTurns
+        val b = s.bodyRoll
+        val a = s.actionRoll
+        val newLog =
+            if (b != null && a != null) {
+                (listOf(SpicySpinLogEntry(b, a, System.currentTimeMillis())) + s.activityLog).take(12)
+            } else {
+                s.activityLog
+            }
         _state.update {
             it.copy(
                 turnIndex = nextTurn,
@@ -104,6 +120,7 @@ class SpicySpinnerGameplayViewModel(
                 freeChoiceActive = false,
                 turnsCompleted = completed,
                 sessionComplete = done,
+                activityLog = newLog,
             )
         }
     }
@@ -119,6 +136,7 @@ class SpicySpinnerGameplayViewModel(
                 sessionReRollsRemaining = MAX_SESSION_REROLLS,
                 turnsCompleted = 0,
                 sessionComplete = false,
+                activityLog = emptyList(),
             )
         }
     }

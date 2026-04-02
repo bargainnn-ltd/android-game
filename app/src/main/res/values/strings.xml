@@ -65,6 +65,9 @@
 
     <!-- Navigation & shell -->
     <string name="nav_hub">Hub</string>
+    <string name="nav_games">Games</string>
+    <string name="nav_social">Social</string>
+    <string name="nav_store">Store</string>
     <string name="nav_decks">Decks</string>
     <string name="nav_saved">Saved</string>
     <string name="nav_profile">Profile</string>
@@ -137,6 +140,32 @@
     <string name="hub_feed_icebreaker_title">Try the Icebreaker Pack</string>
     <string name="hub_feed_icebreaker_sub">Warm up before the main event.</string>
     <string name="hub_link_premium">Explore Premium</string>
+    <string name="hub_landing_session_level">CURRENT SESSION: LEVEL 24</string>
+    <string name="hub_landing_headline_1">PICK YOUR</string>
+    <string name="hub_landing_headline_2">POISON.</string>
+    <string name="hub_landing_subhead">Four high-octane modes designed for those who don\'t play by the rules. Curate your night.</string>
+    <string name="hub_landing_play_now">PLAY NOW</string>
+    <string name="hub_landing_tag_classic">CLASSIC</string>
+    <string name="hub_landing_tag_players">3–12 PLAYERS</string>
+    <string name="hub_landing_never_title">NEVER HAVE I EVER</string>
+    <string name="hub_landing_never_desc">Reveal your secrets or pay the price. The editorial classic for breaking the ice—or shattering it.</string>
+    <string name="hub_landing_high_stakes">HIGH STAKES</string>
+    <string name="hub_landing_spicy_title">SPICY SPINNER</string>
+    <string name="hub_landing_spicy_desc">Let fate decide the forfeit. Randomized chaos for the bold and the brave.</string>
+    <string name="hub_landing_trending">TRENDING</string>
+    <string name="hub_landing_wyr_title">WOULD YOU RATHER</string>
+    <string name="hub_landing_wyr_desc">Impossible choices. Unforgettable debates. Curated for maximum conflict.</string>
+    <string name="hub_landing_community_pick">COMMUNITY PICK</string>
+    <string name="hub_landing_truth_dare_title">TRUTH &amp; DARE</string>
+    <string name="hub_landing_truth_dare_desc">The ultimate test of integrity and insanity. Updated for the new age.</string>
+    <string name="hub_landing_truth_strip_title">TRUTH &amp; DARE</string>
+    <string name="hub_landing_truth_strip_sub">SAFE FOR WORK</string>
+    <string name="hub_landing_deck_title_1">CUSTOM DECK</string>
+    <string name="hub_landing_deck_title_2">BUILDER</string>
+    <string name="hub_landing_deck_desc">Create your own rules and curate the perfect vibe for your squad.</string>
+    <string name="hub_landing_start_building">START BUILDING</string>
+    <string name="cd_hub_menu">Open menu</string>
+    <string name="cd_hub_notifications">Notifications</string>
     <string name="quick_links">QUICK LINKS</string>
     <string name="game_never">I Have Never</string>
     <string name="game_truth_dare">Truth or Dare</string>
@@ -291,6 +320,45 @@
     <string name="wyr_deck_empty">No more cards in this deck.</string>
     <string name="wyr_timer_fmt">Debate: %1$ds</string>
     <string name="debate_timer">Debate Timer</string>
+    <string name="wyr_round_fmt">ROUND %1$d OF %2$d</string>
+    <string name="wyr_title_would_you">WOULD YOU</string>
+    <string name="wyr_title_rather">RATHER…</string>
+    <string name="wyr_option_a_label">OPTION A</string>
+    <string name="wyr_option_b_label">OPTION B</string>
+    <string name="wyr_global_choice">GLOBAL CHOICE</string>
+    <string name="wyr_total_votes">TOTAL VOTES</string>
+    <string name="wyr_choose_reality">CHOOSE THIS REALITY</string>
+    <string name="wyr_select_wisdom">SELECT WISDOM</string>
+    <string name="wyr_skip">SKIP</string>
+    <string name="wyr_share">SHARE</string>
+    <string name="wyr_share_subject">Would you rather…</string>
+    <string name="wyr_stat_illusory">Illustrative</string>
+
+    <string name="spicy_live_session">LIVE SESSION</string>
+    <string name="spicy_title_the">THE </string>
+    <string name="spicy_title_spicy">SPICY</string>
+    <string name="spicy_title_spinner"> SPINNER</string>
+    <string name="spicy_current_player">CURRENT PLAYER</string>
+    <string name="spicy_current_result">CURRENT RESULT</string>
+    <string name="spicy_ready_spin">READY TO SPIN</string>
+    <string name="spicy_spin_now">SPIN NOW</string>
+    <string name="spicy_activity_log">ACTIVITY LOG</string>
+    <string name="spicy_premium">PREMIUM</string>
+    <string name="spicy_dirty_packs">DIRTY PACKS</string>
+    <string name="spicy_view_store">VIEW STORE</string>
+    <string name="spicy_log_just_now">Just now</string>
+    <string name="spicy_log_mins_ago">%1$d mins ago</string>
+    <string name="spicy_log_hours_ago">%1$d hrs ago</string>
+
+    <string name="never_round_fmt">ROUND %1$d OF %2$d</string>
+    <string name="never_mood_label">MOOD</string>
+    <string name="never_category_pill">CLASSIC CATEGORY</string>
+    <string name="never_flag_question">FLAG QUESTION</string>
+    <string name="never_quick_have">I HAVE</string>
+    <string name="never_quick_never">I NEVER</string>
+    <string name="never_all_have">Everyone: I have</string>
+    <string name="never_all_never">Everyone: I never</string>
+    <string name="never_next_prompt_caps">NEXT PROMPT</string>
 
     <!-- Truth & Dare gameplay (Screen 5) -->
     <!-- Matches app brand; gameplay mode is still Truth/Dare in UI -->
