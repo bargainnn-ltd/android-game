@@ -168,7 +168,7 @@ fun SessionSetupScreen(
         )
 
         when (gameMode) {
-            SessionGameMode.QUICK_SESSION, SessionGameMode.TRUTH_DARE -> {
+            SessionGameMode.TRUTH_DARE -> {
                 onStartTruthDare(
                     GameConfig(
                         firstTurnIsPlayerOne = true,
@@ -398,40 +398,42 @@ fun SessionSetupScreen(
             checked = drinkingOn,
             onCheckedChange = { drinkingOn = it },
         )
-        Text(
-            stringResource(R.string.session_prompt_mix),
-            color = Color.White,
-            fontWeight = FontWeight.Medium,
-            modifier = Modifier.padding(top = 4.dp),
-        )
-        Text(
-            stringResource(R.string.session_prompt_mix_subtitle),
-            color = Color.Gray,
-            style = MaterialTheme.typography.bodySmall,
-            modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            PromptMixSegment(
-                label = stringResource(R.string.session_prompt_mix_truth_only),
-                selected = promptMix == PromptMix.TRUTH_ONLY,
-                onClick = { promptMix = PromptMix.TRUTH_ONLY },
-                modifier = Modifier.weight(1f),
+        if (gameMode == SessionGameMode.TRUTH_DARE) {
+            Text(
+                stringResource(R.string.session_prompt_mix),
+                color = Color.White,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.padding(top = 4.dp),
             )
-            PromptMixSegment(
-                label = stringResource(R.string.session_prompt_mix_dare_only),
-                selected = promptMix == PromptMix.DARE_ONLY,
-                onClick = { promptMix = PromptMix.DARE_ONLY },
-                modifier = Modifier.weight(1f),
+            Text(
+                stringResource(R.string.session_prompt_mix_subtitle),
+                color = Color.Gray,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(top = 4.dp, bottom = 8.dp),
             )
-            PromptMixSegment(
-                label = stringResource(R.string.session_prompt_mix_both),
-                selected = promptMix == PromptMix.BOTH,
-                onClick = { promptMix = PromptMix.BOTH },
-                modifier = Modifier.weight(1f),
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                PromptMixSegment(
+                    label = stringResource(R.string.session_prompt_mix_truth_only),
+                    selected = promptMix == PromptMix.TRUTH_ONLY,
+                    onClick = { promptMix = PromptMix.TRUTH_ONLY },
+                    modifier = Modifier.weight(1f),
+                )
+                PromptMixSegment(
+                    label = stringResource(R.string.session_prompt_mix_dare_only),
+                    selected = promptMix == PromptMix.DARE_ONLY,
+                    onClick = { promptMix = PromptMix.DARE_ONLY },
+                    modifier = Modifier.weight(1f),
+                )
+                PromptMixSegment(
+                    label = stringResource(R.string.session_prompt_mix_both),
+                    selected = promptMix == PromptMix.BOTH,
+                    onClick = { promptMix = PromptMix.BOTH },
+                    modifier = Modifier.weight(1f),
+                )
+            }
         }
         ContentRow(
             title = stringResource(R.string.session_turn_timer_row),

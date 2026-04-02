@@ -87,6 +87,17 @@ fun NeverGameplayScreen() {
     )
     val state by vm.state.collectAsStateWithLifecycle()
 
+    var timerLeft by remember { mutableIntStateOf(state.turnTimerSecondsTotal) }
+    LaunchedEffect(state.currentPrompt, state.turnIndex, state.turnTimerEnabled, state.turnTimerSecondsTotal) {
+        if (state.turnTimerEnabled && state.currentPrompt != null && state.turnTimerSecondsTotal > 0) {
+            timerLeft = state.turnTimerSecondsTotal
+            while (timerLeft > 0) {
+                delay(1000)
+                timerLeft--
+            }
+        }
+    }
+
     val bg = Brush.verticalGradient(listOf(Color(0xFF121218), Color(0xFF0A0A10)))
     Column(
         modifier = Modifier
@@ -121,6 +132,15 @@ fun NeverGameplayScreen() {
         }
         Spacer(Modifier.height(8.dp))
         Text(state.intensityLine, color = Color.White.copy(alpha = 0.7f), style = MaterialTheme.typography.labelMedium)
+        if (state.turnTimerEnabled && state.currentPrompt != null && state.turnTimerSecondsTotal > 0) {
+            Text(
+                stringResource(R.string.never_turn_timer_fmt, timerLeft),
+                color = Color(0xFFFF9800),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(top = 8.dp),
+            )
+        }
         Spacer(Modifier.height(16.dp))
         state.error?.let {
             Text(it, color = Color(0xFFFF5252), style = MaterialTheme.typography.bodySmall)

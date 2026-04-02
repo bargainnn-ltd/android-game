@@ -22,6 +22,10 @@ data class NeverUiState(
     /** Per player: null = not set, true = have done, false = never */
     val playerAnswers: List<Boolean?>,
     val error: String?,
+    /** From session setup: show countdown per prompt when true. */
+    val turnTimerEnabled: Boolean,
+    /** Seconds per turn when [turnTimerEnabled]; 0 when off. */
+    val turnTimerSecondsTotal: Int,
 ) {
     val currentReaderName: String
         get() = playerNames.getOrElse(turnIndex % playerNames.size.coerceAtLeast(1)) { "?" }
@@ -40,6 +44,8 @@ class NeverGameplayViewModel(
 ) : ViewModel() {
     private val snap = snapshot ?: defaultSnapshot()
     private val resolvedNames = snap.playerNames.ifEmpty { listOf("Player 1", "Player 2") }
+    private val timerSec = snap.turnTimerSeconds.coerceIn(10, 120)
+    private val timerEnabled = snap.turnTimerOn && timerSec > 0
 
     private val _state = MutableStateFlow(
         NeverUiState(
@@ -51,6 +57,8 @@ class NeverGameplayViewModel(
             turnIndex = 0,
             playerAnswers = List(resolvedNames.size) { null },
             error = null,
+            turnTimerEnabled = timerEnabled,
+            turnTimerSecondsTotal = if (timerEnabled) timerSec else 0,
         ),
     )
     val state: StateFlow<NeverUiState> = _state.asStateFlow()

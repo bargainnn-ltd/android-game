@@ -90,11 +90,21 @@
     <string name="link_privacy">Privacy Policy</string>
 
     <string name="hub_ready_title">Ready to play?</string>
-    <string name="hub_ready_subtitle">Select a game below or start a mixed session.</string>
-    <string name="hub_quick_session">Quick Session</string>
-    <string name="hub_quick_session_sub">Mix prompts from all games</string>
-    <string name="hub_start_now">Start Now</string>
+    <string name="hub_ready_subtitle">Select a game below…</string>
     <string name="hub_game_hub">@string/app_name</string>
+    <string name="hub_welcome_line">Welcome back! Let\'s find your spark.</string>
+    <string name="hub_tile_never_desc">Find hidden truths. Perfect for new connections.</string>
+    <string name="hub_tile_truth_dare_desc">Push your limits. Dare to be bold or choose truth.</string>
+    <string name="hub_tile_spicy_desc">Take a chance. What exciting dynamic will you land on?</string>
+    <string name="hub_tile_wyr_desc">Make a choice. Challenge your values and your partner.</string>
+    <string name="hub_feed_section">Quick Start Couples\' Activity Feed</string>
+    <string name="hub_feed_new_title">New This Week</string>
+    <string name="hub_feed_new_sub">Fresh prompts to spark conversation.</string>
+    <string name="hub_feed_popular_title">Popular With Couples</string>
+    <string name="hub_feed_popular_sub">Most-played games this month.</string>
+    <string name="hub_feed_icebreaker_title">Try the Icebreaker Pack</string>
+    <string name="hub_feed_icebreaker_sub">Warm up before the main event.</string>
+    <string name="hub_link_premium">Explore Premium</string>
     <string name="quick_links">QUICK LINKS</string>
     <string name="game_never">I Have Never</string>
     <string name="game_truth_dare">Truth or Dare</string>
@@ -178,6 +188,7 @@
     <string name="never_next_prompt">Next prompt</string>
     <string name="never_deck_empty">No prompts left in this deck.</string>
     <string name="never_sip_hint">If you have, take 1 sip!</string>
+    <string name="never_turn_timer_fmt">Turn: %1$ds</string>
     <string name="dice_couples_subtitle">Couples\' edition · dual spinner (d8 + d8)</string>
     <string name="dice_your_turn">Your turn</string>
     <string name="dice_named_turn">%1$s\'s turn</string>

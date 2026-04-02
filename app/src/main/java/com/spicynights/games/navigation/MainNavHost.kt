@@ -77,9 +77,6 @@ fun MainNavHost(
             composable(Routes.Hub) {
                 GameHubScreen(
                     onOpenMenu = { },
-                    onQuickSession = {
-                        navController.navigate(sessionSetupRoute(SessionGameMode.QUICK_SESSION))
-                    },
                     onGameNever = {
                         navController.navigate(sessionSetupRoute(SessionGameMode.NEVER))
                     },
