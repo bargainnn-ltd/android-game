@@ -161,29 +161,16 @@ class GameViewModel(
     fun setTruthDareChoice(choice: TruthDareChoice) {
         val s = _uiState.value
         if (s.phase != CardPhase.FaceDown) return
-        val resolved = resolveChoice(choice) ?: return
-        val ok = when (resolved) {
+        val ok = when (choice) {
             TruthDareChoice.TRUTH -> truthsQueue.isNotEmpty()
             TruthDareChoice.DARE -> daresQueue.isNotEmpty()
-            TruthDareChoice.DICE -> error("resolved choice must be TRUTH or DARE")
         }
         if (!ok) return
         _uiState.update {
             it.copy(
-                selectedChoice = resolved,
+                selectedChoice = choice,
                 phase = CardPhase.Flipping,
             )
-        }
-    }
-
-    private fun resolveChoice(choice: TruthDareChoice): TruthDareChoice? = when (choice) {
-        TruthDareChoice.TRUTH, TruthDareChoice.DARE -> choice
-        TruthDareChoice.DICE -> when {
-            truthsQueue.isNotEmpty() && daresQueue.isNotEmpty() ->
-                if (random.nextBoolean()) TruthDareChoice.TRUTH else TruthDareChoice.DARE
-            truthsQueue.isNotEmpty() -> TruthDareChoice.TRUTH
-            daresQueue.isNotEmpty() -> TruthDareChoice.DARE
-            else -> null
         }
     }
 
@@ -331,7 +318,6 @@ class GameViewModel(
                 val d = daresQueue.removeAt(0)
                 false to d
             }
-            TruthDareChoice.DICE -> null
         }
     }
 

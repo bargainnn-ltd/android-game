@@ -34,7 +34,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.ripple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -183,7 +182,6 @@ fun GameScreen(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
-                .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp)
                 .padding(bottom = 4.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -201,10 +199,6 @@ fun GameScreen(
                 onDare = {
                     onClickSound()
                     viewModel.setTruthDareChoice(TruthDareChoice.DARE)
-                },
-                onDice = {
-                    onClickSound()
-                    viewModel.setTruthDareChoice(TruthDareChoice.DICE)
                 },
             )
 
@@ -235,6 +229,7 @@ fun GameScreen(
                 CardPhase.DeckEmpty -> {
                     Box(
                         modifier = Modifier
+                            .weight(1f)
                             .fillMaxWidth()
                             .padding(vertical = 24.dp),
                         contentAlignment = Alignment.Center,
@@ -263,8 +258,8 @@ fun GameScreen(
 
                     Box(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(min = 240.dp, max = 520.dp),
+                            .weight(1f)
+                            .fillMaxWidth(),
                     ) {
                         CardTiltWrapper(tiltDegrees = -2.5f, modifier = Modifier.fillMaxSize()) {
                             TruthDareCard(
@@ -380,7 +375,6 @@ private fun TruthDareChoicePanel(
     daresRemaining: Int,
     onTruth: () -> Unit,
     onDare: () -> Unit,
-    onDice: () -> Unit,
 ) {
     val faceDown = phase == CardPhase.FaceDown
     if (!faceDown) {
@@ -398,7 +392,7 @@ private fun TruthDareChoicePanel(
     val bracketDare = "[$dareLabel]"
     Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(10.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -443,15 +437,6 @@ private fun TruthDareChoicePanel(
                 },
                 modifier = Modifier.weight(1f).testTag("mode_dare"),
             )
-        }
-        OutlinedButton(
-            onClick = onDice,
-            enabled = truthsRemaining > 0 && daresRemaining > 0,
-            modifier = Modifier
-                .fillMaxWidth()
-                .testTag("mode_dice"),
-        ) {
-            Text(stringResource(R.string.mode_dice))
         }
     }
 }
@@ -668,12 +653,19 @@ private fun HouseRulesAccordion(
             )
         }
         if (expanded) {
-            Text(
-                text = stringResource(R.string.house_rules_game_body),
-                style = MaterialTheme.typography.bodySmall,
-                color = NeonTokens.TextMuted,
-                modifier = Modifier.padding(start = 10.dp, end = 10.dp, bottom = 10.dp),
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 120.dp)
+                    .verticalScroll(rememberScrollState()),
+            ) {
+                Text(
+                    text = stringResource(R.string.house_rules_game_body),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = NeonTokens.TextMuted,
+                    modifier = Modifier.padding(start = 10.dp, end = 10.dp, bottom = 10.dp),
+                )
+            }
         }
     }
 }

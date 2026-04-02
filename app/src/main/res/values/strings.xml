@@ -366,7 +366,6 @@
     <string name="game_choose_fate_prefix">CHOOSE YOUR FATE, </string>
     <string name="action_done">DONE</string>
     <string name="action_chicken_out">CHICKEN OUT</string>
-    <string name="mode_dice">Dice</string>
     <string name="next_player">Next player</string>
     <string name="completed">Completed</string>
     <string name="penalty_skip_label">Skip (penalty)</string>

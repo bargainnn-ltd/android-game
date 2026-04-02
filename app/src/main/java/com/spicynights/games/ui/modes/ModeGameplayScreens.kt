@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -149,7 +151,6 @@ fun NeverGameplayScreen(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
                     .padding(horizontal = 16.dp, vertical = 10.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
@@ -211,145 +212,161 @@ fun NeverGameplayScreen(
             state.error?.let {
                 Text(it, color = Color(0xFFFF5252), style = MaterialTheme.typography.bodySmall)
             }
-            Box(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .background(
-                            Brush.radialGradient(
-                                colors = listOf(HubLandingColors.BrandPurple.copy(alpha = 0.18f), Color.Transparent),
-                                radius = 420f,
+            Column(
+                modifier = Modifier.weight(1f).fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(14.dp),
+            ) {
+                Box(
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .fillMaxWidth()
+                            .background(
+                                Brush.radialGradient(
+                                    colors = listOf(HubLandingColors.BrandPurple.copy(alpha = 0.18f), Color.Transparent),
+                                    radius = 420f,
+                                ),
                             ),
-                        ),
-            ) {
-                Surface(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(28.dp),
-                    color = HubLandingColors.Surface,
-                    border = BorderStroke(1.dp, Color.White.copy(alpha = 0.08f)),
                 ) {
-                    Column(Modifier.padding(18.dp)) {
-                        Text(
-                            stringResource(R.string.never_category_pill),
-                            style = MaterialTheme.typography.labelMedium,
-                            color = HubLandingColors.HighStakesRed.copy(alpha = 0.85f),
-                            fontWeight = FontWeight.Bold,
-                            letterSpacing = 0.8.sp,
-                        )
-                        Spacer(Modifier.height(12.dp))
-                        NeverPromptAnnotated(
-                            text = state.currentPrompt ?: stringResource(R.string.never_deck_empty),
-                        )
-                        if (state.drinkingRulesOn && state.currentPrompt != null) {
-                            Spacer(Modifier.height(12.dp))
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        shape = RoundedCornerShape(28.dp),
+                        color = HubLandingColors.Surface,
+                        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.08f)),
+                    ) {
+                        Column(
+                            Modifier
+                                .fillMaxSize()
+                                .verticalScroll(rememberScrollState())
+                                .padding(18.dp),
+                        ) {
                             Text(
-                                "🥂  ${stringResource(R.string.never_sip_hint)}",
-                                color = HubLandingColors.DeckGold,
+                                stringResource(R.string.never_category_pill),
                                 style = MaterialTheme.typography.labelMedium,
+                                color = HubLandingColors.HighStakesRed.copy(alpha = 0.85f),
+                                fontWeight = FontWeight.Bold,
+                                letterSpacing = 0.8.sp,
                             )
-                        }
-                    }
-                }
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                    state.playerNames.take(4).forEach { name ->
-                        Surface(
-                            modifier = Modifier.size(34.dp),
-                            shape = CircleShape,
-                            color = HubLandingColors.SurfaceElevated,
-                        ) {
-                            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            Spacer(Modifier.height(12.dp))
+                            NeverPromptAnnotated(
+                                text = state.currentPrompt ?: stringResource(R.string.never_deck_empty),
+                            )
+                            if (state.drinkingRulesOn && state.currentPrompt != null) {
+                                Spacer(Modifier.height(12.dp))
                                 Text(
-                                    name.take(1).uppercase(),
-                                    color = HubLandingColors.White,
+                                    "🥂  ${stringResource(R.string.never_sip_hint)}",
+                                    color = HubLandingColors.DeckGold,
                                     style = MaterialTheme.typography.labelMedium,
-                                    fontWeight = FontWeight.Bold,
-                                )
-                            }
-                        }
-                    }
-                    if (state.playerNames.size > 4) {
-                        Surface(
-                            modifier = Modifier.size(34.dp),
-                            shape = CircleShape,
-                            color = HubLandingColors.BrandPurple.copy(alpha = 0.45f),
-                        ) {
-                            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                                Text(
-                                    "+${state.playerNames.size - 4}",
-                                    color = HubLandingColors.White,
-                                    style = MaterialTheme.typography.labelSmall,
-                                    fontWeight = FontWeight.Bold,
                                 )
                             }
                         }
                     }
                 }
-                TextButton(onClick = { }) {
-                    Text(
-                        stringResource(R.string.never_flag_question),
-                        color = HubLandingColors.TextDim,
-                        style = MaterialTheme.typography.labelMedium,
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                        state.playerNames.take(4).forEach { name ->
+                            Surface(
+                                modifier = Modifier.size(34.dp),
+                                shape = CircleShape,
+                                color = HubLandingColors.SurfaceElevated,
+                            ) {
+                                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                    Text(
+                                        name.take(1).uppercase(),
+                                        color = HubLandingColors.White,
+                                        style = MaterialTheme.typography.labelMedium,
+                                        fontWeight = FontWeight.Bold,
+                                    )
+                                }
+                            }
+                        }
+                        if (state.playerNames.size > 4) {
+                            Surface(
+                                modifier = Modifier.size(34.dp),
+                                shape = CircleShape,
+                                color = HubLandingColors.BrandPurple.copy(alpha = 0.45f),
+                            ) {
+                                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                    Text(
+                                        "+${state.playerNames.size - 4}",
+                                        color = HubLandingColors.White,
+                                        style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = FontWeight.Bold,
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    TextButton(onClick = { }) {
+                        Text(
+                            stringResource(R.string.never_flag_question),
+                            color = HubLandingColors.TextDim,
+                            style = MaterialTheme.typography.labelMedium,
+                        )
+                    }
+                }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                ) {
+                    NeverQuickCircle(
+                        label = stringResource(R.string.never_quick_have),
+                        icon = Icons.Filled.LocalFireDepartment,
+                        onClick = { vm.setAllPlayersAnswer(true) },
+                    )
+                    NeverQuickCircle(
+                        label = stringResource(R.string.never_quick_never),
+                        icon = Icons.Filled.Close,
+                        onClick = { vm.setAllPlayersAnswer(false) },
                     )
                 }
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-            ) {
-                NeverQuickCircle(
-                    label = stringResource(R.string.never_quick_have),
-                    icon = Icons.Filled.LocalFireDepartment,
-                    onClick = { vm.setAllPlayersAnswer(true) },
+                Text(
+                    stringResource(R.string.house_rules_game_title),
+                    color = HubLandingColors.TextDim,
+                    style = MaterialTheme.typography.labelSmall,
                 )
-                NeverQuickCircle(
-                    label = stringResource(R.string.never_quick_never),
-                    icon = Icons.Filled.Close,
-                    onClick = { vm.setAllPlayersAnswer(false) },
-                )
-            }
-            Text(
-                stringResource(R.string.house_rules_game_title),
-                color = HubLandingColors.TextDim,
-                style = MaterialTheme.typography.labelSmall,
-            )
-            state.playerNames.forEachIndexed { index, name ->
-                Surface(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
-                    color = HubLandingColors.Surface.copy(alpha = 0.9f),
-                    border = BorderStroke(1.dp, Color.White.copy(alpha = 0.06f)),
+                LazyColumn(
+                    modifier = Modifier.weight(1f).fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
-                    Row(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 12.dp, vertical = 10.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Text(
-                            name,
-                            color = HubLandingColors.White,
-                            modifier = Modifier.weight(1f),
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
-                        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                            val sel = state.playerAnswers.getOrNull(index)
-                            NeverRoundToggle(
-                                selected = sel == true,
-                                icon = Icons.Filled.LocalFireDepartment,
-                                onClick = { vm.setPlayerAnswer(index, true) },
-                            )
-                            NeverRoundToggle(
-                                selected = sel == false,
-                                icon = Icons.Filled.Close,
-                                onClick = { vm.setPlayerAnswer(index, false) },
-                            )
+                    itemsIndexed(state.playerNames) { index, name ->
+                        Surface(
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(16.dp),
+                            color = HubLandingColors.Surface.copy(alpha = 0.9f),
+                            border = BorderStroke(1.dp, Color.White.copy(alpha = 0.06f)),
+                        ) {
+                            Row(
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 12.dp, vertical = 10.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Text(
+                                    name,
+                                    color = HubLandingColors.White,
+                                    modifier = Modifier.weight(1f),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                )
+                                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                                    val sel = state.playerAnswers.getOrNull(index)
+                                    NeverRoundToggle(
+                                        selected = sel == true,
+                                        icon = Icons.Filled.LocalFireDepartment,
+                                        onClick = { vm.setPlayerAnswer(index, true) },
+                                    )
+                                    NeverRoundToggle(
+                                        selected = sel == false,
+                                        icon = Icons.Filled.Close,
+                                        onClick = { vm.setPlayerAnswer(index, false) },
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -629,12 +646,20 @@ fun SpicySpinnerGameplayScreen(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
                     .padding(horizontal = 14.dp, vertical = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             GameplayHubTopBar(onOpenMenu = onOpenMenu)
+            Column(
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
             Text(
                 stringResource(R.string.spicy_live_session),
                 style = MaterialTheme.typography.labelMedium,
@@ -695,7 +720,7 @@ fun SpicySpinnerGameplayScreen(
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .heightIn(min = 260.dp, max = 380.dp),
+                        .heightIn(min = 200.dp, max = 300.dp),
                 contentAlignment = Alignment.Center,
             ) {
                 CouplesDualRingSpinner(
@@ -924,17 +949,26 @@ fun SpicySpinnerGameplayScreen(
                 )
             }
             if (rulesExpanded) {
-                rules.forEach { line ->
-                    Text(
-                        "• $line",
-                        color = HubLandingColors.BodyGrey,
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.padding(top = 4.dp),
-                    )
+                Column(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = 120.dp)
+                            .verticalScroll(rememberScrollState()),
+                ) {
+                    rules.forEach { line ->
+                        Text(
+                            "• $line",
+                            color = HubLandingColors.BodyGrey,
+                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.padding(top = 4.dp),
+                        )
+                    }
                 }
             }
+            }
 
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(4.dp))
             if (state.sessionComplete) {
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Button(
@@ -1036,11 +1070,18 @@ fun WyrGameplayScreen(
             Modifier
                 .fillMaxSize()
                 .background(wyrBg)
-                .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp, vertical = 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         GameplayHubTopBar(onOpenMenu = onOpenMenu)
+        Column(
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
         Spacer(Modifier.height(8.dp))
         Surface(
             shape = RoundedCornerShape(20.dp),
@@ -1230,9 +1271,10 @@ fun WyrGameplayScreen(
             style = MaterialTheme.typography.labelSmall,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 4.dp, bottom = 12.dp),
+                .padding(top = 4.dp, bottom = 8.dp),
             textAlign = TextAlign.Center,
         )
+        }
         Button(
             onClick = {
                 scope.launch {
@@ -1243,7 +1285,7 @@ fun WyrGameplayScreen(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 24.dp),
+                    .padding(bottom = 8.dp),
             shape = RoundedCornerShape(24.dp),
             colors =
                 ButtonDefaults.buttonColors(
@@ -1267,11 +1309,12 @@ private fun WyrOptionCard(
     buttonText: String,
     isOutlined: Boolean,
     onPick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Surface(
         shape = RoundedCornerShape(WyrCardRadius),
         color = HubLandingColors.Surface,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         border = BorderStroke(1.dp, labelColor.copy(alpha = 0.35f)),
     ) {
         Box(Modifier.fillMaxWidth()) {
@@ -1294,12 +1337,21 @@ private fun WyrOptionCard(
                     letterSpacing = 1.sp,
                 )
                 Spacer(Modifier.height(10.dp))
-                Text(
-                    bodyText,
-                    color = HubLandingColors.White,
-                    style = MaterialTheme.typography.bodyLarge,
-                    lineHeight = 24.sp,
-                )
+                val bodyScroll = rememberScrollState()
+                Box(
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = 100.dp)
+                            .verticalScroll(bodyScroll),
+                ) {
+                    Text(
+                        bodyText,
+                        color = HubLandingColors.White,
+                        style = MaterialTheme.typography.bodyLarge,
+                        lineHeight = 24.sp,
+                    )
+                }
                 Spacer(Modifier.height(14.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
