@@ -25,11 +25,17 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.BookmarkBorder
+import androidx.compose.material.icons.filled.LocalFireDepartment
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.ripple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -177,12 +183,13 @@ fun GameScreen(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp)
                 .padding(bottom = 4.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Spacer(Modifier.height(2.dp))
-            TruthDareModeStrip(
+            TruthDareChoicePanel(
                 phase = ui.phase,
                 pendingRevealIsTruth = ui.pendingRevealIsTruth,
                 truthsRemaining = ui.truthsRemaining,
@@ -200,6 +207,10 @@ fun GameScreen(
                     viewModel.setTruthDareChoice(TruthDareChoice.DICE)
                 },
             )
+
+            if (ui.phase == CardPhase.FaceDown) {
+                ChooseYourFateLine(currentPlayerLabel = currentPlayerLabel)
+            }
 
             PlayerTimerRow(
                 currentPlayerLabel = currentPlayerLabel,
@@ -224,8 +235,8 @@ fun GameScreen(
                 CardPhase.DeckEmpty -> {
                     Box(
                         modifier = Modifier
-                            .weight(1f)
-                            .fillMaxWidth(),
+                            .fillMaxWidth()
+                            .padding(vertical = 24.dp),
                         contentAlignment = Alignment.Center,
                     ) {
                         Text(
@@ -252,9 +263,8 @@ fun GameScreen(
 
                     Box(
                         modifier = Modifier
-                            .weight(1f)
                             .fillMaxWidth()
-                            .heightIn(min = 140.dp),
+                            .heightIn(min = 240.dp, max = 520.dp),
                     ) {
                         CardTiltWrapper(tiltDegrees = -2.5f, modifier = Modifier.fillMaxSize()) {
                             TruthDareCard(
@@ -363,7 +373,7 @@ private fun GameTopBar(
 }
 
 @Composable
-private fun TruthDareModeStrip(
+private fun TruthDareChoicePanel(
     phase: CardPhase,
     pendingRevealIsTruth: Boolean,
     truthsRemaining: Int,
@@ -373,75 +383,156 @@ private fun TruthDareModeStrip(
     onDice: () -> Unit,
 ) {
     val faceDown = phase == CardPhase.FaceDown
+    if (!faceDown) {
+        return
+    }
     val selectedTruth = when (phase) {
         CardPhase.ShowingTruth -> true
         CardPhase.ShowingDare -> false
         CardPhase.Flipping -> pendingRevealIsTruth
         else -> null
     }
-    Row(
+    val truthLabel = stringResource(R.string.truth_label)
+    val dareLabel = stringResource(R.string.dare_label)
+    val bracketTruth = "[$truthLabel]"
+    val bracketDare = "[$dareLabel]"
+    Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        ModeSegment(
-            label = stringResource(R.string.choice_truth),
-            selected = selectedTruth == true,
-            enabled = faceDown && truthsRemaining > 0,
-            onClick = onTruth,
-            modifier = Modifier.weight(1f).testTag("mode_truth"),
-        )
-        ModeSegment(
-            label = stringResource(R.string.choice_dare),
-            selected = selectedTruth == false,
-            enabled = faceDown && daresRemaining > 0,
-            onClick = onDare,
-            modifier = Modifier.weight(1f).testTag("mode_dare"),
-        )
-        ModeSegment(
-            label = stringResource(R.string.mode_dice),
-            selected = false,
-            enabled = faceDown && truthsRemaining > 0 && daresRemaining > 0,
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+        ) {
+            TruthDareHeroCard(
+                accent = NeonTokens.NeonCyan,
+                bracketLabel = bracketTruth,
+                selected = selectedTruth == true,
+                enabled = truthsRemaining > 0,
+                onClick = onTruth,
+                icon = {
+                    Icon(
+                        Icons.AutoMirrored.Outlined.HelpOutline,
+                        contentDescription = null,
+                        tint = NeonTokens.NeonCyan.copy(alpha = if (truthsRemaining > 0) 1f else 0.35f),
+                        modifier = Modifier.size(40.dp),
+                    )
+                },
+                modifier = Modifier.weight(1f).testTag("mode_truth"),
+            )
+            Text(
+                text = stringResource(R.string.wyr_or),
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.Bold,
+                color = NeonTokens.TextPrimary,
+            )
+            TruthDareHeroCard(
+                accent = NeonTokens.NeonMagenta,
+                bracketLabel = bracketDare,
+                selected = selectedTruth == false,
+                enabled = daresRemaining > 0,
+                onClick = onDare,
+                icon = {
+                    Icon(
+                        Icons.Filled.LocalFireDepartment,
+                        contentDescription = null,
+                        tint = NeonTokens.NeonMagenta.copy(alpha = if (daresRemaining > 0) 1f else 0.35f),
+                        modifier = Modifier.size(40.dp),
+                    )
+                },
+                modifier = Modifier.weight(1f).testTag("mode_dare"),
+            )
+        }
+        OutlinedButton(
             onClick = onDice,
-            modifier = Modifier.weight(1f).testTag("mode_dice"),
+            enabled = truthsRemaining > 0 && daresRemaining > 0,
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag("mode_dice"),
+        ) {
+            Text(stringResource(R.string.mode_dice))
+        }
+    }
+}
+
+@Composable
+private fun TruthDareHeroCard(
+    accent: Color,
+    bracketLabel: String,
+    selected: Boolean,
+    enabled: Boolean,
+    onClick: () -> Unit,
+    icon: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val brush = NeonTokens.glassBorderBrush(accent.copy(alpha = if (selected) 0.95f else 0.5f))
+    val bg = when {
+        !enabled -> NeonTokens.BgVoid.copy(alpha = 0.35f)
+        selected -> accent.copy(alpha = 0.2f)
+        else -> NeonTokens.BgElevated.copy(alpha = 0.75f)
+    }
+    Column(
+        modifier = modifier
+            .heightIn(min = 132.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .border(2.dp, brush, RoundedCornerShape(16.dp))
+            .background(bg)
+            .clickable(
+                enabled = enabled,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = ripple(color = accent.copy(alpha = 0.25f)),
+                onClick = onClick,
+            )
+            .padding(horizontal = 8.dp, vertical = 10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Text(
+            text = bracketLabel,
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = FontWeight.Bold,
+            color = accent.copy(alpha = if (enabled) 1f else 0.4f),
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp),
+            contentAlignment = Alignment.Center,
+        ) {
+            icon()
+        }
+        Text(
+            text = bracketLabel,
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = FontWeight.Bold,
+            color = accent.copy(alpha = if (enabled) 1f else 0.4f),
         )
     }
 }
 
 @Composable
-private fun ModeSegment(
-    label: String,
-    selected: Boolean,
-    enabled: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val bg = when {
-        selected -> NeonTokens.NeonMagenta
-        else -> NeonTokens.BgElevated
-    }
-    val fg = if (selected) Color.White else NeonTokens.TextPrimary
-    val borderC = if (selected) NeonTokens.NeonMagenta else NeonTokens.NeonCyan.copy(alpha = 0.35f)
-    Surface(
-        modifier = modifier
-            .clip(RoundedCornerShape(12.dp))
-            .border(1.5.dp, borderC, RoundedCornerShape(12.dp))
-            .clickable(
-                enabled = enabled,
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                onClick = onClick,
-            ),
-        color = bg.copy(alpha = if (enabled || selected) 1f else 0.45f),
-        shape = RoundedCornerShape(12.dp),
+private fun ChooseYourFateLine(currentPlayerLabel: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .testTag("choose_fate_line"),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = label,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 7.dp),
-            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-            color = fg.copy(alpha = if (enabled || selected) 1f else 0.5f),
-            textAlign = TextAlign.Center,
+            text = stringResource(R.string.game_choose_fate_prefix),
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.Bold,
+            color = NeonTokens.TextPrimary,
+        )
+        Text(
+            text = "[$currentPlayerLabel]",
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.Bold,
+            color = NeonTokens.NeonCyan,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }
@@ -596,14 +687,14 @@ private fun GameplayActions(
     onNextPlayer: () -> Unit,
 ) {
     val skipEnabled = if (penaltyEnabled) skipsLeft > 0 else true
-    val skipLabel = if (penaltyEnabled) {
+    val chickenLabel = if (penaltyEnabled) {
         stringResource(
             R.string.skip_count_format,
-            stringResource(R.string.penalty_skip_label),
+            stringResource(R.string.action_chicken_out),
             skipsLeft,
         )
     } else {
-        stringResource(R.string.skip)
+        stringResource(R.string.action_chicken_out)
     }
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -613,16 +704,14 @@ private fun GameplayActions(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            ModChoicePillButton(
-                text = skipLabel,
-                isBlack = false,
+            ModWhiteOutlinePillButton(
+                text = chickenLabel,
                 onClick = onSkip,
                 modifier = Modifier.weight(1f).testTag("skip_btn"),
                 enabled = skipEnabled,
             )
-            ModChoicePillButton(
-                text = stringResource(R.string.completed),
-                isBlack = true,
+            ModDoneGreenPillButton(
+                text = stringResource(R.string.action_done),
                 onClick = onCompleted,
                 modifier = Modifier.weight(1f).testTag("completed_btn"),
             )

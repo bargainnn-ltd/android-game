@@ -92,6 +92,35 @@
     <string name="link_terms">Terms of Service</string>
     <string name="link_privacy">Privacy Policy</string>
 
+    <string name="age_access_protocol">ACCESS PROTOCOL</string>
+    <string name="age_hero_line1">CURATED FOR THE</string>
+    <string name="age_hero_line2">MATURE MIND.</string>
+    <string name="age_hero_body">This experience is restricted to adults. Verify your age to unlock curated games and private sessions built for consenting partners.</string>
+    <string name="age_feature_adult_title">Adult Content</string>
+    <string name="age_feature_adult_desc">UNFILTERED PARTY DYNAMICS AND THEMES</string>
+    <string name="age_feature_privacy_title">Privacy First</string>
+    <string name="age_feature_privacy_desc">DATA ENCRYPTED AND NEVER STORED PUBLICLY</string>
+    <string name="age_verify_identity_title">Verify Identity</string>
+    <string name="age_enter_dob">ENTER YOUR DATE OF BIRTH</string>
+    <string name="age_label_month">MONTH</string>
+    <string name="age_label_day">DAY</string>
+    <string name="age_label_year">YEAR</string>
+    <string name="age_continue">CONTINUE</string>
+    <string name="age_or_divider">OR</string>
+    <string name="age_i_am_18_older">I AM 18 OR OLDER</string>
+    <string name="age_secure_access">SECURE ACCESS</string>
+    <string name="age_not_18_exit">Not 18? Exit</string>
+    <string name="age_error_invalid_date">Please enter a valid date.</string>
+    <string name="age_error_under_18">You must be 18 or older to continue.</string>
+    <string name="age_error_incomplete_dob">Enter your full date of birth.</string>
+    <string name="age_error_terms">Please accept the Terms of Service and Privacy Policy.</string>
+    <string name="age_footer_copyright">© 2026 COUPLE GAMES DIGITAL GROUP</string>
+    <string name="age_footer_safety">SAFETY CENTER</string>
+    <string name="age_footer_legal">LEGAL MENTIONS</string>
+    <string name="age_cd_menu">Menu</string>
+    <string name="age_cd_notifications">Notifications</string>
+    <string name="age_cd_secure">Secure access</string>
+
     <string name="hub_ready_title">Ready to play?</string>
     <string name="hub_ready_subtitle">Select a game below…</string>
     <string name="hub_game_hub">@string/app_name</string>
@@ -266,6 +295,9 @@
     <!-- Truth & Dare gameplay (Screen 5) -->
     <!-- Matches app brand; gameplay mode is still Truth/Dare in UI -->
     <string name="game_screen_title">@string/app_name</string>
+    <string name="game_choose_fate_prefix">CHOOSE YOUR FATE, </string>
+    <string name="action_done">DONE</string>
+    <string name="action_chicken_out">CHICKEN OUT</string>
     <string name="mode_dice">Dice</string>
     <string name="next_player">Next player</string>
     <string name="completed">Completed</string>

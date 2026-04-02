@@ -40,6 +40,8 @@ import com.spicynights.games.R
 import com.spicynights.games.ui.theme.ModColors
 import com.spicynights.games.ui.theme.NeonTokens
 
+private val DoneNeonGreen = Color(0xFF00E676)
+
 @Composable
 fun ModScreenBackground(
     brush: Brush,
@@ -230,6 +232,81 @@ fun ModChoicePillButton(
             text = text,
             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
             color = fg.copy(alpha = if (enabled) 1f else 0.55f),
+        )
+    }
+}
+
+@Composable
+fun ModDoneGreenPillButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    testTag: String? = null,
+) {
+    val shape = RoundedCornerShape(percent = 50)
+    val interactionSource = remember { MutableInteractionSource() }
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(48.dp)
+            .clip(shape)
+            .background(NeonTokens.BgVoid.copy(alpha = 0.35f))
+            .border(2.dp, DoneNeonGreen.copy(alpha = if (enabled) 0.95f else 0.35f), shape)
+            .then(if (testTag != null) Modifier.testTag(testTag) else Modifier)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = ripple(color = DoneNeonGreen.copy(alpha = 0.25f)),
+                enabled = enabled,
+                role = Role.Button,
+                onClick = onClick,
+            )
+            .padding(horizontal = 16.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+            color = DoneNeonGreen.copy(alpha = if (enabled) 1f else 0.45f),
+        )
+    }
+}
+
+@Composable
+fun ModWhiteOutlinePillButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    testTag: String? = null,
+) {
+    val shape = RoundedCornerShape(percent = 50)
+    val interactionSource = remember { MutableInteractionSource() }
+    val borderCol = Color.White.copy(alpha = if (enabled) 0.88f else 0.35f)
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(48.dp)
+            .clip(shape)
+            .background(Color.Transparent)
+            .border(2.dp, borderCol, shape)
+            .then(if (testTag != null) Modifier.testTag(testTag) else Modifier)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = ripple(color = Color.White.copy(alpha = 0.12f)),
+                enabled = enabled,
+                role = Role.Button,
+                onClick = onClick,
+            )
+            .padding(horizontal = 12.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+            color = Color.White.copy(alpha = if (enabled) 0.95f else 0.45f),
+            textAlign = TextAlign.Center,
+            maxLines = 2,
         )
     }
 }

@@ -87,7 +87,7 @@ fun TruthDareCard(
             }
             else -> ModColors.StrokeBlack
         }
-        val borderW = if (lightPromptStyle && !showBack) 2.dp else 3.dp
+        val borderW = 3.dp
         Surface(
             modifier = Modifier
                 .fillMaxSize(0.92f)
@@ -139,7 +139,7 @@ fun TruthDareCard(
                             contentAlignment = Alignment.Center,
                         ) {
                             Text(
-                                text = prompt,
+                                text = if (lightPromptStyle) prompt.uppercase() else prompt,
                                 style = MaterialTheme.typography.titleLarge.copy(
                                     lineHeight = 26.sp,
                                     fontWeight = FontWeight.Bold,
