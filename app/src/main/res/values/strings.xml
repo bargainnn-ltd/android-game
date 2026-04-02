@@ -229,8 +229,9 @@
     <string name="settings_turn_timer_hint">Time limit for Truth or Dare</string>
     <string name="settings_sound">Sound Effects</string>
     <string name="settings_haptics">Haptic Feedback</string>
+    <string name="settings_theme_section">Theme</string>
     <string name="settings_theme_midnight">Midnight (Dark)</string>
-    <string name="settings_theme_twilight">Twilight (Dim)</string>
+    <string name="settings_theme_light">Light</string>
     <string name="settings_language">Language</string>
     <string name="settings_privacy">Privacy Policy</string>
     <string name="settings_terms">Terms of Service</string>

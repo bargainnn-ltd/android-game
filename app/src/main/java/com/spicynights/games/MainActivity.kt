@@ -7,9 +7,13 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.spicynights.games.data.GameConfig
@@ -30,6 +34,15 @@ class MainActivity : ComponentActivity() {
             val appTheme by prefs.appThemePreference.collectAsStateWithLifecycle(
                 initialValue = AppThemePreference.MIDNIGHT,
             )
+            val light = appTheme == AppThemePreference.LIGHT
+            SideEffect {
+                val window = this@MainActivity.window
+                WindowCompat.getInsetsController(window, window.decorView).apply {
+                    isAppearanceLightStatusBars = light
+                    isAppearanceLightNavigationBars = light
+                }
+                window.navigationBarColor = if (light) Color.White.toArgb() else android.graphics.Color.BLACK
+            }
             SpicyNightsTheme(appTheme = appTheme) {
                 val scope = rememberCoroutineScope()
                 val ageVerified by prefs.ageVerified.collectAsStateWithLifecycle(initialValue = false)

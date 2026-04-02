@@ -69,6 +69,7 @@ import com.spicynights.games.data.local.AppPreferencesRepository
 import com.spicynights.games.navigation.SessionGameMode
 import com.spicynights.games.session.SessionSnapshot
 import com.spicynights.games.ui.theme.NeonTokens
+import com.spicynights.games.ui.theme.themeScreenBackgroundBrush
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.UUID
@@ -200,7 +201,7 @@ fun SessionSetupScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(NeonTokens.screenBackgroundBrush())
+            .background(themeScreenBackgroundBrush())
             .verticalScroll(rememberScrollState())
             .padding(16.dp)
             .testTag("session_setup_screen"),
@@ -210,7 +211,11 @@ fun SessionSetupScreen(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             IconButton(onClick = onBack) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, tint = Color.White)
+                Icon(
+                    Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onBackground,
+                )
             }
             Row(
                 modifier = Modifier.weight(1f),
@@ -230,11 +235,15 @@ fun SessionSetupScreen(
                     stringResource(R.string.session_setup_title),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
             }
             IconButton(onClick = { }) {
-                Icon(Icons.Outlined.Menu, contentDescription = null, tint = Color.White)
+                Icon(
+                    Icons.Outlined.Menu,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onBackground,
+                )
             }
         }
         Spacer(Modifier.height(16.dp))
@@ -247,12 +256,12 @@ fun SessionSetupScreen(
         ) {
             Text(
                 stringResource(R.string.session_whos_playing),
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.Bold,
             )
             Surface(
                 shape = RoundedCornerShape(12.dp),
-                color = NeonTokens.BgElevated,
+                color = MaterialTheme.colorScheme.surfaceVariant,
             ) {
                 Text(
                     stringResource(R.string.session_n_selected, players.count { it.selected }),
@@ -302,7 +311,7 @@ fun SessionSetupScreen(
                                 .size(64.dp)
                                 .clip(CircleShape)
                                 .border(BorderStroke(3.dp, ringColor), CircleShape)
-                                .background(NeonTokens.BgElevated)
+                                .background(MaterialTheme.colorScheme.surfaceVariant)
                                 .clickable {
                                     players[index] = p.copy(selected = !p.selected)
                                 },
@@ -311,7 +320,7 @@ fun SessionSetupScreen(
                             Text(
                                 text = p.name.take(1).uppercase(),
                                 style = MaterialTheme.typography.headlineSmall,
-                                color = Color.White,
+                                color = MaterialTheme.colorScheme.onSurface,
                             )
                         }
                         if (p.selected) {
@@ -334,7 +343,7 @@ fun SessionSetupScreen(
                     }
                     Text(
                         p.name,
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onBackground,
                         style = MaterialTheme.typography.labelSmall,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -348,7 +357,7 @@ fun SessionSetupScreen(
         Spacer(Modifier.height(24.dp))
         Text(
             stringResource(R.string.session_play_mode),
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onBackground,
             fontWeight = FontWeight.Bold,
         )
         Spacer(Modifier.height(8.dp))
@@ -371,7 +380,7 @@ fun SessionSetupScreen(
         Spacer(Modifier.height(24.dp))
         Text(
             stringResource(R.string.session_intensity_level),
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onBackground,
             fontWeight = FontWeight.Bold,
         )
         Spacer(Modifier.height(8.dp))
@@ -397,7 +406,7 @@ fun SessionSetupScreen(
         Spacer(Modifier.height(24.dp))
         Text(
             stringResource(R.string.session_content_settings),
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onBackground,
             fontWeight = FontWeight.Bold,
         )
         Spacer(Modifier.height(8.dp))
@@ -410,7 +419,7 @@ fun SessionSetupScreen(
         if (gameMode == SessionGameMode.TRUTH_DARE) {
             Text(
                 stringResource(R.string.session_prompt_mix),
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onBackground,
                 fontWeight = FontWeight.Medium,
                 modifier = Modifier.padding(top = 4.dp),
             )
@@ -569,19 +578,20 @@ private fun PlayModeSegment(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val scheme = MaterialTheme.colorScheme
     val border = if (selected) BorderStroke(2.dp, NeonTokens.NeonMagenta) else BorderStroke(1.dp, Color.Gray.copy(alpha = 0.3f))
     Surface(
         modifier = modifier
             .clip(RoundedCornerShape(14.dp))
             .clickable(enabled = enabled, onClick = onClick),
         shape = RoundedCornerShape(14.dp),
-        color = NeonTokens.BgElevated,
+        color = scheme.surfaceVariant,
         border = border,
     ) {
         Text(
             label,
             modifier = Modifier.padding(14.dp),
-            color = if (enabled) Color.White else Color.Gray,
+            color = if (enabled) scheme.onSurface else Color.Gray,
             style = MaterialTheme.typography.labelLarge,
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
             textAlign = TextAlign.Center,
@@ -596,13 +606,14 @@ private fun PromptMixSegment(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val scheme = MaterialTheme.colorScheme
     val border = if (selected) BorderStroke(2.dp, NeonTokens.NeonMagenta) else BorderStroke(1.dp, Color.Gray.copy(alpha = 0.3f))
     Surface(
         modifier = modifier
             .clip(RoundedCornerShape(14.dp))
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(14.dp),
-        color = NeonTokens.BgElevated,
+        color = scheme.surfaceVariant,
         border = border,
     ) {
         Column(
@@ -626,7 +637,7 @@ private fun PromptMixSegment(
             }
             Text(
                 label,
-                color = Color.White,
+                color = scheme.onSurface,
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
                 textAlign = TextAlign.Center,
@@ -646,6 +657,7 @@ private fun IntensityCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val scheme = MaterialTheme.colorScheme
     val borderColor = when {
         selected && accent -> NeonTokens.NeonMagenta
         selected -> NeonTokens.NeonCyan
@@ -656,7 +668,7 @@ private fun IntensityCard(
             .clip(RoundedCornerShape(16.dp))
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(16.dp),
-        color = NeonTokens.BgElevated,
+        color = scheme.surfaceVariant,
         border = BorderStroke(2.dp, borderColor),
     ) {
         Column(Modifier.padding(12.dp)) {
@@ -665,7 +677,7 @@ private fun IntensityCard(
                     title,
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    color = if (accent && selected) NeonTokens.NeonMagenta else Color.White,
+                    color = if (accent && selected) NeonTokens.NeonMagenta else scheme.onSurface,
                 )
                 Box(
                     modifier = Modifier
@@ -688,9 +700,10 @@ private fun ContentRow(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
 ) {
+    val scheme = MaterialTheme.colorScheme
     Surface(
         shape = RoundedCornerShape(12.dp),
-        color = NeonTokens.BgElevated,
+        color = scheme.surfaceVariant,
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp),
@@ -700,7 +713,7 @@ private fun ContentRow(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(Modifier.weight(1f)) {
-                Text(title, color = Color.White, fontWeight = FontWeight.Medium)
+                Text(title, color = scheme.onSurface, fontWeight = FontWeight.Medium)
                 Text(subtitle, color = Color.Gray, style = MaterialTheme.typography.bodySmall)
             }
             Switch(

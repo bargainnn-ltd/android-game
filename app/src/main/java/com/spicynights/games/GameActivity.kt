@@ -16,9 +16,13 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.platform.LocalView
 import androidx.core.content.getSystemService
@@ -61,6 +65,15 @@ class GameActivity : ComponentActivity() {
             val appTheme by prefs.appThemePreference.collectAsStateWithLifecycle(
                 initialValue = AppThemePreference.MIDNIGHT,
             )
+            val light = appTheme == AppThemePreference.LIGHT
+            SideEffect {
+                val window = this@GameActivity.window
+                WindowCompat.getInsetsController(window, window.decorView).apply {
+                    isAppearanceLightStatusBars = light
+                    isAppearanceLightNavigationBars = light
+                }
+                window.navigationBarColor = if (light) Color.White.toArgb() else android.graphics.Color.BLACK
+            }
             val soundOn by prefs.soundEffectsEnabled.collectAsStateWithLifecycle(initialValue = true)
             val hapticsOn by prefs.hapticFeedbackEnabled.collectAsStateWithLifecycle(initialValue = true)
             SpicyNightsTheme(appTheme = appTheme) {

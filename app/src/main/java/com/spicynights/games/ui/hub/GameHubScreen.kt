@@ -42,6 +42,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.spicynights.games.R
+import com.spicynights.games.ui.theme.themeHubCardElevated
+import com.spicynights.games.ui.theme.themeHubCardSurface
+import com.spicynights.games.ui.theme.themeHubLandingBrush
+import com.spicynights.games.ui.theme.themeHubPrimaryText
+import com.spicynights.games.ui.theme.themeHubSecondaryText
+import com.spicynights.games.ui.theme.themeIsLight
+import com.spicynights.games.ui.theme.themeNeverCardInnerBrush
 
 @Composable
 fun GameHubScreen(
@@ -53,9 +60,7 @@ fun GameHubScreen(
     onGameWyr: () -> Unit,
     onCustomDeck: () -> Unit,
 ) {
-    val bg = Brush.verticalGradient(
-        listOf(HubLandingColors.Black, HubLandingColors.Charcoal, HubLandingColors.Black),
-    )
+    val bg = themeHubLandingBrush()
 
     Box(
         modifier = Modifier
@@ -126,7 +131,7 @@ private fun HubTopBar(
             Icon(
                 Icons.Filled.Menu,
                 contentDescription = stringResource(R.string.cd_hub_menu),
-                tint = HubLandingColors.White,
+                tint = themeHubPrimaryText(),
             )
         }
         Box(
@@ -147,7 +152,7 @@ private fun HubTopBar(
             Icon(
                 Icons.Filled.Notifications,
                 contentDescription = stringResource(R.string.cd_hub_notifications),
-                tint = HubLandingColors.White,
+                tint = themeHubPrimaryText(),
             )
         }
     }
@@ -168,7 +173,7 @@ private fun HubHero() {
             text = stringResource(R.string.hub_landing_headline_1),
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.Bold,
-            color = HubLandingColors.White,
+            color = themeHubPrimaryText(),
             letterSpacing = 2.sp,
         )
         Text(
@@ -182,7 +187,7 @@ private fun HubHero() {
         Text(
             text = stringResource(R.string.hub_landing_subhead),
             style = MaterialTheme.typography.bodyMedium,
-            color = HubLandingColors.BodyGrey,
+            color = themeHubSecondaryText(),
             lineHeight = 22.sp,
         )
     }
@@ -206,12 +211,7 @@ private fun HubNeverCard(
         Column(
             Modifier
                 .background(
-                    Brush.verticalGradient(
-                        listOf(
-                            Color(0xFF1A1520),
-                            HubLandingColors.Surface,
-                        ),
-                    ),
+                    themeNeverCardInnerBrush(),
                     shape = RoundedCornerShape(24.dp),
                 )
                 .padding(12.dp),
@@ -228,14 +228,14 @@ private fun HubNeverCard(
                     text = stringResource(R.string.hub_landing_never_title),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = HubLandingColors.White,
+                    color = themeHubPrimaryText(),
                     letterSpacing = 0.5.sp,
                 )
                 Spacer(Modifier.height(6.dp))
                 Text(
                     text = stringResource(R.string.hub_landing_never_desc),
                     style = MaterialTheme.typography.bodySmall,
-                    color = HubLandingColors.BodyGrey,
+                    color = themeHubSecondaryText(),
                     lineHeight = 18.sp,
                 )
                 Spacer(Modifier.height(12.dp))
@@ -265,7 +265,7 @@ private fun HubSpicyCard(
 ) {
     Surface(
         shape = RoundedCornerShape(24.dp),
-        color = HubLandingColors.Surface,
+        color = themeHubCardSurface(),
         modifier = modifier
             .fillMaxWidth()
             .testTag("hub_game_spicy"),
@@ -295,14 +295,14 @@ private fun HubSpicyCard(
                 text = stringResource(R.string.hub_landing_spicy_title),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = HubLandingColors.White,
+                color = themeHubPrimaryText(),
                 letterSpacing = 0.5.sp,
             )
             Spacer(Modifier.height(6.dp))
             Text(
                 text = stringResource(R.string.hub_landing_spicy_desc),
                 style = MaterialTheme.typography.bodySmall,
-                color = HubLandingColors.BodyGrey,
+                color = themeHubSecondaryText(),
                 lineHeight = 18.sp,
             )
             Spacer(Modifier.height(12.dp))
@@ -332,7 +332,7 @@ private fun HubWyrCard(
 ) {
     Surface(
         shape = RoundedCornerShape(24.dp),
-        color = HubLandingColors.Surface,
+        color = themeHubCardSurface(),
         modifier = modifier
             .fillMaxWidth()
             .testTag("hub_game_wyr"),
@@ -360,14 +360,14 @@ private fun HubWyrCard(
                 text = stringResource(R.string.hub_landing_wyr_title),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = HubLandingColors.White,
+                color = themeHubPrimaryText(),
                 letterSpacing = 0.5.sp,
             )
             Spacer(Modifier.height(6.dp))
             Text(
                 text = stringResource(R.string.hub_landing_wyr_desc),
                 style = MaterialTheme.typography.bodySmall,
-                color = HubLandingColors.BodyGrey,
+                color = themeHubSecondaryText(),
                 lineHeight = 18.sp,
             )
             Spacer(Modifier.height(12.dp))
@@ -376,8 +376,8 @@ private fun HubWyrCard(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(14.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = HubLandingColors.SurfaceElevated,
-                    contentColor = HubLandingColors.White,
+                    containerColor = themeHubCardElevated(),
+                    contentColor = themeHubPrimaryText(),
                 ),
             ) {
                 Text(
@@ -397,7 +397,7 @@ private fun HubTruthDareCardBody(
 ) {
     Surface(
         shape = RoundedCornerShape(24.dp),
-        color = HubLandingColors.Surface,
+        color = themeHubCardSurface(),
         modifier = modifier
             .fillMaxWidth()
             .testTag("hub_game_truth_dare"),
@@ -415,14 +415,14 @@ private fun HubTruthDareCardBody(
                 text = stringResource(R.string.hub_landing_truth_dare_title),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = HubLandingColors.White,
+                color = themeHubPrimaryText(),
                 letterSpacing = 0.5.sp,
             )
             Spacer(Modifier.height(6.dp))
             Text(
                 text = stringResource(R.string.hub_landing_truth_dare_desc),
                 style = MaterialTheme.typography.bodySmall,
-                color = HubLandingColors.BodyGrey,
+                color = themeHubSecondaryText(),
                 lineHeight = 18.sp,
             )
             Spacer(Modifier.height(12.dp))
@@ -449,7 +449,7 @@ private fun HubTruthDareCardBody(
 private fun HubTruthDareStrip() {
     Surface(
         shape = RoundedCornerShape(16.dp),
-        color = HubLandingColors.SurfaceElevated,
+        color = themeHubCardElevated(),
         modifier = Modifier.fillMaxWidth(),
     ) {
     }
@@ -466,9 +466,9 @@ private fun HubCustomDeckCard(onStartBuilding: () -> Unit) {
                 .background(
                     Brush.linearGradient(
                         listOf(
-                            HubLandingColors.BrandPurpleDark.copy(alpha = 0.5f),
-                            HubLandingColors.Surface,
-                            HubLandingColors.BrandPurple.copy(alpha = 0.25f),
+                            HubLandingColors.BrandPurpleDark.copy(alpha = if (themeIsLight()) 0.12f else 0.5f),
+                            themeHubCardSurface(),
+                            HubLandingColors.BrandPurple.copy(alpha = if (themeIsLight()) 0.08f else 0.25f),
                         ),
                     ),
                 )
@@ -483,7 +483,7 @@ private fun HubCustomDeckCard(onStartBuilding: () -> Unit) {
                         text = stringResource(R.string.hub_landing_deck_title_1),
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Bold,
-                        color = HubLandingColors.White,
+                        color = themeHubPrimaryText(),
                     )
                     Text(
                         text = stringResource(R.string.hub_landing_deck_title_2),
@@ -496,7 +496,7 @@ private fun HubCustomDeckCard(onStartBuilding: () -> Unit) {
                 Text(
                     text = stringResource(R.string.hub_landing_deck_desc),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = HubLandingColors.BodyGrey,
+                    color = themeHubSecondaryText(),
                     lineHeight = 22.sp,
                 )
                 Spacer(Modifier.height(16.dp))

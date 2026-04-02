@@ -9,8 +9,10 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material.icons.filled.SportsEsports
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +23,7 @@ import com.spicynights.games.R
 import com.spicynights.games.navigation.Routes
 import com.spicynights.games.ui.hub.HubLandingColors
 import com.spicynights.games.ui.theme.NeonTokens
+import com.spicynights.games.ui.theme.themeIsLight
 
 enum class BottomNavStyle {
     HUB,
@@ -52,9 +55,10 @@ private fun HubBottomBar(
         Triple(Routes.Store, Icons.Filled.ShoppingBag, R.string.nav_store),
         Triple(Routes.Profile, Icons.Filled.Person, R.string.nav_profile),
     )
+    val scheme = MaterialTheme.colorScheme
     NavigationBar(
-        containerColor = HubLandingColors.Black,
-        contentColor = HubLandingColors.White,
+        containerColor = if (themeIsLight()) scheme.surface else HubLandingColors.Black,
+        contentColor = if (themeIsLight()) scheme.onSurface else HubLandingColors.White,
     ) {
         items.forEach { (route, icon, labelRes) ->
             val selected = selectedRoute == route
@@ -78,9 +82,10 @@ private fun GameplayBottomBar(
         Triple(Routes.Hub, Icons.Filled.Explore, R.string.nav_explore),
         Triple(Routes.Settings, Icons.Filled.Settings, R.string.nav_settings),
     )
+    val scheme = MaterialTheme.colorScheme
     NavigationBar(
-        containerColor = NeonTokens.NavBarContainer,
-        contentColor = NeonTokens.TextPrimary,
+        containerColor = if (themeIsLight()) scheme.surface.copy(alpha = 0.98f) else NeonTokens.NavBarContainer,
+        contentColor = if (themeIsLight()) scheme.onSurface else NeonTokens.TextPrimary,
     ) {
         items.forEach { (route, icon, labelRes) ->
             NavigationBarItem(
@@ -103,9 +108,10 @@ private fun SettingsAppBottomBar(
         Triple(Routes.Hub, Icons.Filled.Explore, R.string.nav_explore),
         Triple(Routes.Settings, Icons.Filled.Settings, R.string.nav_settings),
     )
+    val scheme = MaterialTheme.colorScheme
     NavigationBar(
-        containerColor = NeonTokens.NavBarContainer,
-        contentColor = NeonTokens.TextPrimary,
+        containerColor = if (themeIsLight()) scheme.surface.copy(alpha = 0.98f) else NeonTokens.NavBarContainer,
+        contentColor = if (themeIsLight()) scheme.onSurface else NeonTokens.TextPrimary,
     ) {
         items.forEach { (route, icon, labelRes) ->
             NavigationBarItem(
@@ -120,19 +126,25 @@ private fun SettingsAppBottomBar(
 }
 
 @Composable
-private fun hubNavItemColors() = NavigationBarItemDefaults.colors(
-    selectedIconColor = HubLandingColors.BrandPurple,
-    selectedTextColor = HubLandingColors.BrandPurple,
-    unselectedIconColor = HubLandingColors.TextDim,
-    unselectedTextColor = HubLandingColors.TextDim,
-    indicatorColor = HubLandingColors.BrandPurple.copy(alpha = 0.28f),
-)
+private fun hubNavItemColors(): NavigationBarItemColors {
+    val scheme = MaterialTheme.colorScheme
+    return NavigationBarItemDefaults.colors(
+        selectedIconColor = HubLandingColors.BrandPurple,
+        selectedTextColor = HubLandingColors.BrandPurple,
+        unselectedIconColor = if (themeIsLight()) scheme.onSurfaceVariant else HubLandingColors.TextDim,
+        unselectedTextColor = if (themeIsLight()) scheme.onSurfaceVariant else HubLandingColors.TextDim,
+        indicatorColor = HubLandingColors.BrandPurple.copy(alpha = 0.28f),
+    )
+}
 
 @Composable
-private fun navItemColors() = NavigationBarItemDefaults.colors(
-    selectedIconColor = NeonTokens.NeonMagenta,
-    selectedTextColor = NeonTokens.NeonMagenta,
-    unselectedIconColor = NeonTokens.TextDim,
-    unselectedTextColor = NeonTokens.TextDim,
-    indicatorColor = NeonTokens.NavIndicator,
-)
+private fun navItemColors(): NavigationBarItemColors {
+    val scheme = MaterialTheme.colorScheme
+    return NavigationBarItemDefaults.colors(
+        selectedIconColor = NeonTokens.NeonMagenta,
+        selectedTextColor = NeonTokens.NeonMagenta,
+        unselectedIconColor = if (themeIsLight()) scheme.onSurfaceVariant else NeonTokens.TextDim,
+        unselectedTextColor = if (themeIsLight()) scheme.onSurfaceVariant else NeonTokens.TextDim,
+        indicatorColor = NeonTokens.NavIndicator,
+    )
+}

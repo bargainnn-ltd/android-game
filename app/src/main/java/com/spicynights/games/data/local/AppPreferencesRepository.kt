@@ -31,7 +31,7 @@ enum class DefaultIntensity(val storageValue: Int) {
 /** App theme from Settings. */
 enum class AppThemePreference {
     MIDNIGHT,
-    TWILIGHT,
+    LIGHT,
 }
 
 class AppPreferencesRepository(private val context: Context) {
@@ -85,7 +85,7 @@ class AppPreferencesRepository(private val context: Context) {
 
     val appThemePreference: Flow<AppThemePreference> = context.dataStore.data.map { raw ->
         when (raw[Keys.appTheme]) {
-            "twilight" -> AppThemePreference.TWILIGHT
+            "light", "twilight" -> AppThemePreference.LIGHT
             else -> AppThemePreference.MIDNIGHT
         }
     }
@@ -158,7 +158,7 @@ class AppPreferencesRepository(private val context: Context) {
     suspend fun setAppThemePreference(theme: AppThemePreference) {
         context.dataStore.edit {
             it[Keys.appTheme] = when (theme) {
-                AppThemePreference.TWILIGHT -> "twilight"
+                AppThemePreference.LIGHT -> "light"
                 AppThemePreference.MIDNIGHT -> "midnight"
             }
         }

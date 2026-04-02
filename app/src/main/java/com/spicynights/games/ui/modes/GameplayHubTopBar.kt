@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.spicynights.games.R
 import com.spicynights.games.ui.hub.HubLandingColors
+import com.spicynights.games.ui.theme.themeHubPrimaryText
 
 @Composable
 fun GameplayHubTopBar(
@@ -34,7 +35,7 @@ fun GameplayHubTopBar(
             Icon(
                 Icons.Filled.Menu,
                 contentDescription = stringResource(R.string.cd_hub_menu),
-                tint = HubLandingColors.White,
+                tint = themeHubPrimaryText(),
             )
         }
         Box(
@@ -55,7 +56,7 @@ fun GameplayHubTopBar(
             Icon(
                 Icons.Filled.Notifications,
                 contentDescription = stringResource(R.string.cd_hub_notifications),
-                tint = HubLandingColors.White,
+                tint = themeHubPrimaryText(),
             )
         }
     }

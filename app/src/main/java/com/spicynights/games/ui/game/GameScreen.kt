@@ -69,6 +69,7 @@ import com.spicynights.games.R
 import com.spicynights.games.data.Level
 import com.spicynights.games.ui.theme.ModColors
 import com.spicynights.games.ui.theme.NeonTokens
+import com.spicynights.games.ui.theme.themeScreenBackgroundBrush
 import com.spicynights.games.viewmodel.CardPhase
 import com.spicynights.games.viewmodel.GameViewModel
 import com.spicynights.games.viewmodel.TruthDareChoice
@@ -166,7 +167,7 @@ fun GameScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(NeonTokens.screenBackgroundBrush())
+            .background(themeScreenBackgroundBrush())
             .testTag("game_screen"),
     ) {
         GameTopBar(
@@ -221,7 +222,7 @@ fun GameScreen(
                     ui.totalInSession.coerceAtLeast(0),
                 ),
                 style = MaterialTheme.typography.bodySmall,
-                color = NeonTokens.TextMuted,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.testTag("progress_label"),
             )
 
@@ -237,7 +238,7 @@ fun GameScreen(
                         Text(
                             text = stringResource(R.string.deck_empty),
                             style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                            color = NeonTokens.TextPrimary,
+                            color = MaterialTheme.colorScheme.onSurface,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -319,8 +320,9 @@ private fun GameTopBar(
     onBack: () -> Unit,
     onBookmark: () -> Unit,
 ) {
+    val scheme = MaterialTheme.colorScheme
     Surface(
-        color = NeonTokens.BgDeep,
+        color = scheme.surface,
         shadowElevation = 6.dp,
     ) {
         Row(
@@ -333,7 +335,7 @@ private fun GameTopBar(
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = stringResource(R.string.cd_home),
-                    tint = Color.White,
+                    tint = scheme.onSurface,
                 )
             }
             Row(
@@ -353,14 +355,14 @@ private fun GameTopBar(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                    color = Color.White,
+                    color = scheme.onSurface,
                 )
             }
             IconButton(onClick = onBookmark, modifier = Modifier.testTag("bookmark_prompt_btn")) {
                 Icon(
                     imageVector = Icons.Filled.BookmarkBorder,
                     contentDescription = stringResource(R.string.cd_bookmark_prompt),
-                    tint = Color.White.copy(alpha = 0.9f),
+                    tint = scheme.onSurface.copy(alpha = 0.9f),
                 )
             }
         }

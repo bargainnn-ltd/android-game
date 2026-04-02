@@ -99,6 +99,12 @@ import com.spicynights.games.viewmodel.CouplesDiceRules
 import com.spicynights.games.viewmodel.WyrGameplayViewModel
 import com.spicynights.games.ui.hub.HubLandingColors
 import com.spicynights.games.ui.theme.NeonTokens
+import com.spicynights.games.ui.theme.themeHubCardElevated
+import com.spicynights.games.ui.theme.themeHubCardSurface
+import com.spicynights.games.ui.theme.themeHubLandingBrush
+import com.spicynights.games.ui.theme.themeHubPrimaryText
+import com.spicynights.games.ui.theme.themeHubSecondaryText
+import com.spicynights.games.ui.theme.themeHubTertiaryText
 import com.spicynights.games.viewmodel.SpicySpinLogEntry
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -138,9 +144,7 @@ fun NeverGameplayScreen(
         }
     }
 
-    val bg = Brush.verticalGradient(
-        listOf(HubLandingColors.Black, HubLandingColors.Charcoal, HubLandingColors.Black),
-    )
+    val bg = themeHubLandingBrush()
     val roundNum =
         when {
             state.totalPrompts == 0 -> 0
@@ -174,7 +178,7 @@ fun NeverGameplayScreen(
                 state.currentReaderName,
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
-                color = HubLandingColors.White,
+                color = themeHubPrimaryText(),
             )
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -184,14 +188,14 @@ fun NeverGameplayScreen(
                 Text(
                     stringResource(R.string.never_round_fmt, roundNum, state.totalPrompts.coerceAtLeast(1)),
                     style = MaterialTheme.typography.labelLarge,
-                    color = HubLandingColors.BodyGrey,
+                    color = themeHubSecondaryText(),
                     fontWeight = FontWeight.Bold,
                 )
                 Row(verticalAlignment = Alignment.Bottom) {
                     Text(
                         stringResource(R.string.never_mood_label),
                         style = MaterialTheme.typography.labelSmall,
-                        color = HubLandingColors.TextDim,
+                        color = themeHubTertiaryText(),
                         modifier = Modifier.padding(end = 6.dp),
                     )
                     Text(
@@ -207,7 +211,7 @@ fun NeverGameplayScreen(
                 progress = { progress.coerceIn(0f, 1f) },
                 modifier = Modifier.fillMaxWidth().height(4.dp).clip(RoundedCornerShape(2.dp)),
                 color = HubLandingColors.BrandPurple,
-                trackColor = HubLandingColors.SurfaceElevated,
+                trackColor = themeHubCardElevated(),
             )
             if (state.turnTimerEnabled && state.currentPrompt != null && state.turnTimerSecondsTotal > 0) {
                 Text(
@@ -239,7 +243,7 @@ fun NeverGameplayScreen(
                     Surface(
                         modifier = Modifier.fillMaxSize(),
                         shape = RoundedCornerShape(28.dp),
-                        color = HubLandingColors.Surface,
+                        color = themeHubCardSurface(),
                         border = BorderStroke(1.dp, Color.White.copy(alpha = 0.08f)),
                     ) {
                         Column(
@@ -280,12 +284,12 @@ fun NeverGameplayScreen(
                             Surface(
                                 modifier = Modifier.size(34.dp),
                                 shape = CircleShape,
-                                color = HubLandingColors.SurfaceElevated,
+                                color = themeHubCardElevated(),
                             ) {
                                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                                     Text(
                                         name.take(1).uppercase(),
-                                        color = HubLandingColors.White,
+                                        color = themeHubPrimaryText(),
                                         style = MaterialTheme.typography.labelMedium,
                                         fontWeight = FontWeight.Bold,
                                     )
@@ -301,7 +305,7 @@ fun NeverGameplayScreen(
                                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                                     Text(
                                         "+${state.playerNames.size - 4}",
-                                        color = HubLandingColors.White,
+                                        color = themeHubPrimaryText(),
                                         style = MaterialTheme.typography.labelSmall,
                                         fontWeight = FontWeight.Bold,
                                     )
@@ -312,7 +316,7 @@ fun NeverGameplayScreen(
                     TextButton(onClick = { }) {
                         Text(
                             stringResource(R.string.never_flag_question),
-                            color = HubLandingColors.TextDim,
+                            color = themeHubTertiaryText(),
                             style = MaterialTheme.typography.labelMedium,
                         )
                     }
@@ -334,7 +338,7 @@ fun NeverGameplayScreen(
                 }
                 Text(
                     stringResource(R.string.house_rules_game_title),
-                    color = HubLandingColors.TextDim,
+                    color = themeHubTertiaryText(),
                     style = MaterialTheme.typography.labelSmall,
                 )
                 LazyColumn(
@@ -345,7 +349,7 @@ fun NeverGameplayScreen(
                         Surface(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(16.dp),
-                            color = HubLandingColors.Surface.copy(alpha = 0.9f),
+                            color = themeHubCardSurface().copy(alpha = 0.9f),
                             border = BorderStroke(1.dp, Color.White.copy(alpha = 0.06f)),
                         ) {
                             Row(
@@ -357,7 +361,7 @@ fun NeverGameplayScreen(
                             ) {
                                 Text(
                                     name,
-                                    color = HubLandingColors.White,
+                                    color = themeHubPrimaryText(),
                                     modifier = Modifier.weight(1f),
                                     style = MaterialTheme.typography.bodyMedium,
                                 )
@@ -430,7 +434,7 @@ private fun NeverPromptAnnotated(text: String) {
     if (parts == null) {
         Text(
             text,
-            color = HubLandingColors.White,
+            color = themeHubPrimaryText(),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
             lineHeight = 28.sp,
@@ -471,18 +475,18 @@ private fun NeverQuickCircle(
     ) {
         Surface(
             shape = CircleShape,
-            color = HubLandingColors.SurfaceElevated,
+            color = themeHubCardElevated(),
             modifier = Modifier.size(76.dp),
             border = BorderStroke(1.dp, Color.White.copy(alpha = 0.1f)),
         ) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Icon(icon, contentDescription = label, tint = HubLandingColors.White, modifier = Modifier.size(32.dp))
+                Icon(icon, contentDescription = label, tint = themeHubPrimaryText(), modifier = Modifier.size(32.dp))
             }
         }
         Spacer(Modifier.height(8.dp))
         Text(
             label,
-            color = HubLandingColors.White,
+            color = themeHubPrimaryText(),
             style = MaterialTheme.typography.labelLarge,
             fontWeight = FontWeight.Bold,
         )
@@ -499,12 +503,12 @@ private fun NeverRoundToggle(
     Surface(
         onClick = onClick,
         shape = CircleShape,
-        color = if (selected) HubLandingColors.BrandPurple.copy(alpha = 0.35f) else HubLandingColors.SurfaceElevated,
+        color = if (selected) HubLandingColors.BrandPurple.copy(alpha = 0.35f) else themeHubCardElevated(),
         border = BorderStroke(2.dp, border),
         modifier = Modifier.size(48.dp),
     ) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Icon(icon, contentDescription = null, tint = HubLandingColors.White, modifier = Modifier.size(22.dp))
+            Icon(icon, contentDescription = null, tint = themeHubPrimaryText(), modifier = Modifier.size(22.dp))
         }
     }
 }
@@ -557,13 +561,13 @@ private fun SpicyActivityLogRow(
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 "${b.uppercase()} / ${a.uppercase()}",
-                color = HubLandingColors.White,
+                color = themeHubPrimaryText(),
                 style = MaterialTheme.typography.titleSmall,
                 fontWeight = FontWeight.Bold,
             )
             Text(
                 SpicyLogAge(entry.timeMillis),
-                color = HubLandingColors.TextDim,
+                color = themeHubTertiaryText(),
                 style = MaterialTheme.typography.labelSmall,
             )
         }
@@ -635,10 +639,7 @@ fun SpicySpinnerGameplayScreen(
     val bodyLabel = state.bodyRoll?.let { bodies.getOrNull(it - 1) }
     val actionLabel = state.actionRoll?.let { actions.getOrNull(it - 1) }
 
-    val spicyBg =
-        Brush.verticalGradient(
-            listOf(HubLandingColors.Black, HubLandingColors.Charcoal, HubLandingColors.Black),
-        )
+    val spicyBg = themeHubLandingBrush()
     val spicyTitleGradient =
         Brush.horizontalGradient(
             listOf(HubLandingColors.BrandPurple, HubLandingColors.SpicyPink),
@@ -679,7 +680,7 @@ fun SpicySpinnerGameplayScreen(
                     stringResource(R.string.spicy_title_the),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
-                    color = HubLandingColors.White,
+                    color = themeHubPrimaryText(),
                 )
                 Text(
                     stringResource(R.string.spicy_title_spicy),
@@ -693,7 +694,7 @@ fun SpicySpinnerGameplayScreen(
                     stringResource(R.string.spicy_title_spinner),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
-                    color = HubLandingColors.White,
+                    color = themeHubPrimaryText(),
                 )
             }
             Text(
@@ -707,14 +708,14 @@ fun SpicySpinnerGameplayScreen(
                 currentName,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
-                color = HubLandingColors.White,
+                color = themeHubPrimaryText(),
             )
             Text(
                 stringResource(R.string.dice_turns_fmt, state.turnsCompleted, state.maxTurns),
-                color = HubLandingColors.TextDim,
+                color = themeHubTertiaryText(),
                 style = MaterialTheme.typography.labelSmall,
             )
-            Text(state.intensityLine, color = HubLandingColors.TextDim, style = MaterialTheme.typography.labelSmall)
+            Text(state.intensityLine, color = themeHubTertiaryText(), style = MaterialTheme.typography.labelSmall)
             if (state.turnTimerEnabled && state.bodyRoll != null && state.actionTimerSeconds > 0) {
                 Text(
                     stringResource(R.string.dice_timer_fmt, timerLeft),
@@ -744,7 +745,7 @@ fun SpicySpinnerGameplayScreen(
             }
             Surface(
                 shape = RoundedCornerShape(20.dp),
-                color = HubLandingColors.Surface,
+                color = themeHubCardSurface(),
                 modifier = Modifier.fillMaxWidth(),
                 border = BorderStroke(1.dp, Color.White.copy(alpha = 0.08f)),
             ) {
@@ -752,13 +753,13 @@ fun SpicySpinnerGameplayScreen(
                     Text(
                         stringResource(R.string.spicy_current_result),
                         style = MaterialTheme.typography.labelSmall,
-                        color = HubLandingColors.TextDim,
+                        color = themeHubTertiaryText(),
                         letterSpacing = 1.sp,
                     )
                     Spacer(Modifier.height(6.dp))
                     when {
                         isRolling -> {
-                            Text("…", color = HubLandingColors.BodyGrey, style = MaterialTheme.typography.titleMedium)
+                            Text("…", color = themeHubSecondaryText(), style = MaterialTheme.typography.titleMedium)
                         }
                         state.sessionComplete -> {
                             Text(
@@ -770,7 +771,7 @@ fun SpicySpinnerGameplayScreen(
                         state.bodyRoll != null && state.actionRoll != null && bodyLabel != null && actionLabel != null -> {
                             Text(
                                 "${bodyLabel.uppercase()} / ${actionLabel.uppercase()}",
-                                color = HubLandingColors.White,
+                                color = themeHubPrimaryText(),
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
                             )
@@ -827,14 +828,14 @@ fun SpicySpinnerGameplayScreen(
             }
             Text(
                 stringResource(R.string.dice_tap_to_spin),
-                color = HubLandingColors.TextDim,
+                color = themeHubTertiaryText(),
                 style = MaterialTheme.typography.labelSmall,
             )
 
             if (state.activityLog.isNotEmpty()) {
                 Surface(
                     shape = RoundedCornerShape(20.dp),
-                    color = HubLandingColors.Surface,
+                    color = themeHubCardSurface(),
                     modifier = Modifier.fillMaxWidth(),
                     border = BorderStroke(1.dp, Color.White.copy(alpha = 0.08f)),
                 ) {
@@ -843,7 +844,7 @@ fun SpicySpinnerGameplayScreen(
                             stringResource(R.string.spicy_activity_log),
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold,
-                            color = HubLandingColors.White,
+                            color = themeHubPrimaryText(),
                         )
                         Spacer(Modifier.height(10.dp))
                         state.activityLog.forEach { entry ->
@@ -857,7 +858,7 @@ fun SpicySpinnerGameplayScreen(
             if (state.isDoubleRoll && !state.freeChoiceActive) {
                 Surface(
                     shape = RoundedCornerShape(16.dp),
-                    color = HubLandingColors.Surface,
+                    color = themeHubCardSurface(),
                     modifier = Modifier.fillMaxWidth(),
                     border = BorderStroke(1.dp, HubLandingColors.SpicyOrange.copy(alpha = 0.5f)),
                 ) {
@@ -869,7 +870,7 @@ fun SpicySpinnerGameplayScreen(
                         )
                         Text(
                             stringResource(R.string.dice_double_roll_body),
-                            color = HubLandingColors.White,
+                            color = themeHubPrimaryText(),
                             modifier = Modifier.padding(top = 8.dp),
                             style = MaterialTheme.typography.bodyMedium,
                         )
@@ -889,14 +890,14 @@ fun SpicySpinnerGameplayScreen(
             if (state.isDoubleRoll && state.freeChoiceActive) {
                 Text(
                     stringResource(R.string.dice_free_choice_hint),
-                    color = HubLandingColors.White,
+                    color = themeHubPrimaryText(),
                     fontWeight = FontWeight.Medium,
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
             Text(
                 stringResource(R.string.dice_consent_line),
-                color = HubLandingColors.TextDim,
+                color = themeHubTertiaryText(),
                 style = MaterialTheme.typography.labelSmall,
                 modifier = Modifier.fillMaxWidth(),
             )
@@ -911,12 +912,12 @@ fun SpicySpinnerGameplayScreen(
             ) {
                 Text(
                     stringResource(R.string.dice_rules_title),
-                    color = HubLandingColors.White,
+                    color = themeHubPrimaryText(),
                     fontWeight = FontWeight.Medium,
                 )
                 Text(
                     if (rulesExpanded) "▲" else "▼",
-                    color = HubLandingColors.TextDim,
+                    color = themeHubTertiaryText(),
                 )
             }
             if (rulesExpanded) {
@@ -930,7 +931,7 @@ fun SpicySpinnerGameplayScreen(
                     rules.forEach { line ->
                         Text(
                             "• $line",
-                            color = HubLandingColors.BodyGrey,
+                            color = themeHubSecondaryText(),
                             style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier.padding(top = 4.dp),
                         )
@@ -952,7 +953,7 @@ fun SpicySpinnerGameplayScreen(
                     Button(
                         onClick = onBack,
                         modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(containerColor = HubLandingColors.SurfaceElevated),
+                        colors = ButtonDefaults.buttonColors(containerColor = themeHubCardElevated()),
                     ) {
                         Text(stringResource(R.string.dice_back))
                     }
@@ -962,7 +963,7 @@ fun SpicySpinnerGameplayScreen(
                     Button(
                         onClick = { runRollAnimation { vm.reRoll() } },
                         modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(containerColor = HubLandingColors.SurfaceElevated),
+                        colors = ButtonDefaults.buttonColors(containerColor = themeHubCardElevated()),
                         enabled = state.sessionReRollsRemaining > 0 && state.bodyRoll != null && !isRolling,
                     ) {
                         Text(stringResource(R.string.dice_reroll_fmt, state.sessionReRollsRemaining))
@@ -1044,10 +1045,7 @@ fun WyrGameplayScreen(
     val totalPairs = state.totalPairs.coerceAtLeast(1)
     val roundNum = (totalPairs - state.cardsRemaining).coerceIn(1, totalPairs)
 
-    val wyrBg =
-        Brush.verticalGradient(
-            listOf(HubLandingColors.Black, HubLandingColors.Charcoal, HubLandingColors.Black),
-        )
+    val wyrBg = themeHubLandingBrush()
 
     Column(
         modifier =
@@ -1069,14 +1067,14 @@ fun WyrGameplayScreen(
         Spacer(Modifier.height(8.dp))
         Surface(
             shape = RoundedCornerShape(20.dp),
-            color = HubLandingColors.Surface,
+            color = themeHubCardSurface(),
             border = BorderStroke(1.dp, Color.White.copy(alpha = 0.1f)),
         ) {
             Text(
                 stringResource(R.string.wyr_round_fmt, roundNum, totalPairs),
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                 style = MaterialTheme.typography.labelLarge,
-                color = HubLandingColors.White,
+                color = themeHubPrimaryText(),
                 fontWeight = FontWeight.Bold,
             )
         }
@@ -1098,7 +1096,7 @@ fun WyrGameplayScreen(
                     stringResource(R.string.wyr_title_would_you),
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold,
-                    color = HubLandingColors.White,
+                    color = themeHubPrimaryText(),
                 )
                 Text(
                     stringResource(R.string.wyr_title_rather),
@@ -1148,8 +1146,8 @@ fun WyrGameplayScreen(
                 onClick = { launchWyrFlipThenAdvance { vm.nextCard() } },
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(22.dp),
-                border = BorderStroke(1.dp, HubLandingColors.TextDim),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = HubLandingColors.White),
+                border = BorderStroke(1.dp, themeHubTertiaryText()),
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = themeHubPrimaryText()),
             ) {
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowForwardIos,
@@ -1176,8 +1174,8 @@ fun WyrGameplayScreen(
                 },
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(22.dp),
-                border = BorderStroke(1.dp, HubLandingColors.TextDim),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = HubLandingColors.White),
+                border = BorderStroke(1.dp, themeHubTertiaryText()),
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = themeHubPrimaryText()),
             ) {
                 Icon(Icons.Filled.Share, contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(Modifier.size(6.dp))
@@ -1203,7 +1201,7 @@ fun WyrGameplayScreen(
         ) {
             Text(
                 stringResource(R.string.debate_timer),
-                color = HubLandingColors.BodyGrey,
+                color = themeHubSecondaryText(),
                 style = MaterialTheme.typography.bodyMedium,
             )
             Switch(
@@ -1213,14 +1211,14 @@ fun WyrGameplayScreen(
         }
         Text(
             stringResource(R.string.wyr_stat_illusory),
-            color = HubLandingColors.TextDim,
+            color = themeHubTertiaryText(),
             style = MaterialTheme.typography.labelSmall,
             modifier = Modifier.fillMaxWidth(),
             textAlign = TextAlign.Center,
         )
         Text(
             stringResource(R.string.wyr_next_card) + " · ${state.cardsRemaining}",
-            color = HubLandingColors.TextDim,
+            color = themeHubTertiaryText(),
             style = MaterialTheme.typography.labelSmall,
             modifier = Modifier
                 .fillMaxWidth()
@@ -1288,7 +1286,7 @@ private fun WyrCombinedOptionCard(
                                 colors =
                                     listOf(
                                         purple.copy(alpha = 0.45f),
-                                        HubLandingColors.Surface.copy(alpha = 0.92f),
+                                        themeHubCardSurface().copy(alpha = 0.92f),
                                     ),
                             ),
                         )
@@ -1344,7 +1342,7 @@ private fun WyrCombinedOptionCard(
                             Brush.verticalGradient(
                                 colors =
                                     listOf(
-                                        HubLandingColors.Surface.copy(alpha = 0.92f),
+                                        themeHubCardSurface().copy(alpha = 0.92f),
                                         coral.copy(alpha = 0.45f),
                                     ),
                             ),
@@ -1400,7 +1398,7 @@ private fun WyrCombinedOptionCard(
                     .size(WyrOrBadgeSize)
                     .shadow(12.dp, CircleShape, ambientColor = Color.Black.copy(alpha = 0.35f), spotColor = Color.Black.copy(alpha = 0.4f)),
             shape = CircleShape,
-            color = HubLandingColors.SurfaceElevated,
+            color = themeHubCardElevated(),
             border = BorderStroke(2.dp, Color.White.copy(alpha = 0.22f)),
             tonalElevation = 6.dp,
         ) {
