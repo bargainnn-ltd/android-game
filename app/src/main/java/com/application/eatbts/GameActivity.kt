@@ -19,8 +19,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
@@ -71,7 +69,6 @@ class GameActivity : ComponentActivity() {
                     isAppearanceLightStatusBars = light
                     isAppearanceLightNavigationBars = light
                 }
-                window.navigationBarColor = if (light) Color.White.toArgb() else android.graphics.Color.BLACK
             }
             val soundOn by prefs.soundEffectsEnabled.collectAsStateWithLifecycle(initialValue = true)
             val hapticsOn by prefs.hapticFeedbackEnabled.collectAsStateWithLifecycle(initialValue = true)

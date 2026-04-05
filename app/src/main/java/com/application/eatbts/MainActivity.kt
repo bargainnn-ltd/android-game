@@ -17,8 +17,6 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
@@ -47,7 +45,6 @@ class MainActivity : ComponentActivity() {
                     isAppearanceLightStatusBars = light
                     isAppearanceLightNavigationBars = light
                 }
-                window.navigationBarColor = if (light) Color.White.toArgb() else android.graphics.Color.BLACK
             }
             CoupleGamesTheme(appTheme = appTheme) {
                 val scope = rememberCoroutineScope()
