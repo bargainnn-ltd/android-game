@@ -38,6 +38,10 @@ class MatchmakingRepository(
         awaitClose { reg.remove() }
     }
 
+    /**
+     * Writes a queue ticket readable by any signed-in user (see Firestore rules on `matchmaking`).
+     * Do not put secrets here; [displayName] is visible to other seekers for pairing UX.
+     */
     suspend fun enqueueTicket(
         uid: String,
         displayName: String,

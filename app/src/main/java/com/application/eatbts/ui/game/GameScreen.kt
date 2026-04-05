@@ -171,7 +171,7 @@ fun GameScreen(
             .testTag("game_screen"),
     ) {
         GameTopBar(
-            title = stringResource(R.string.game_screen_title),
+            title = stringResource(R.string.game_truth_dare),
             onBack = {
                 onClickSound()
                 onNavigateHome()

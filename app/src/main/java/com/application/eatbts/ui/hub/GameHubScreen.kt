@@ -127,7 +127,10 @@ private fun HubTopBar(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        IconButton(onClick = onOpenMenu) {
+        IconButton(
+            onClick = onOpenMenu,
+            modifier = Modifier.testTag("hub_menu_button"),
+        ) {
             Icon(
                 Icons.Filled.Menu,
                 contentDescription = stringResource(R.string.cd_hub_menu),

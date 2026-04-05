@@ -41,6 +41,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -89,7 +93,8 @@ fun SettingsScreen(
             .fillMaxSize()
             .background(colorScheme.background)
             .verticalScroll(rememberScrollState())
-            .padding(16.dp),
+            .padding(16.dp)
+            .testTag("settings_screen"),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
@@ -151,16 +156,16 @@ fun SettingsScreen(
         Text(stringResource(R.string.settings_theme_section), color = colorScheme.onBackground, fontWeight = FontWeight.Medium)
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             ThemeCard(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).testTag("settings_theme_midnight"),
                 title = stringResource(R.string.settings_theme_midnight),
-                selected = themePref == AppThemePreference.MIDNIGHT,
+                isSelected = themePref == AppThemePreference.MIDNIGHT,
                 onClick = { scope.launch { prefs.setAppThemePreference(AppThemePreference.MIDNIGHT) } },
                 lightPreview = false,
             )
             ThemeCard(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).testTag("settings_theme_light"),
                 title = stringResource(R.string.settings_theme_light),
-                selected = themePref == AppThemePreference.LIGHT,
+                isSelected = themePref == AppThemePreference.LIGHT,
                 onClick = { scope.launch { prefs.setAppThemePreference(AppThemePreference.LIGHT) } },
                 lightPreview = true,
             )
@@ -271,7 +276,7 @@ private fun IntensityRow(selected: Int, onSelect: (Int) -> Unit) {
 private fun ThemeCard(
     modifier: Modifier,
     title: String,
-    selected: Boolean,
+    isSelected: Boolean,
     onClick: () -> Unit,
     lightPreview: Boolean,
 ) {
@@ -279,13 +284,13 @@ private fun ThemeCard(
     val fill =
         when {
             lightPreview -> Color.White
-            selected -> NeonTokens.BgElevated
+            isSelected -> NeonTokens.BgElevated
             else -> NeonTokens.BgVoid.copy(alpha = 0.9f)
         }
     val border =
         when {
-            selected && lightPreview -> BorderStroke(2.dp, scheme.primary)
-            selected -> BorderStroke(2.dp, NeonTokens.NeonCyan)
+            isSelected && lightPreview -> BorderStroke(2.dp, scheme.primary)
+            isSelected -> BorderStroke(2.dp, NeonTokens.NeonCyan)
             lightPreview -> BorderStroke(1.dp, Color(0xFFBDBDBD))
             else -> BorderStroke(1.dp, NeonTokens.GlassBorderStrong)
         }
@@ -295,7 +300,12 @@ private fun ThemeCard(
         shape = RoundedCornerShape(12.dp),
         color = fill,
         border = border,
-        modifier = modifier.clickable(onClick = onClick),
+        modifier = modifier
+            .semantics {
+                contentDescription = title
+                selected = isSelected
+            }
+            .clickable(onClick = onClick),
     ) {
         Column(Modifier.padding(12.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Box(
@@ -304,7 +314,7 @@ private fun ThemeCard(
                     .fillMaxWidth(),
                 contentAlignment = Alignment.Center,
             ) {
-                if (selected) Text("✓", color = checkColor)
+                if (isSelected) Text("✓", color = checkColor)
             }
             Text(title, color = titleColor, style = MaterialTheme.typography.labelMedium)
         }

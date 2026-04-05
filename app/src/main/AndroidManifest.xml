@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <!-- QA: allowBackup=true — verify backup/restore policy for DataStore (game prefs) before release. -->
     <application
         android:name=".CoupleGamesApp"
         android:allowBackup="true"
@@ -17,7 +18,7 @@
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713" />
+            android:value="${admobAppId}" />
 
         <meta-data
             android:name="com.google.android.gms.games.APP_ID"

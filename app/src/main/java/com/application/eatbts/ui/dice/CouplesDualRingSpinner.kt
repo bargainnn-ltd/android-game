@@ -139,6 +139,22 @@ private fun Canvas.drawSegmentLabel(
     restore()
 }
 
+/** Counter-rotates against the ring [graphicsLayer] so labels stay screen-upright. */
+private fun Canvas.drawSegmentLabelUpright(
+    layerRotationDeg: Float,
+    text: String,
+    cx: Float,
+    cy: Float,
+    maxWidth: Float,
+    baseTextSize: Float,
+    minTextSize: Float,
+) {
+    save()
+    rotate(-layerRotationDeg, cx, cy)
+    drawSegmentLabel(text, cx, cy, maxWidth, baseTextSize, minTextSize)
+    restore()
+}
+
 @Composable
 fun CouplesDualRingSpinner(
     bodyRoll: Int?,
@@ -253,11 +269,12 @@ fun CouplesDualRingSpinner(
                 val ty = cy + labelR * sin(rad).toFloat()
                 val labelText = outerLabels.getOrElse(i) { "$segValue" }
                 val maxW = segmentLabelMaxWidth(labelR)
-                drawContext.canvas.nativeCanvas.drawSegmentLabel(
-                    labelText,
-                    tx,
-                    ty,
-                    maxW,
+                drawContext.canvas.nativeCanvas.drawSegmentLabelUpright(
+                    layerRotationDeg = outerRotation.value,
+                    text = labelText,
+                    cx = tx,
+                    cy = ty,
+                    maxWidth = maxW,
                     baseTextSize = labelPx.coerceIn(18f, 28f),
                     minTextSize = 9f,
                 )
@@ -302,11 +319,12 @@ fun CouplesDualRingSpinner(
                 val ty = cy + labelR * sin(rad).toFloat()
                 val labelText = innerLabels.getOrElse(i) { "$segValue" }
                 val maxW = segmentLabelMaxWidth(labelR)
-                drawContext.canvas.nativeCanvas.drawSegmentLabel(
-                    labelText,
-                    tx,
-                    ty,
-                    maxW,
+                drawContext.canvas.nativeCanvas.drawSegmentLabelUpright(
+                    layerRotationDeg = innerRotation.value,
+                    text = labelText,
+                    cx = tx,
+                    cy = ty,
+                    maxWidth = maxW,
                     baseTextSize = (labelPx * 0.82f).coerceIn(14f, 22f),
                     minTextSize = 8f,
                 )

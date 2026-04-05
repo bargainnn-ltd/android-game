@@ -17,6 +17,7 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.application.eatbts.R
@@ -63,6 +64,7 @@ private fun HubBottomBar(
         items.forEach { (route, icon, labelRes) ->
             val selected = selectedRoute == route
             NavigationBarItem(
+                modifier = Modifier.testTag("bottom_nav_$route"),
                 selected = selected,
                 onClick = { onNavigate(route) },
                 icon = { Icon(icon, contentDescription = null, modifier = Modifier.size(22.dp)) },
@@ -89,6 +91,7 @@ private fun GameplayBottomBar(
     ) {
         items.forEach { (route, icon, labelRes) ->
             NavigationBarItem(
+                modifier = Modifier.testTag("bottom_nav_$route"),
                 selected = selectedRoute == route,
                 onClick = { onNavigate(route) },
                 icon = { Icon(icon, contentDescription = null, modifier = Modifier.size(22.dp)) },
@@ -115,6 +118,7 @@ private fun SettingsAppBottomBar(
     ) {
         items.forEach { (route, icon, labelRes) ->
             NavigationBarItem(
+                modifier = Modifier.testTag("bottom_nav_$route"),
                 selected = selectedRoute == route,
                 onClick = { onNavigate(route) },
                 icon = { Icon(icon, contentDescription = null, modifier = Modifier.size(22.dp)) },

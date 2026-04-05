@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
@@ -79,6 +80,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -166,7 +168,10 @@ fun NeverGameplayScreen(
                     .padding(horizontal = 16.dp, vertical = 10.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
-            GameplayHubTopBar(onOpenMenu = onOpenMenu)
+            GameplayHubTopBar(
+                title = stringResource(R.string.game_never),
+                onOpenMenu = onOpenMenu,
+            )
             Text(
                 stringResource(R.string.spicy_current_player),
                 style = MaterialTheme.typography.labelMedium,
@@ -640,10 +645,6 @@ fun SpicySpinnerGameplayScreen(
     val actionLabel = state.actionRoll?.let { actions.getOrNull(it - 1) }
 
     val spicyBg = themeHubLandingBrush()
-    val spicyTitleGradient =
-        Brush.horizontalGradient(
-            listOf(HubLandingColors.BrandPurple, HubLandingColors.SpicyPink),
-        )
     val spinButtonBrush =
         Brush.horizontalGradient(
             listOf(HubLandingColors.BrandPurple, HubLandingColors.BrandPurpleDark),
@@ -658,7 +659,11 @@ fun SpicySpinnerGameplayScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            GameplayHubTopBar(onOpenMenu = onOpenMenu)
+            GameplayHubTopBar(
+                title = stringResource(R.string.game_spicy_spinner),
+                onOpenMenu = onOpenMenu,
+                centerTitle = { SpicySpinnerBarTitle() },
+            )
             Column(
                 modifier =
                     Modifier
@@ -668,54 +673,41 @@ fun SpicySpinnerGameplayScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-            Text(
-                stringResource(R.string.spicy_live_session),
-                style = MaterialTheme.typography.labelMedium,
-                color = HubLandingColors.DeckGold,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 1.2.sp,
-            )
-            Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
                 Text(
-                    stringResource(R.string.spicy_title_the),
-                    style = MaterialTheme.typography.headlineSmall,
+                    stringResource(R.string.spicy_current_player),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = HubLandingColors.BrandPurple.copy(alpha = 0.85f),
+                    fontWeight = FontWeight.SemiBold,
+                    letterSpacing = 1.sp,
+                )
+                Spacer(Modifier.width(8.dp))
+                Text(
+                    currentName,
+                    style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = themeHubPrimaryText(),
-                )
-                Text(
-                    stringResource(R.string.spicy_title_spicy),
-                    style =
-                        MaterialTheme.typography.headlineSmall.merge(
-                            TextStyle(brush = spicyTitleGradient),
-                        ),
-                    fontWeight = FontWeight.Bold,
-                )
-                Text(
-                    stringResource(R.string.spicy_title_spinner),
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = themeHubPrimaryText(),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
             Text(
-                stringResource(R.string.spicy_current_player),
-                style = MaterialTheme.typography.labelMedium,
-                color = HubLandingColors.BrandPurple.copy(alpha = 0.85f),
-                fontWeight = FontWeight.SemiBold,
-                letterSpacing = 1.sp,
-            )
-            Text(
-                currentName,
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = themeHubPrimaryText(),
-            )
-            Text(
-                stringResource(R.string.dice_turns_fmt, state.turnsCompleted, state.maxTurns),
+                text =
+                    "${stringResource(R.string.dice_turns_fmt, state.turnsCompleted, state.maxTurns)} · ${state.intensityLine}",
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 4.dp, bottom = 14.dp),
                 color = themeHubTertiaryText(),
                 style = MaterialTheme.typography.labelSmall,
+                textAlign = TextAlign.Center,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
             )
-            Text(state.intensityLine, color = themeHubTertiaryText(), style = MaterialTheme.typography.labelSmall)
             if (state.turnTimerEnabled && state.bodyRoll != null && state.actionTimerSeconds > 0) {
                 Text(
                     stringResource(R.string.dice_timer_fmt, timerLeft),
@@ -724,10 +716,12 @@ fun SpicySpinnerGameplayScreen(
                     fontWeight = FontWeight.Bold,
                 )
             }
+            Spacer(Modifier.height(28.dp))
             Box(
                 modifier =
                     Modifier
                         .fillMaxWidth()
+                        .padding(top = 8.dp)
                         .heightIn(min = 200.dp, max = 300.dp),
                 contentAlignment = Alignment.Center,
             ) {
@@ -1055,7 +1049,10 @@ fun WyrGameplayScreen(
                 .padding(horizontal = 16.dp, vertical = 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        GameplayHubTopBar(onOpenMenu = onOpenMenu)
+        GameplayHubTopBar(
+            title = stringResource(R.string.game_wyr),
+            onOpenMenu = onOpenMenu,
+        )
         Column(
             modifier =
                 Modifier

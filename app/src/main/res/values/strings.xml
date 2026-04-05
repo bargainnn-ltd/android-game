@@ -361,8 +361,6 @@
     <string name="never_next_prompt_caps">NEXT PROMPT</string>
 
     <!-- Truth & Dare gameplay (Screen 5) -->
-    <!-- Matches app brand; gameplay mode is still Truth/Dare in UI -->
-    <string name="game_screen_title">@string/app_name</string>
     <string name="game_choose_fate_prefix">CHOOSE YOUR FATE, </string>
     <string name="action_done">DONE</string>
     <string name="action_chicken_out">CHICKEN OUT</string>

@@ -19,6 +19,8 @@ android {
         versionCode = 21
         versionName = "8.9.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        // Google test app id; release overrides via ADMOB_APPLICATION_ID in gradle.properties when set.
+        manifestPlaceholders["admobAppId"] = "ca-app-pub-3940256099942544~3347511713"
     }
 
     buildTypes {
@@ -28,6 +30,26 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            val prodAdMobId = (project.findProperty("ADMOB_APPLICATION_ID") as String?)
+                ?: "ca-app-pub-3940256099942544~3347511713"
+            manifestPlaceholders["admobAppId"] = prodAdMobId
+        }
+    }
+
+    testOptions {
+        managedDevices {
+            localDevices {
+                create("pixel2Api26") {
+                    device = "Pixel 2"
+                    apiLevel = 26
+                    systemImageSource = "google"
+                }
+                create("pixel6Api34") {
+                    device = "Pixel 6"
+                    apiLevel = 34
+                    systemImageSource = "google"
+                }
+            }
         }
     }
 
@@ -96,6 +118,8 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     androidTestImplementation("androidx.test:rules:1.6.1")
+    androidTestImplementation("androidx.test.uiautomator:uiautomator:2.3.0")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
