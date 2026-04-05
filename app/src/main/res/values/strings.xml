@@ -375,4 +375,31 @@
     <string name="timer_remaining_fmt">%1$ds / %2$ds</string>
     <string name="timer_disabled_hint">Timer off</string>
     <string name="cd_bookmark_prompt">Bookmark prompt</string>
+
+    <!-- Firebase / online -->
+    <string name="default_web_client_id" translatable="false">000000000000-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com</string>
+    <string name="play_games_leaderboard_id" translatable="false">YOUR_LEADERBOARD_ID</string>
+    <string name="games_services_app_id" translatable="false">000000000000</string>
+    <string name="settings_account_section">Account</string>
+    <string name="auth_guest_sign_in">Continue as guest</string>
+    <string name="auth_google_sign_in">Sign in with Google</string>
+    <string name="auth_sign_out">Sign out</string>
+    <string name="profile_signed_out_hint">Sign in to play online and sync your profile.</string>
+    <string name="profile_signed_in_as">Signed in: %1$s</string>
+    <string name="profile_play_games_sign_in">Play Games sign-in</string>
+    <string name="profile_watch_rewarded_ad">Watch ad for bonus</string>
+    <string name="session_find_opponent">Find opponent</string>
+    <string name="matchmaking_title">Finding a match</string>
+    <string name="matchmaking_searching">Looking for another player with the same settings…</string>
+    <string name="matchmaking_cancel">Cancel</string>
+    <string name="matchmaking_need_auth">You must be signed in to play online. Use Settings → Account.</string>
+    <string name="matchmaking_idle_hint">Starting…</string>
+    <string name="matchmaking_retry">Try again</string>
+    <string name="online_game_title">Online Truth or Dare</string>
+    <string name="online_loading_match">Loading match…</string>
+    <string name="online_waiting_opponent">Waiting for your opponent</string>
+    <string name="online_your_turn_pick">Your turn — pick Truth or Dare</string>
+    <string name="online_your_turn_reveal">Your turn — next card</string>
+    <string name="online_match_completed">Match completed</string>
+    <string name="notification_channel_general">General</string>
 </resources>

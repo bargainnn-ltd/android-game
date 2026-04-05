@@ -4,14 +4,16 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
     id("org.jetbrains.kotlin.plugin.serialization")
     id("org.jetbrains.kotlin.plugin.parcelize")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
-    namespace = "com.spicynights.games"
+    namespace = "com.application.eatbts"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.spicynights.games"
+        applicationId = "com.application.eatbts"
         minSdk = 26
         targetSdk = 35
         versionCode = 21
@@ -70,6 +72,20 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
     implementation("androidx.datastore:datastore-preferences:1.1.1")
+
+    val firebaseBom = platform("com.google.firebase:firebase-bom:33.7.0")
+    implementation(firebaseBom)
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-crashlytics")
+    implementation("com.google.firebase:firebase-messaging")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.9.0")
+
+    implementation("com.google.android.gms:play-services-auth:21.3.0")
+    implementation("com.google.android.gms:play-services-ads:23.6.0")
+    implementation("com.google.android.gms:play-services-games-v2:20.1.2")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.jetbrains.kotlin:kotlin-test")

@@ -1,0 +1,22 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "matches",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "players", "arrayConfig": "CONTAINS" },
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "created_at", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "matchmaking",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "game_mode", "order": "ASCENDING" },
+        { "fieldPath": "seeking", "order": "ASCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
