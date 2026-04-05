@@ -185,6 +185,8 @@
     <string name="session_play_mode">Play Mode</string>
     <string name="session_pass_and_play">Pass &amp; Play</string>
     <string name="session_host_online">Host Online</string>
+    <string name="session_host_online_coming_soon">Coming soon — online hosting is still in development.</string>
+    <string name="session_host_online_coming_soon_button">Coming soon</string>
     <string name="session_intensity_level">Intensity Level</string>
     <string name="session_spicy_card">Spicy</string>
     <string name="session_spicy_desc">Flirty &amp; fun, great for breaking the ice</string>

@@ -134,6 +134,31 @@ fun NeverGameplayScreen(
         onDispose { flipSound.release() }
     }
     val soundOn by prefs.soundEffectsEnabled.collectAsStateWithLifecycle(initialValue = true)
+    val scope = rememberCoroutineScope()
+    val rotation = remember { Animatable(0f) }
+    val rotY by produceState(initialValue = 0f, rotation) {
+        snapshotFlow { rotation.value }.collect { value = it }
+    }
+    val density = LocalDensity.current
+    val flipCameraDistance = 12f * density.density
+    var neverFlipBusy by remember { mutableStateOf(false) }
+
+    fun launchNeverFlipThenAdvance(advance: () -> Unit) {
+        if (neverFlipBusy) return
+        scope.launch {
+            neverFlipBusy = true
+            try {
+                if (soundOn) flipSound.playFlip()
+                val half = tween<Float>(durationMillis = 220, easing = LinearEasing)
+                rotation.animateTo(90f, half)
+                advance()
+                rotation.animateTo(180f, half)
+                rotation.snapTo(0f)
+            } finally {
+                neverFlipBusy = false
+            }
+        }
+    }
 
     var timerLeft by remember { mutableIntStateOf(state.turnTimerSecondsTotal) }
     LaunchedEffect(state.currentPrompt, state.turnIndex, state.turnTimerEnabled, state.turnTimerSecondsTotal) {
@@ -245,36 +270,48 @@ fun NeverGameplayScreen(
                                 ),
                             ),
                 ) {
-                    Surface(
-                        modifier = Modifier.fillMaxSize(),
-                        shape = RoundedCornerShape(28.dp),
-                        color = themeHubCardSurface(),
-                        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.08f)),
-                    ) {
-                        Column(
+                    Box(
+                        modifier =
                             Modifier
                                 .fillMaxSize()
-                                .verticalScroll(rememberScrollState())
-                                .padding(18.dp),
+                                .graphicsLayer {
+                                    cameraDistance = flipCameraDistance
+                                    rotationY = rotY
+                                    transformOrigin = TransformOrigin(0.5f, 0.5f)
+                                    scaleX = if (rotY > 90f) -1f else 1f
+                                },
+                    ) {
+                        Surface(
+                            modifier = Modifier.fillMaxSize(),
+                            shape = RoundedCornerShape(28.dp),
+                            color = themeHubCardSurface(),
+                            border = BorderStroke(1.dp, Color.White.copy(alpha = 0.08f)),
                         ) {
-                            Text(
-                                stringResource(R.string.never_category_pill),
-                                style = MaterialTheme.typography.labelMedium,
-                                color = HubLandingColors.HighStakesRed.copy(alpha = 0.85f),
-                                fontWeight = FontWeight.Bold,
-                                letterSpacing = 0.8.sp,
-                            )
-                            Spacer(Modifier.height(12.dp))
-                            NeverPromptAnnotated(
-                                text = state.currentPrompt ?: stringResource(R.string.never_deck_empty),
-                            )
-                            if (state.drinkingRulesOn && state.currentPrompt != null) {
-                                Spacer(Modifier.height(12.dp))
+                            Column(
+                                Modifier
+                                    .fillMaxSize()
+                                    .verticalScroll(rememberScrollState())
+                                    .padding(18.dp),
+                            ) {
                                 Text(
-                                    "🥂  ${stringResource(R.string.never_sip_hint)}",
-                                    color = HubLandingColors.DeckGold,
+                                    stringResource(R.string.never_category_pill),
                                     style = MaterialTheme.typography.labelMedium,
+                                    color = HubLandingColors.HighStakesRed.copy(alpha = 0.85f),
+                                    fontWeight = FontWeight.Bold,
+                                    letterSpacing = 0.8.sp,
                                 )
+                                Spacer(Modifier.height(12.dp))
+                                NeverPromptAnnotated(
+                                    text = state.currentPrompt ?: stringResource(R.string.never_deck_empty),
+                                )
+                                if (state.drinkingRulesOn && state.currentPrompt != null) {
+                                    Spacer(Modifier.height(12.dp))
+                                    Text(
+                                        "🥂  ${stringResource(R.string.never_sip_hint)}",
+                                        color = HubLandingColors.DeckGold,
+                                        style = MaterialTheme.typography.labelMedium,
+                                    )
+                                }
                             }
                         }
                     }
@@ -390,12 +427,9 @@ fun NeverGameplayScreen(
             }
             val canNext = state.currentPrompt != null
             OutlinedButton(
-                onClick = {
-                    if (soundOn) flipSound.playFlip()
-                    vm.nextPrompt()
-                },
+                onClick = { launchNeverFlipThenAdvance { vm.nextPrompt() } },
                 modifier = Modifier.fillMaxWidth(),
-                enabled = canNext,
+                enabled = canNext && !neverFlipBusy,
                 shape = RoundedCornerShape(28.dp),
                 border = BorderStroke(2.dp, HubLandingColors.DeckGold),
                 colors =

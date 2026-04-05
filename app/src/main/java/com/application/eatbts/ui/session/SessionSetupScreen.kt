@@ -200,27 +200,6 @@ fun SessionSetupScreen(
         }
     }
 
-    fun startOnlineMatch() {
-        val selectedPlayers = players.filter { it.selected }
-        if (selectedPlayers.size < 2) return
-        val names = selectedPlayers.map { it.name.trim().ifBlank { "Player" } }
-        val level = levelForIntensity()
-        val (includeTruths, includeDares) = promptMix.toIncludeFlags()
-        val timerSec = if (timerOn) defaultTurnTimerSeconds.coerceIn(10, 120) else 0
-        scope.launch {
-            prefs.setCategoryPartyDrinking(drinkingOn)
-        }
-        onStartOnlineMatchmaking(
-            OnlineTruthDareSession(
-                displayName = names.first(),
-                level = level,
-                includeTruths = includeTruths,
-                includeDares = includeDares,
-                turnTimerSeconds = timerSec,
-            ),
-        )
-    }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -399,6 +378,21 @@ fun SessionSetupScreen(
                 modifier = Modifier.weight(1f),
             )
         }
+        if (gameMode == SessionGameMode.TRUTH_DARE && playMode == PlayModeChoice.HOST_ONLINE) {
+            Spacer(Modifier.height(10.dp))
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(12.dp),
+                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.85f),
+            ) {
+                Text(
+                    stringResource(R.string.session_host_online_coming_soon),
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
 
         Spacer(Modifier.height(24.dp))
         Text(
@@ -487,10 +481,8 @@ fun SessionSetupScreen(
         val canStart = players.count { it.selected } >= 2
         val onlineTruthDare = gameMode == SessionGameMode.TRUTH_DARE && playMode == PlayModeChoice.HOST_ONLINE
         Button(
-            onClick = {
-                if (onlineTruthDare) startOnlineMatch() else startGame()
-            },
-            enabled = canStart && (playMode == PlayModeChoice.PASS_AND_PLAY || onlineTruthDare),
+            onClick = { startGame() },
+            enabled = canStart && playMode == PlayModeChoice.PASS_AND_PLAY,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp)
@@ -503,7 +495,10 @@ fun SessionSetupScreen(
             ),
         ) {
             Text(
-                if (onlineTruthDare) stringResource(R.string.session_find_opponent) else stringResource(R.string.start_game),
+                when {
+                    onlineTruthDare -> stringResource(R.string.session_host_online_coming_soon_button)
+                    else -> stringResource(R.string.start_game)
+                },
                 fontWeight = FontWeight.Bold,
             )
             Icon(
