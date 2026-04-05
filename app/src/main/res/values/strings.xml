@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Couple Games</string>
+    <string name="app_name">Luvin</string>
     <string name="disclaimer_title">Adults only (18+)</string>
     <string name="disclaimer_body">This app contains mature themes for consenting adults. By continuing, you confirm you are 18 or older and will use this app privately and respectfully.</string>
     <string name="consent_reminder">Play respectfully. Both players must be comfortable.</string>

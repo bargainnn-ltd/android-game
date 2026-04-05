@@ -16,7 +16,7 @@ android {
         applicationId = "com.application.eatbts"
         minSdk = 26
         targetSdk = 35
-        versionCode = 21
+        versionCode = 20
         versionName = "8.9.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // Google test app id; release overrides via ADMOB_APPLICATION_ID in gradle.properties when set.
